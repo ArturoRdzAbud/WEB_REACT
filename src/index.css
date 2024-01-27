@@ -1,0 +1,30 @@
+body {
+  padding: 7rem;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid#DDD;
+}
+
+thead, tfoot {
+  background: #333;
+  color: WHITE
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
+
+tr:nth-child(even){
+  background: #f2f2f2;}
+
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
