@@ -1,4 +1,4 @@
-import { useReactTable, getCoreRowModel, flexRender, getPaginationRowModel, getSortedRowModel } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, flexRender, getPaginationRowModel, getSortedRowModel, getFilteredRowModel } from "@tanstack/react-table";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
@@ -39,13 +39,18 @@ function SimpleTable() {
     ];
 
     const [sorting, setSorting] = useState([])
+    const [filtering, setFiltering] = useState("")
 
     const table = useReactTable({
         data, columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        state: { sorting }, onSortingChange: setSorting
+        getFilteredRowModel: getFilteredRowModel(),
+        state: { sorting, globalFilter: filtering, }, 
+        onSortingChange: setSorting,
+        onGlobalFilterChange: setFiltering,
+
     })
 
 
@@ -53,6 +58,11 @@ function SimpleTable() {
     return (
         <div>
             <h1>Catálogo de equipos</h1>
+            <input 
+                type="text"
+                value = {filtering}
+                onChange={(e) => setFiltering(e.target.value)}
+            />
             <table border="1">
 
                 <thead>
