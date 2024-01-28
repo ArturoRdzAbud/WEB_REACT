@@ -9,7 +9,7 @@ function SimpleTable() {
 
     useEffect(() => {
         // Cambia la URL a la de tu API
-        //EJEMPLO EDICION ROLA
+        //EJEMPLO EDICION ROLAnd
         //Ejemplo 2
         const apiUrl = 'http://localhost:3000/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
 
