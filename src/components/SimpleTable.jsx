@@ -9,6 +9,7 @@ function SimpleTable() {
 
     useEffect(() => {
         // Cambia la URL a la de tu API
+        //EJEMPLO EDICION ROLA
         const apiUrl = 'http://localhost:3000/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
 
         // Haciendo la solicitud a la API utilizando Axios
