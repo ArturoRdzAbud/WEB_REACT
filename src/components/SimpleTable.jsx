@@ -11,6 +11,7 @@ function SimpleTable() {
         // Cambia la URL a la de tu API
         //EJEMPLO EDICION ROLAnd
         //Ejemplo 2
+        //Ejemplo 3
         const apiUrl = 'http://localhost:3000/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
 
         // Haciendo la solicitud a la API utilizando Axios
