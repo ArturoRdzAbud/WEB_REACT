@@ -18,6 +18,9 @@ function SimpleTable() {
         axios.get(apiUrl)
             .then(response => setDatos(response.data))
             .catch(error => console.error('Error al obtener datos:', error));
+
+        // console.log(data)    
+
     }, []); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
 
 
@@ -47,7 +50,7 @@ function SimpleTable() {
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        state: { sorting, globalFilter: filtering, }, 
+        state: { sorting, globalFilter: filtering, },
         onSortingChange: setSorting,
         onGlobalFilterChange: setFiltering,
 
@@ -55,12 +58,14 @@ function SimpleTable() {
 
 
 
+
+
     return (
         <div>
             <h1>Catálogo de equipos</h1>
-            <input 
+            <input
                 type="text"
-                value = {filtering}
+                value={filtering}
                 onChange={(e) => setFiltering(e.target.value)}
             />
             <table border="1">
@@ -85,8 +90,8 @@ function SimpleTable() {
                     {table.getRowModel().rows.map((row) => (
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => (
-                                <td>
-                                    0                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                <td key={cell.id}>
+                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </td>
                             ))}
                         </tr>
@@ -109,7 +114,7 @@ function SimpleTable() {
 
             </table>
 
-            <button onClick={() => table.setPageIndex(0)}>
+            <button className="btn btn-primary" onClick={() => table.setPageIndex(0)}>
                 Primera Página
             </button>
 

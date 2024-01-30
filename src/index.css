@@ -28,3 +28,16 @@ h1 {
   line-height: 1.1;
 }
 
+
+button{
+  margin: 5px;
+}
+.form-switch {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  /* justify-content: space-between !important; */
+}
+.form-check-label {
+  margin-right: 50px !important;
+ }
+
