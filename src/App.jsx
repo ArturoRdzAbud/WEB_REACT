@@ -3,7 +3,7 @@ import './App.css'
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 import Equipos from './components/Equipos'
 //import Equipos2 from './components/Equipos2'
-import SimpleTable from './components/SimpleTable'
+import CatEquipos from './components/CatEquipos';
 
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
       <div className='container'>
         <Routes>
           <Route path='/' element={<Equipos />} />
-          <Route path='/Equipos' element={<SimpleTable />} />
+          <Route path='/Equipos' element={<CatEquipos />} />
           
         </Routes>
       </div>
