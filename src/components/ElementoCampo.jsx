@@ -1,11 +1,12 @@
 //componente para mostrar un campo
-import { useState } from "react";
+import { useState,useEffect } from "react";
 export const ElementoCampo = ({
   type = 'text'
   , lblCampo = 'lblCampo'
   , claCampo = 'claCampo'
   , nomCampo = ''
   , onInputChange
+  //, valCampo
 }) => {
 
   // const [value, setValue] = useState(nomCampo || '')
@@ -17,10 +18,16 @@ export const ElementoCampo = ({
     const newValue = type == 'checkbox' ? event.target.checked : event.target.value;
     setValue(newValue)
     // console.log(newValue)
+
     if (onInputChange) {//Asigna el valor en el padre recibe de parametro el evento SET
       onInputChange(newValue);
     }
   }
+
+  // Actualiza el valor cuando cambia `nomCampo` externamente
+  useEffect(() => {
+    setValue(nomCampo);
+  }, [nomCampo]);
 
   return (
     <>

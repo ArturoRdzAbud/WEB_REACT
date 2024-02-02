@@ -1,5 +1,5 @@
 body {
-  padding: 7rem;
+  padding: 2rem;
 }
 
 table {
@@ -40,4 +40,54 @@ button{
 .form-check-label {
   margin-right: 50px !important;
  }
+
+
+
+ 
+ /* Estilos adicionales para App.css */
+ .app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Sidebar.css */
+.sidebar {
+  width: 300px;
+  height: 100%;
+  background-color: #333;
+  color: white;
+  padding-top: 20px;
+  transition: width 0.3s;
+}
+
+.collapsed {
+  width: 60px;
+}
+
+.toggle-button {
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
+  background-color: #444;
+}
+
+ul-sidebar {
+  list-style: none;
+  padding: 0;
+}
+
+li-sidebar {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+li-sidebar:hover {
+  background-color: #555;
+}
 

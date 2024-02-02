@@ -1,10 +1,12 @@
 import { useReactTable, getCoreRowModel, flexRender, getPaginationRowModel, getSortedRowModel, getFilteredRowModel } from "@tanstack/react-table";
 import React, { useState } from 'react';
 import dayjs from "dayjs";
+import { ElementoCampo } from './ElementoCampo';
+import { useEffect } from "react";
 
-function SimpleTable({data,columns}) {
+function SimpleTable({ data, columns, handleEdit }) {
 
-       
+
 
     const [sorting, setSorting] = useState([])
     const [filtering, setFiltering] = useState("")
@@ -22,16 +24,28 @@ function SimpleTable({data,columns}) {
     })
 
 
+    //  const EditaElemento=(esEditar)=>{
+    //     console.log(esEditar)
+    //  }
+    // useEffect(() => {
+    //     EditaElemento()
+    //   }, [])
+
+
 
 
 
     return (
         <div>
-            <input
+            {/* <input
                 type="text"
                 value={filtering}
                 onChange={(e) => setFiltering(e.target.value)}
-            />
+            /> */}
+
+            <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtering} onInputChange={setFiltering} />
+
+
             <table border="1">
 
                 <thead>
@@ -55,7 +69,10 @@ function SimpleTable({data,columns}) {
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => (
                                 <td key={cell.id}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    {cell.column.id == "Nombre" ?
+                                        <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
+                                        : flexRender(cell.column.columnDef.cell, cell.getContext())
+                                    }
                                 </td>
                             ))}
                         </tr>
