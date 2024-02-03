@@ -62,7 +62,7 @@ const CatEquipos = () => {
 
 
 
-  }, []); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
+  }, [activo]); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
 
 
 
@@ -72,13 +72,36 @@ const CatEquipos = () => {
       accessorKey: 'IdEquipo',
       footer: 'Id'
     },
-    // { header: 'Nombre y Apellido',       código de refencia para cuando ocupemos concatenar dos columnas
-    // accessorFn: row => `${row.nombre} ${row.apellido}`
-    //},
+    {
+      header: 'IdLiga',
+      accessorKey: 'IdLiga',
+      footer: 'IdLiga'
+    },
+    {
+      header: 'IdTorneo',
+      accessorKey: 'IdTorneo',
+      footer: 'IdTorneo'
+    },
+    {
+      header: 'Liga',
+      accessorKey: 'Liga',
+      footer: 'Liga'
+    },
+    {
+      header: 'Torneo',
+      accessorKey: 'Torneo',
+      footer: 'Torneo'
+    },
     {
       header: 'Nombre',
       accessorKey: 'Nombre',
       footer: 'Nombre'
+      //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
+    },
+    {
+      header: 'Activo',
+      accessorKey: 'Activo',
+      footer: 'Activo'
       //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
     }
   ];
@@ -95,8 +118,10 @@ const CatEquipos = () => {
     // console.log(rowData.original.Nombre);
     setNombre(rowData.original.Nombre)
     setIdEquipo(rowData.original.IdEquipo)
+    //if (rowData.original.Activo == 'false') { setActivo(false) } else { setActivo(true) }
+    if (rowData.original.Activo == false) { setActivo(false) } else { setActivo(true) }
     // handleSetNombre(rowData.original.Nombre)//Asigna nombre
-    // console.log(nombre);
+    
   }
 
 
@@ -105,7 +130,10 @@ const CatEquipos = () => {
       <h1>Equipos</h1>
       <hr></hr>
       {!esEditar ?
+        <>
+        <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
         <SimpleTable data={data} columns={columns} handleEdit={handleEdit} />
+        </>
         :
 
         <div>

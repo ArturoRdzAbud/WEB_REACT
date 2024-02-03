@@ -24,24 +24,11 @@ function SimpleTable({ data, columns, handleEdit }) {
     })
 
 
-    //  const EditaElemento=(esEditar)=>{
-    //     console.log(esEditar)
-    //  }
-    // useEffect(() => {
-    //     EditaElemento()
-    //   }, [])
-
-
-
-
+    
 
     return (
         <div>
-            {/* <input
-                type="text"
-                value={filtering}
-                onChange={(e) => setFiltering(e.target.value)}
-            /> */}
+            
 
             <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtering} onInputChange={setFiltering} />
 

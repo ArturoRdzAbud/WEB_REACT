@@ -14,6 +14,7 @@ import CatEquipos from './CatEquipos';
 //https://www.svgviewer.dev/ BUSCAR ICONOS NUEVOS SVG E IMPORTARLOS A CARPETA SVG
 
 import EquiposSvg from '../svg/equipos.svg?react'
+import BalonSvg from '../svg/balon.svg?react'
 
 export const SideBar = () => {
 
@@ -54,7 +55,7 @@ export const SideBar = () => {
                 
                 <ul className='navbar-nav'>
                     <li className="nav-item">
-                        <NavLink to='/' className='nav-link' > Alta de Equipo </NavLink>
+                        <NavLink to='/' className='nav-link' > <BalonSvg />{expanded?' Alta de Equipo':''} </NavLink>
                         <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded?' Equipos':''} </NavLink>
                     </li>
                 </ul>
