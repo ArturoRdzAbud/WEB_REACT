@@ -62,7 +62,7 @@ const CatEquipos = () => {
 
 
 
-  }, [activo]); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
+  }, []); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
 
 
 

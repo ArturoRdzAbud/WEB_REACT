@@ -11,9 +11,9 @@ import { SideBar } from './components/SideBar';
 function App() {
   return (
     <>
-    
-    
-     {/* <BrowserRouter>
+
+
+      {/* <BrowserRouter>
 
 
       <nav className='navbar navbar-expand navbar-light bg-light'>
@@ -39,15 +39,23 @@ function App() {
     </BrowserRouter>  */}
 
 
-<div className="app-container">
-      <SideBar />
-      <div className="main-content">
-        {/* Contenido principal de la aplicación */}
-        {/* <h1>Contenido Principal</h1> */}
-      </div>
-    </div>
+      {/* <div className="app-container">
+        <SideBar />
+        <div className="main-content">
+        </div>
+      </div> */}
 
-  
+
+
+      <div className="App" id="outer-container">
+        <SideBar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
+        <div id="page-wrap">
+          {/* <h1>Cool Restaurant</h1>
+        <h2>Check out our offerings in the sidebar!</h2> */}
+        </div>
+      </div>
+
+
     </>
   )
 }

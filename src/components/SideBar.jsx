@@ -1,78 +1,80 @@
-import { useState } from "react"
+import React from 'react';
+import { slide as Menu } from 'react-burger-menu';
+import '../css/Sidebar.css';
 
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 import Equipos from './Equipos'
 import CatEquipos from './CatEquipos';
-
-//PASO IMPORTANTE : correr este comando para que pesque los svg
-//ESTO SI npm install --save-dev vite-plugin-svgr
-
-//ESTO NO npm install file-loader --save-dev
-//ESTO NO npm install vite-plugin-svg --save-dev
-
-//https://www.npmjs.com/package/vite-plugin-svgr FUENTE DE PLUGIN SVG PARA VITE
-//https://www.svgviewer.dev/ BUSCAR ICONOS NUEVOS SVG E IMPORTARLOS A CARPETA SVG
-
 import EquiposSvg from '../svg/equipos.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
 
+// export default props => {
 export const SideBar = () => {
-
-    const [expanded, setExpanded] = useState(false)
-
-    const toggleSidebar = () => {
-        setExpanded(!expanded)
-        // classList.toggle("change")
-    }
-
 
     return (
 
-        <BrowserRouter>
+        <>
 
-            <div className={`sidebar ${expanded ? 'expanded' : 'collapsed'}`}>
-                
-                {/* <div className="toggle-button" onClick={toggleSidebar}>
-                    {expanded ? '◄' : '►'} 
-                </div> */}
 
-                <div className={`${expanded ? 'change' : 'menu-container'}`} onClick={toggleSidebar} >
-                        <div className="bar1"></div>
-                        <div className="bar2"></div>
-                        <div className="bar3"></div>
-                    </div>
+            {/*  
 
-                {/* <ul className="li.sidebar">
-                <li className="li.sidebar">Inicio</li>
-                <li className="li.sidebar">Perfil</li>
-                <li className="li.sidebar">Configuración</li>
-                 </ul> */}
+
+        //npm install react-burger-menu@2.7.1 --force
+        //npm install axios
+        //npm install react-router-dom
+        //npm install @tanstack/react-table
+        //npm install --save-dev vite-plugin-svgr
 
 
 
-
-                {/* <nav className='navbar navbar-expand navbar-light bg-light'> */}
-                
-                <ul className='navbar-nav'>
-                    <li className="nav-item">
-                        <NavLink to='/' className='nav-link' > <BalonSvg />{expanded?' Alta de Equipo':''} </NavLink>
-                        <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded?' Equipos':''} </NavLink>
-                    </li>
-                </ul>
-                {/* </nav> */}
-            </div>
-
-            <div className='container'>
-                <Routes>
-                    <Route path='/' element={<Equipos />} />
-                    <Route path='/Equipos' element={<CatEquipos />} />
-                </Routes>
-            </div>
-
-        </BrowserRouter>
+        https://app.netlify.com/
+        https://www.digitalocean.com/community/tutorials/react-react-burger-menu-sidebar     
 
 
+                https://github.com/azouaoui-med/react-pro-sidebar/blob/master/storybook/Playground.tsx
+                https://azouaoui-med.github.io/react-pro-sidebar/iframe.html?id=playground--playground&args=&viewMode=story
+                https://www.geeksforgeeks.org/how-to-create-a-responsive-sidebar-with-dropdown-menu-in-reactjs/
+
+      <a className="menu-item" href="/">
+        Home
+      </a>
+      <a className="menu-item" href="/salads">
+        Salads
+      </a>
+      <a className="menu-item" href="/pizzas">
+        Pizzas
+      </a>
+      <a className="menu-item" href="/desserts">
+        Desserts
+      </a> */}
+
+
+            <BrowserRouter>
+
+
+                <Menu>
+                    <ul className='navbar-nav'>
+                        <li className="nav-item">
+                            <NavLink to='/' className='nav-link' > <BalonSvg />{' Alta de Equipo'} </NavLink>
+                            {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
+                            <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
+                            {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
+                        </li>
+                    </ul>
+                </Menu>
+
+
+                <div className='container'>
+                    <Routes>
+                        <Route path='/' element={<Equipos />} />
+                        <Route path='/Equipos' element={<CatEquipos />} />
+                    </Routes>
+                </div>
+
+
+            </BrowserRouter>
+
+        </>
 
     );
 };
-
