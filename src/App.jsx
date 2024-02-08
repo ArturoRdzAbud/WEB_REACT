@@ -7,6 +7,7 @@ import Equipos from './components/Equipos'
 import CatEquipos from './components/CatEquipos';
 
 import { SideBar } from './components/SideBar';
+import CatTiposDeSancion from './components/CatTiposDeSancion';
 
 function App() {
   return (

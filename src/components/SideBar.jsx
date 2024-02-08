@@ -7,6 +7,8 @@ import Equipos from './Equipos'
 import CatEquipos from './CatEquipos';
 import EquiposSvg from '../svg/equipos.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
+import CatTiposDeSancion from './CatTiposDeSancion';
+
 
 // export default props => {
 export const SideBar = () => {
@@ -59,6 +61,7 @@ export const SideBar = () => {
                             {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
                             <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
+                            <NavLink to='/TiposDeSancion' className='nav-link' > <EquiposSvg />{' Tipos de Sancion'} </NavLink>
                         </li>
                     </ul>
                 </Menu>
@@ -68,6 +71,7 @@ export const SideBar = () => {
                     <Routes>
                         <Route path='/' element={<Equipos />} />
                         <Route path='/Equipos' element={<CatEquipos />} />
+                        <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
                     </Routes>
                 </div>
 
