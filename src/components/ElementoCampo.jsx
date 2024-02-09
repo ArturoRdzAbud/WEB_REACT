@@ -1,5 +1,5 @@
 //componente para mostrar un campo
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 export const ElementoCampo = ({
   type = 'text'
   , lblCampo = 'lblCampo'
@@ -7,6 +7,8 @@ export const ElementoCampo = ({
   , nomCampo = ''
   , onInputChange
   //, valCampo
+  , options = []// Nuevo prop para las opciones del combo desplegable
+  //,options = [{ value: '', label: 'Seleccionar' }, ...] // Agrega una opción por defecto al combo desplegable
 }) => {
 
   // const [value, setValue] = useState(nomCampo || '')
@@ -15,7 +17,7 @@ export const ElementoCampo = ({
   const handleInputChange = (event) => {
     // console.log(event)
     //const newValue = event.target.value;
-    const newValue = type == 'checkbox' ? event.target.checked : event.target.value;
+    const newValue = type === 'checkbox' ? event.target.checked : event.target.value;
     setValue(newValue)
     // console.log(newValue)
 
@@ -31,7 +33,7 @@ export const ElementoCampo = ({
 
   return (
     <>
-      {type == 'checkbox' ?
+      {type == 'checkbox' ? (
 
         <div className="form-check form-switch">
           <input className="form-check-input"
@@ -43,20 +45,7 @@ export const ElementoCampo = ({
           <label className="form-check-label" htmlFor={claCampo}>{lblCampo}</label>
         </div>
 
-        // <div className="form-check">
-        //   <input className="form-check-input"
-        //     type={type}
-        //     // value="1"
-        //     id="flexCheckDefault"
-        //     checked={true}
-        //     onChange={handleInputChange}
-        //     />
-        //     <label className="form-check-label" htmlFor="flexCheckDefault">
-        //       {lblCampo}
-        //     </label>
-        // </div>
-
-        :
+      ) : type == 'text' ? ( // Si el tipo es 'texto', mostrar un campo texto
         <div className="form-floating mb-3">
           <input className="form-control"
             type={type}
@@ -67,7 +56,24 @@ export const ElementoCampo = ({
           />
           <label htmlFor="floatingInput">{lblCampo}</label>
         </div>
-      }
+
+
+      ) : type == 'select' ? ( // Si el tipo es 'select', mostrar un combo desplegable
+        <div className="form-floating mb-3">
+          <select className="form-select" id={claCampo} value={value} onChange={handleInputChange}>
+          {[{ value: '-1', label: '' }, ...options].map((option, index) => (
+            // {options.map((option, index) => (
+              <option key={index} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+          <label htmlFor={claCampo}>{lblCampo}</label>
+        </div>)
+
+
+        : (<p>Tipo de campo no válido</p>)
+        
+        }
+
 
 
 

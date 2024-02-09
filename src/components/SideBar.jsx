@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import '../css/Sidebar.css';
 
@@ -10,6 +10,20 @@ import BalonSvg from '../svg/balon.svg?react'
 
 // export default props => {
 export const SideBar = () => {
+
+    // const menuRef = useRef(null); // Create a ref
+
+    const [isOpen, setOpen] = useState(false)
+    const handleIsOpen = () => {
+        setOpen(!isOpen)
+    }
+    const closeMenu = () => {
+        // Close the menu programmatically
+        // You can access the menu instance using ref
+        // For example, if you have a ref like `menuRef`
+        // menuRef.current.closeMenu();
+        setOpen(false)
+    };
 
     return (
 
@@ -28,7 +42,8 @@ export const SideBar = () => {
 
 
         https://app.netlify.com/
-        https://www.digitalocean.com/community/tutorials/react-react-burger-menu-sidebar     
+        https://www.digitalocean.com/community/tutorials/react-react-burger-menu-sidebar  
+        https://www.npmjs.com/package/react-burger-menu   
 
 
                 https://github.com/azouaoui-med/react-pro-sidebar/blob/master/storybook/Playground.tsx
@@ -52,12 +67,14 @@ export const SideBar = () => {
             <BrowserRouter>
 
 
-                <Menu>
+                <Menu isOpen={isOpen}
+                    onOpen={handleIsOpen}
+                    onClose={handleIsOpen}>
                     <ul className='navbar-nav'>
                         <li className="nav-item">
-                            <NavLink to='/' className='nav-link' > <BalonSvg />{' Alta de Equipo'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/' className='nav-link' > <BalonSvg />{' Alta de Equipo'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
-                            <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
                         </li>
                     </ul>
