@@ -8,6 +8,7 @@ export const ElementoCampo = ({
   , onInputChange
   //, valCampo
   , options = []// Nuevo prop para las opciones del combo desplegable
+  , editable = true //para indicar si el campo es editable
   //,options = [{ value: '', label: 'Seleccionar' }, ...] // Agrega una opción por defecto al combo desplegable
 }) => {
 
@@ -41,7 +42,9 @@ export const ElementoCampo = ({
             id={claCampo}
             //checked={value=='on'?true:false} 
             checked={value}
-            onChange={handleInputChange} />
+            onChange={handleInputChange} 
+            disabled={!editable}
+            />
           <label className="form-check-label" htmlFor={claCampo}>{lblCampo}</label>
         </div>
 
@@ -53,6 +56,7 @@ export const ElementoCampo = ({
             placeholder={lblCampo}
             value={value}
             onChange={handleInputChange}
+            disabled={!editable}
           />
           <label htmlFor="floatingInput">{lblCampo}</label>
         </div>
@@ -60,7 +64,12 @@ export const ElementoCampo = ({
 
       ) : type == 'select' ? ( // Si el tipo es 'select', mostrar un combo desplegable
         <div className="form-floating mb-3">
-          <select className="form-select" id={claCampo} value={value} onChange={handleInputChange}>
+          <select className="form-select" 
+            id={claCampo} 
+            value={value} 
+            onChange={handleInputChange}
+            disabled={!editable}
+            >
           {[{ value: '-1', label: '' }, ...options].map((option, index) => (
             // {options.map((option, index) => (
               <option key={index} value={option.value}>{option.label}</option>

@@ -82,6 +82,7 @@ function SimpleTable({ data, columns, handleEdit }) {
 
             </table>
 
+
             <button className="btn btn-primary" onClick={() => table.setPageIndex(0)}>
                 Primera Página
             </button>

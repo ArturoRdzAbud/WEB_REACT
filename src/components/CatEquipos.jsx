@@ -12,12 +12,16 @@ const CatEquipos = () => {
   const [esVerBaja, setEsVerBaja] = useState(false);
   const [ligaF, setLigaF] = useState(-1);
   const [dataLiga, setDatosLiga] = useState([]);
+  const [torneoF, setTorneoF] = useState(-1);
+  const [dataTorneo, setDatosTorneo] = useState([]);
   //>
   const [esEditar, setEsEditar] = useState(false);
+  const [esNuevo, setEsNuevo] = useState(false);
   const [idEquipo, setIdEquipo] = useState(0);
   const [nombre, setNombre] = useState('');
   const [activo, setActivo] = useState(false);
 
+  //datos de registri
   const [idLiga, setIdLiga] = useState(0);
   const [idTorneo, setIdTorneo] = useState(0);
   const [accion, setAccion] = useState(0);
@@ -40,32 +44,55 @@ const CatEquipos = () => {
 
       await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
       console.log('Guardando equipo', data);
-      inicializaFiltros()
+      inicializaCampos()
       setEsEditar(false)//regresa al grid
     } catch (error) {
       console.error('Error al guardar el equipo', error);
     }
   };
-  const inicializaFiltros = () => {
+  const inicializaCampos = () => {
     //TODO LIMPIAR CADA FILTRO A SU VALOR INICIAL
     setEsVerBaja(false)
     setLigaF(-1)
+    setTorneoF(-1)
+    //Campos 
+    setIdLiga(0)
+    setIdTorneo(0)
+    setNombre('')
   };
   const cancelar = () => {
     console.log('Edición cancelada');
-    inicializaFiltros()
+    inicializaCampos()
     setEsEditar(false)
   };
+  const nuevo = () => {
+    inicializaCampos()
+    setEsEditar(true)
+    setEsNuevo(true)
+  };
 
+
+  //se ejecuta 1 vez al inicio se
+  // llenan combos
   useEffect(() => {
-    const apiUrl = 'http://localhost:3000/ConsultarGrid?psSpSel=%22ConsultarLigasCmb%22';
+    var apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
     axios.get(apiUrl)
       .then(response => {
         setDatosLiga(response.data)
       }
       )
       .catch(error => console.error('Error al obtener LIGA', error));
+
+      apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarTorneosCmb%22';
+      axios.get(apiUrl)
+        .then(response => {
+          setDatosTorneo(response.data)
+        }
+        )
+        .catch(error => console.error('Error al obtener TORNEO', error));
+
   }, []);
+
   useEffect(() => {
     const apiUrl = 'http://localhost:3000/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
     axios.get(apiUrl)
@@ -74,13 +101,14 @@ const CatEquipos = () => {
   }, [esEditar]); // ASEGURA QUE SE EJECUTA CUANDO CAMBIA esEditar recarga GRID
 
   useEffect(() => {
-    // TODO IR FILTRANDO CAMPO POR CAMPO
+    // TODO IR FILTRANDO LOCALMENTE CAMPO POR CAMPO SIN IR A BASE DE DATOS
     var datosFiltrados = data
     datosFiltrados = esVerBaja ? data.filter(item => item.Activo) : data;
     datosFiltrados = ligaF > 0 ? datosFiltrados.filter(item => item.IdLiga == ligaF) : datosFiltrados;
+    datosFiltrados = torneoF > 0 ? datosFiltrados.filter(item => item.IdTorneo == torneoF) : datosFiltrados;
     
     setDatosD(datosFiltrados);
-  }, [esVerBaja, ligaF]); //AGREGAR AQUI CADA FILTRO
+  }, [esVerBaja, ligaF,torneoF]); //AGREGAR AQUI CADA FILTRO PARA QUE SE FILTRE CADA VEZ QUE CAMBIA UNO
 
   const columns = [
     {
@@ -137,22 +165,25 @@ const CatEquipos = () => {
     <div>
       <h1>Equipos</h1>
       <hr></hr>
-      {!esEditar ?//----------------------------MODO EDICION/NUEVO REGISTRO
+      {!esEditar ?//----------------------------MODO GRID pinta filtros al inicio
         <>
+          <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
           <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
           <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={ligaF} options={dataLiga} onInputChange={setLigaF} />
-          <ElementoCampo type="select" lblCampo="Torneo:" claCampo="campo" options={[
+          <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={torneoF} options={dataTorneo} onInputChange={setTorneoF} />
+          {/* <ElementoCampo type="select" lblCampo="Torneo:" claCampo="campo" options={[
             { value: 'opcion1', label: 'test' },
             { value: 'opcion2', label: 'prueba' },
-            //TODO completar con informacion de la base de datos leer y cachar el campo CLA
-          ]} />
+          ]} /> */}
           <SimpleTable data={dataD} columns={columns} handleEdit={handleEdit} />
         </>
-        ://----------------------------MODO GRID
+        ://----------------------------MODO EDICION/NUEVO REGISTRO
         <div>
           <form onSubmit={guardarEquipo}>
             <br />
-
+            {/* <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} /> */}
+            <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo}/>
+            <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={idTorneo} options={dataTorneo} onInputChange={setIdTorneo} editable={esNuevo}/>
 
             <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} />
             {/* <ElementoCampo type='text' lblCampo="Capitán del Equipo :" claCampo="claCapitan" nomCampo={capitan} onInputChange={setCapitan} /> */}
