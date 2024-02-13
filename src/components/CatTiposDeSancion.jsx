@@ -8,62 +8,105 @@ import { ElementoCampo } from './ElementoCampo';
 const CatTiposDeSancion = () => {
 
   const [data, setDatos] = useState([]);
+  const [dataD, setDatosD] = useState([]);
+  //Filtros
+  const [esVerBaja, setEsVerBaja] = useState(false);
+  const [ligaF, setLigaF] = useState(-1);
+  const [dataLiga, setDatosLiga] = useState([]);
 
+  //>
   const [esEditar, setEsEditar] = useState(false);
-  const [idEquipo, setIdEquipo] = useState(0);
-  const [nombre, setNombre] = useState('');
+  const [esNuevo, setEsNuevo] = useState(false);
+  const [idTipoSancion, setIdTipoSancion] = useState(0);
+  const [clave, setClave] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [causaBaja, setCausaBaja] = useState(false);
   const [activo, setActivo] = useState(false);
-  const [capitan, setCapitan] = useState('');
-  /*
-  const guardarEquipo = async (e) => {
+  const [juegosSuspension, setJuegosSuspension] = useState('');
+
+  //datos de registri
+  const [idLiga, setIdLiga] = useState(0);
+  const [accion, setAccion] = useState(0);
+
+  const guardarTiposDeSancion = async (e) => {
     e.preventDefault();
 
     const data = {
-      pnIdLiga: 1,
-      pnIdTorneo: 6,
-      pnIdEquipo: 0,
-      psNombre: nombre,
+      pnIdLiga: idLiga,
+      pnIdTipoSancion: idTipoSancion,
+      psClave: clave,
+      psdescripcion: descripcion,
+      pnJuegosSuspension: juegosSuspension,
+      pnCausaBaja: causaBaja,
       pnActivo: activo,
-      pnAccion: 1
+      pnAccion: accion
     };
 
-    const apiReq = 'http://localhost:3000/GuardarEquipo';
+    const apiReq = 'http://localhost:3000/GuardarTiposDeSancion';
 
     try {
       await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-      console.log('Guardando equipo', data);
-      // Puedes redirigir o realizar otras acciones después de guardar el equipo
+      console.log('Guardando Tipos de Sanción', data);
+      inicializaCampos()
+      setEsEditar(false)//regresa al grid
     } catch (error) {
-      console.error('Error al guardar el equipo', error);
+      console.error('Error al guardar el tipo de sanción', error);
     }
   };
-  const cancelar = () => {
-    // Aquí puedes realizar acciones cuando se cancela la edición
-    console.log('Edición cancelada');
-    setEsEditar(false)
-    // Por ejemplo, puedes redirigir a la página anterior
-    // Asumiendo que estás utilizando React Router
-    // Si no, ajusta esta parte según tu enrutamiento
-    // import { useHistory } from 'react-router-dom';
-    // const history = useHistory();
-    // history.goBack();
+  const inicializaCampos = () => {
+    //TODO LIMPIAR CADA FILTRO A SU VALOR INICIAL
+    setEsVerBaja(false)
+    setLigaF(-1)
+    //setTorneoF(-1)
+    //Campos 
+    setIdLiga(0)
+    setIdTipoSancion(0)
+    setDescripcion('')
+    setClave('')
+    setJuegosSuspension(0)
+    setCausaBaja(false)
   };
-*/
+  const cancelar = () => {
+    console.log('Edición cancelada');
+    inicializaCampos()
+    setEsEditar(false)
+  };
+  const nuevo = () => {
+    inicializaCampos()
+    setEsEditar(true)
+    setEsNuevo(true)
+  };
+
+  //se ejecuta 1 vez al inicio se
+  // llenan combos
+  useEffect(() => {
+    var apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
+    axios.get(apiUrl)
+      .then(response => {
+        setDatosLiga(response.data)
+      }
+      )
+      .catch(error => console.error('Error al obtener LIGA', error));
+
+  }, []);
+
   useEffect(() => {
     // Cambia la URL a la de tu API
     const apiUrl = 'http://localhost:3000/ConsultarTiposDeSancion?pnIdLiga=1';
-
-    // Haciendo la solicitud a la API utilizando Axios
     axios.get(apiUrl)
-      .then(response => setDatos(response.data))
+      .then(response => { setDatos(response.data); setDatosD(response.data) })
       .catch(error => console.error('Error al obtener datos:', error));
+  }, [esEditar]); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
 
-    // console.log(data)    
+  useEffect(() => {
+    // TODO IR FILTRANDO LOCALMENTE CAMPO POR CAMPO SIN IR A BASE DE DATOS
+    var datosFiltrados = data
+    datosFiltrados = esVerBaja ? data.filter(item => item.Activo) : data;
+    datosFiltrados = ligaF > 0 ? datosFiltrados.filter(item => item.IdLiga == ligaF) : datosFiltrados;
+    //datosFiltrados = torneoF > 0 ? datosFiltrados.filter(item => item.IdTorneo == torneoF) : datosFiltrados;
 
-
-
-
-  }, []); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
+    setDatosD(datosFiltrados);
+  }, [esVerBaja, ligaF]); //AGREGAR AQUI CADA FILTRO PARA QUE SE FILTRE CADA VEZ QUE CAMBIA UNO
 
 
 
@@ -90,7 +133,7 @@ const CatTiposDeSancion = () => {
     },
     {
       header: 'Activa',
-      accessorKey: 'Activa',
+      accessorKey: 'Activo',
       footer: 'Activa'
       //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
     }
@@ -100,14 +143,12 @@ const CatTiposDeSancion = () => {
   // }
   const handleEdit = (rowData) => {
     setEsEditar(true)
-    // console.log(esEditar);
-    // console.log(rowData.original.IdEquipo);
-    // console.log(rowData.original.Activo);
-    setNombre(rowData.original.Activo)
-    setIdEquipo(rowData.original.IdEquipo)
-    //if (rowData.original.Activo == 'false') { setActivo(false) } else { setActivo(true) }
+    setDescripcion(rowData.original.descripcion)
+    setIdTipoSancion(rowData.original.idTipoSancion)
     if (rowData.original.Activo == false) { setActivo(false) } else { setActivo(true) }
-    // handleSetNombre(rowData.original.Activo)//Asigna nombre
+
+    setIdLiga(rowData.original.IdLiga)
+    setAccion(0)//0 para MODIF 1 para nuevo
 
   }
 
@@ -118,8 +159,10 @@ const CatTiposDeSancion = () => {
       <hr></hr>
       {!esEditar ?
         <>
-          <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
-          <SimpleTable data={data} columns={columns} handleEdit={handleEdit} />
+          <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
+          <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
+          <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={ligaF} options={dataLiga} onInputChange={setLigaF} />
+          <SimpleTable data={dataD} columns={columns} handleEdit={handleEdit} />
         </>
         :
 

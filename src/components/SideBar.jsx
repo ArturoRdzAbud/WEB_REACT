@@ -8,6 +8,7 @@ import CatEquipos from './CatEquipos';
 import EquiposSvg from '../svg/equipos.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
 import Arbitrosvg from '../svg/arbitro.svg?react'
+import Tarjetasvg from '../svg/tarjetas.svg?react'
 import CatTiposDeSancion from './CatTiposDeSancion';
 import CatArbitro from './CatArbitro';
 
@@ -80,8 +81,8 @@ export const SideBar = () => {
                             {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
-                            <NavLink to='/RegdeArbitro' className='nav-link' > <Arbitrosvg />{' Registro de Arbitro'} </NavLink>
-                            <NavLink to='/TiposDeSancion' className='nav-link' > <EquiposSvg />{' Tipos de Sancion'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/RegdeArbitro' className='nav-link' > <Arbitrosvg />{' Registro de Arbitro'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
                         </li>
                     </ul>
                 </Menu>
