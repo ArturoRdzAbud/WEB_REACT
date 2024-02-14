@@ -24,11 +24,11 @@ function SimpleTable({ data, columns, handleEdit }) {
     })
 
 
-    
+
 
     return (
         <div>
-            
+
 
             <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtering} onInputChange={setFiltering} />
 
@@ -56,7 +56,7 @@ function SimpleTable({ data, columns, handleEdit }) {
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => (
                                 <td key={cell.id}>
-                                    {cell.column.id == "Nombre" ?
+                                    {(cell.column.id == "Nombre" || cell.column.id == "Descripcion") ?
                                         <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
                                         : flexRender(cell.column.columnDef.cell, cell.getContext())
                                     }

@@ -35,7 +35,7 @@ const CatTiposDeSancion = () => {
       pnIdLiga: idLiga,
       pnIdTipoSancion: idTipoSancion,
       psClave: clave,
-      psdescripcion: descripcion,
+      psDescripcion: descripcion,
       pnJuegosSuspension: juegosSuspension,
       pnCausaBaja: causaBaja,
       pnActivo: activo,
@@ -112,6 +112,11 @@ const CatTiposDeSancion = () => {
 
   const columns = [
     {
+      header: 'Id',
+      accessorKey: 'IdTipoSancion',
+      footer: 'Id'
+    },
+    {
       header: 'Clave',
       accessorKey: 'Clave',
       footer: 'Clave'
@@ -143,8 +148,11 @@ const CatTiposDeSancion = () => {
   // }
   const handleEdit = (rowData) => {
     setEsEditar(true)
-    setDescripcion(rowData.original.descripcion)
-    setIdTipoSancion(rowData.original.idTipoSancion)
+    setClave(rowData.original.Clave)
+    setDescripcion(rowData.original.Descripcion)
+    setIdTipoSancion(rowData.original.IdTipoSancion)
+    setJuegosSuspension(rowData.original.JuegosSuspension)
+    setCausaBaja(rowData.original.CausaBaja)
     if (rowData.original.Activo == false) { setActivo(false) } else { setActivo(true) }
 
     setIdLiga(rowData.original.IdLiga)
@@ -168,20 +176,21 @@ const CatTiposDeSancion = () => {
 
 
         <div>
-          {/* 
-          <form onSubmit={guardarEquipo}>
+          <form onSubmit={guardarTiposDeSancion}>
             <br />
-
-            <ElementoCampo type='text' lblCampo="Activo* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} />
-            <ElementoCampo type='text' lblCampo="Capitán del Equipo :" claCampo="claCapitan" nomCampo={capitan} onInputChange={setCapitan} />
+            {/* <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} /> */}
+            <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo} />
+            <ElementoCampo type='text' lblCampo="Clave* :" claCampo="Clave" onInputChange={setClave} nomCampo={clave} editable={esNuevo} />
+            <ElementoCampo type='text' lblCampo="Descripción* :" claCampo="Descripcion" onInputChange={setDescripcion} nomCampo={descripcion} />
+            <ElementoCampo type='text' lblCampo="Juegos de Suspención* :" claCampo="JuegosSuspencion" nomCampo={juegosSuspension} onInputChange={setJuegosSuspension} />
+            <ElementoCampo type='checkbox' lblCampo="Causa Baja* :" claCampo="CausaBaja" nomCampo={causaBaja} onInputChange={setCausaBaja} />
             <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
 
             <button type="submit" className="btn btn-primary" >Guardar</button>
             <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
 
-            <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sCapitan={capitan}|@sActivo={activo.toString()}|</p>
+            <p>Parrafo temporal para ver parametros del SP a Base de datos|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>
           </form>
-          */}
         </div>
 
       }
