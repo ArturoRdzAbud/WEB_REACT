@@ -22,7 +22,7 @@ const CatTiposDeSancion = () => {
   const [descripcion, setDescripcion] = useState('');
   const [causaBaja, setCausaBaja] = useState(false);
   const [activo, setActivo] = useState(false);
-  const [juegosSuspension, setJuegosSuspension] = useState('');
+  const [juegosSuspension, setJuegosSuspension] = useState(0);
 
   //datos de registri
   const [idLiga, setIdLiga] = useState(0);
@@ -182,7 +182,7 @@ const CatTiposDeSancion = () => {
             <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo} />
             <ElementoCampo type='text' lblCampo="Clave* :" claCampo="Clave" onInputChange={setClave} nomCampo={clave} editable={esNuevo} />
             <ElementoCampo type='text' lblCampo="Descripción* :" claCampo="Descripcion" onInputChange={setDescripcion} nomCampo={descripcion} />
-            <ElementoCampo type='text' lblCampo="Juegos de Suspención* :" claCampo="JuegosSuspencion" nomCampo={juegosSuspension} onInputChange={setJuegosSuspension} />
+            <ElementoCampo type='number' lblCampo="Juegos de Suspención* :" claCampo="JuegosSuspencion" nomCampo={juegosSuspension} onInputChange={setJuegosSuspension} />
             <ElementoCampo type='checkbox' lblCampo="Causa Baja* :" claCampo="CausaBaja" nomCampo={causaBaja} onInputChange={setCausaBaja} />
             <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
 
