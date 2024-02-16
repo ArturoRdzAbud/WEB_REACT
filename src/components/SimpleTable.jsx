@@ -1,4 +1,7 @@
-import { useReactTable, getCoreRowModel, flexRender, getPaginationRowModel, getSortedRowModel, getFilteredRowModel } from "@tanstack/react-table";
+import  { useReactTable, getCoreRowModel, flexRender, getPaginationRowModel
+            , getSortedRowModel, getFilteredRowModel
+            // ,useColumnVisibility 
+        } from "@tanstack/react-table";
 import React, { useState } from 'react';
 import dayjs from "dayjs";
 import { ElementoCampo } from './ElementoCampo';
@@ -10,6 +13,7 @@ function SimpleTable({ data, columns, handleEdit }) {
 
     const [sorting, setSorting] = useState([])
     const [filtering, setFiltering] = useState("")
+    // const { setColumnVisibility, getToggleHiddenProps } = useColumnVisibility();
 
     const table = useReactTable({
         data, columns,
@@ -40,11 +44,13 @@ function SimpleTable({ data, columns, handleEdit }) {
                         <tr key={headerGroup.id}>
                             {
                                 headerGroup.headers.map(header => (
-                                    <th key={header.id}
-                                        onClick={header.column.getToggleSortingHandler()}>
-                                        {flexRender(header.column.columnDef.header, header.getContext())}
-                                        {{ asc: "⬆️", desc: "⬇️" }[header.column.getIsSorted() ?? null]}
-                                    </th>
+                                    // {header.column.columnDef.visible? (  //VALIDA SI ES VISIBLE
+                                        <th key={header.id}
+                                            onClick={header.column.getToggleSortingHandler()}>
+                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                            {{ asc: "⬆️", desc: "⬇️" }[header.column.getIsSorted() ?? null]}
+                                        </th>
+                                    // ):null}
                                 ))
                             }
                         </tr>
@@ -56,10 +62,11 @@ function SimpleTable({ data, columns, handleEdit }) {
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => (
                                 <td key={cell.id}>
-                                    {cell.column.id == "Nombre" ?
-                                        <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
-                                        : flexRender(cell.column.columnDef.cell, cell.getContext())
-                                    }
+                                    {cell.column.columnDef.visible ? (  //VALIDA SI ES VISIBLE
+                                        cell.column.id == "Nombre" ?    //VALIDA SI ES COLUMNA TIPO LINK
+                                            <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
+                                            : flexRender(cell.column.columnDef.cell, cell.getContext())
+                                    ):null}
                                 </td>
                             ))}
                         </tr>

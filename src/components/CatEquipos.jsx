@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
+import { AlertaEmergente } from './AlertaEmergente';
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
 const CatEquipos = () => {
-  const [data, setDatos] = useState([]);
-  const [dataD, setDatosD] = useState([]);
+  const [datosEquiposBD, setDatosEquiposBD] = useState([]);
+  const [datosEquipos, setDatosEquipos] = useState([]);
   //Filtros
   const [esVerBaja, setEsVerBaja] = useState(false);
-  const [ligaF, setLigaF] = useState(-1);
-  const [dataLiga, setDatosLiga] = useState([]);
-  const [torneoF, setTorneoF] = useState(-1);
-  const [dataTorneo, setDatosTorneo] = useState([]);
+  const [datosLiga, setDatosLiga] = useState([]);
+  const [datosTorneo, setDatosTorneo] = useState([]);
+  const [datosTorneoBD, setDatosTorneoBD] = useState([]);//se guarda en otro arreglo para filtrarlo localmente
   //>
   const [esEditar, setEsEditar] = useState(false);
   const [esNuevo, setEsNuevo] = useState(false);
@@ -21,59 +21,97 @@ const CatEquipos = () => {
   const [nombre, setNombre] = useState('');
   const [activo, setActivo] = useState(false);
 
-  //datos de registri
-  const [idLiga, setIdLiga] = useState(0);
-  const [idTorneo, setIdTorneo] = useState(0);
+  //datos de registro
   const [accion, setAccion] = useState(0);
 
+  //DatosPantalla
+  const [claLiga, setClaLiga] = useState(-1);
+  const [claTorneo, setClaTorneo] = useState(-1);
+  const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+  
+  const onAceptar = () => {
+    setEsMuestraCamposReq(false)
+  };
   const guardarEquipo = async (e) => {
     e.preventDefault();
-
     const data = {
-      pnIdLiga: idLiga,
-      pnIdTorneo: idTorneo,
+      pnIdLiga: claLiga,
+      pnIdTorneo: claTorneo,
       pnIdEquipo: idEquipo,
       psNombre: nombre,
       pnActivo: activo,
       pnAccion: accion
     };
-
     const apiReq = 'http://localhost:3000/GuardarEquipo';
-
     try {
 
-      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
+      if (claLiga == -1) { setEsMuestraCamposReq(true); return }
+      if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
+      if (nombre.trim === '') { setEsMuestraCamposReq(true); return }
+      // console.log(esMuestraCamposReq)
       console.log('Guardando equipo', data);
+      // if (claLiga == claLiga) return
+      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
       inicializaCampos()
       setEsEditar(false)//regresa al grid
+      setEsNuevo(false)
     } catch (error) {
       console.error('Error al guardar el equipo', error);
     }
   };
   const inicializaCampos = () => {
-    //TODO LIMPIAR CADA FILTRO A SU VALOR INICIAL
-    setEsVerBaja(false)
-    setLigaF(-1)
-    setTorneoF(-1)
+    // console.log('Inicializa')
+    setEsVerBaja(true)
     //Campos 
-    setIdLiga(0)
-    setIdTorneo(0)
     setNombre('')
+    //DatosPantalla
+    setClaLiga(-1)
+    setClaTorneo(-1)
+
+    setIdEquipo(0)
+    setNombre('')
+    setActivo(true)
+    setAccion(0)
   };
   const cancelar = () => {
-    console.log('Edición cancelada');
+    // console.log('Edición cancelada');
     inicializaCampos()
     setEsEditar(false)
+    setEsNuevo(false)
   };
   const nuevo = () => {
+    // console.log('nuevo')
     inicializaCampos()
     setEsEditar(true)
     setEsNuevo(true)
+    setAccion(1)//0 para MODIF 1 para nuevo
+  };
+
+  const handleLiga = (value, claLiga) => {//limpia combos hijo 
+    // console.log('handleLiga')
+    setClaLiga(value)
+    setClaTorneo(-1)
   };
 
 
-  //se ejecuta 1 vez al inicio se
-  // llenan combos
+  const filtraLocalCombo = () => {
+    // console.log('filtraLocalCombo')
+    var datosFiltrados = datosTorneoBD
+    datosFiltrados = claLiga > 0 ? datosTorneoBD.filter(item => item.IdLiga == claLiga) : datosTorneoBD;
+    setDatosTorneo(datosFiltrados);
+  }
+  const filtraLocal = () => {
+    filtraLocalCombo()//Asigna la Dependencia de combos 
+
+    var datosFiltrados = datosEquiposBD
+    datosFiltrados = !esVerBaja ? datosEquiposBD.filter(item => item.Activo) : datosEquiposBD;
+    datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : datosFiltrados;
+    datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
+
+    setDatosEquipos(datosFiltrados);
+  };
+  //-------------------------------------------------------------------SECCION USE EFFFECT
+  // llena arreglos de combos
   useEffect(() => {
     var apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
     axios.get(apiUrl)
@@ -83,69 +121,82 @@ const CatEquipos = () => {
       )
       .catch(error => console.error('Error al obtener LIGA', error));
 
-      apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarTorneosCmb%22';
-      axios.get(apiUrl)
-        .then(response => {
-          setDatosTorneo(response.data)
-        }
-        )
-        .catch(error => console.error('Error al obtener TORNEO', error));
+    apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarTorneosCmb%22';
+    axios.get(apiUrl)
+      .then(response => {
+        setDatosTorneoBD(response.data)
+        setDatosTorneo(response.data)
+      }
+      )
+      .catch(error => console.error('Error al obtener TORNEO', error));
+  }, []);// se ejecuta 1 vez al inicio solamente
 
-  }, []);
-
+  //Carga equipos desde BD
   useEffect(() => {
+    if (esEditar) return//sale si es modo edicion
     const apiUrl = 'http://localhost:3000/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
     axios.get(apiUrl)
-      .then(response => { setDatos(response.data); setDatosD(response.data) })
-      .catch(error => console.error('Error al obtener datos:', error));
-  }, [esEditar]); // ASEGURA QUE SE EJECUTA CUANDO CAMBIA esEditar recarga GRID
+      .then(response => {
+        setDatosEquiposBD(response.data);
+        setDatosEquipos(response.data);
+      })
+      .catch(error => console.error('Error al obtener datos:', error))
+      .finally(() => {
+        inicializaCampos()
+      });
+  }, [esEditar]); // Se EJECUTA CUANDO CAMBIA la bandera esEditar
 
   useEffect(() => {
-    // TODO IR FILTRANDO LOCALMENTE CAMPO POR CAMPO SIN IR A BASE DE DATOS
-    var datosFiltrados = data
-    datosFiltrados = esVerBaja ? data.filter(item => item.Activo) : data;
-    datosFiltrados = ligaF > 0 ? datosFiltrados.filter(item => item.IdLiga == ligaF) : datosFiltrados;
-    datosFiltrados = torneoF > 0 ? datosFiltrados.filter(item => item.IdTorneo == torneoF) : datosFiltrados;
-    
-    setDatosD(datosFiltrados);
-  }, [esVerBaja, ligaF,torneoF]); //AGREGAR AQUI CADA FILTRO PARA QUE SE FILTRE CADA VEZ QUE CAMBIA UNO
+    filtraLocalCombo()
+  }, [claLiga]);//Se llama al modificar el combo liga modo edicion/nuevo
+
+  useEffect(() => {
+    filtraLocal()
+  }, [esVerBaja, claLiga, claTorneo]); //Se invoca al interactuar con los filtros arriba del grid
 
   const columns = [
     {
       header: 'Id',
       accessorKey: 'IdEquipo',
       footer: 'Id'
+      ,visible :false
     },
     {
       header: 'IdLiga',
       accessorKey: 'IdLiga',
       footer: 'IdLiga'
+      ,visible:false
     },
     {
       header: 'IdTorneo',
       accessorKey: 'IdTorneo',
       footer: 'IdTorneo'
+      ,visible:false
     },
     {
       header: 'Liga',
       accessorKey: 'Liga',
       footer: 'Liga'
+      ,visible:true
     },
     {
       header: 'Torneo',
       accessorKey: 'Torneo',
       footer: 'Torneo'
+      ,visible:true
     },
     {
       header: 'Nombre',
       accessorKey: 'Nombre',
       footer: 'Nombre'
+      ,visible:true
       //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
     },
     {
       header: 'Activo',
       accessorKey: 'Activo',
       footer: 'Activo'
+      ,visible:true
       //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
     }
   ];
@@ -156,48 +207,52 @@ const CatEquipos = () => {
     setIdEquipo(rowData.original.IdEquipo)
     if (rowData.original.Activo == false) { setActivo(false) } else { setActivo(true) }
 
-    setIdLiga(rowData.original.IdLiga)
-    setIdTorneo(rowData.original.IdTorneo)
+    setClaLiga(rowData.original.IdLiga)
+    setClaTorneo(rowData.original.IdTorneo)
     setAccion(0)//0 para MODIF 1 para nuevo
   }
 
   return (
-    <div>
-      <h1>Equipos</h1>
-      <hr></hr>
-      {!esEditar ?//----------------------------MODO GRID pinta filtros al inicio
-        <>
-          <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
-          <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
-          <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={ligaF} options={dataLiga} onInputChange={setLigaF} />
-          <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={torneoF} options={dataTorneo} onInputChange={setTorneoF} />
-          {/* <ElementoCampo type="select" lblCampo="Torneo:" claCampo="campo" options={[
-            { value: 'opcion1', label: 'test' },
-            { value: 'opcion2', label: 'prueba' },
-          ]} /> */}
-          <SimpleTable data={dataD} columns={columns} handleEdit={handleEdit} />
-        </>
-        ://----------------------------MODO EDICION/NUEVO REGISTRO
-        <div>
-          <form onSubmit={guardarEquipo}>
-            <br />
-            {/* <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} /> */}
-            <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo}/>
-            <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={idTorneo} options={dataTorneo} onInputChange={setIdTorneo} editable={esNuevo}/>
+    <>
+      <div>
+        {esNuevo ? (<h1>Nuevo Equipo</h1>) : esEditar ? <h1>Editar Equipo</h1> : <h1>Equipos</h1>}
+        <hr></hr>
+        {!esEditar ?//----------------------------MODO GRID pinta filtros al inicio
+          <>
+            <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
+            <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
+            <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
+            <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} />
+            <SimpleTable data={datosEquipos} columns={columns} handleEdit={handleEdit} />
+          </>
+          ://----------------------------MODO EDICION/NUEVO REGISTRO
+          <div>
+            <form onSubmit={guardarEquipo}>
+              <br />
+              <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo} />
+              <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={esNuevo} />
+              <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} />
+              <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
+              <button type="submit" className="btn btn-primary" >Guardar</button>
+              <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
+              <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sActivo={activo.toString()}|</p>
+            </form>
+          </div>
+        }
+        {/* {setEsCargaInicial(true)}   */}
 
-            <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} />
-            {/* <ElementoCampo type='text' lblCampo="Capitán del Equipo :" claCampo="claCapitan" nomCampo={capitan} onInputChange={setCapitan} /> */}
-            <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
-
-            <button type="submit" className="btn btn-primary" >Guardar</button>
-            <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
-
-            <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sActivo={activo.toString()}|</p>
-          </form>
-        </div>
-
-      }
-    </div>
+        {esMuestraCamposReq &&
+          <AlertaEmergente
+            titulo={'Alerta'}
+            mensaje={'Los datos con * son requeridos, favor de validar.'}
+            mostrarBotonAceptar={true}
+            mostrarBotonCancelar={false}
+            onAceptar={onAceptar}
+          ></AlertaEmergente>
+          // : <p></p>
+        }
+      </div>
+    </>
   );
 };
 
