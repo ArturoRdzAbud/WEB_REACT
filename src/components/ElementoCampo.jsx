@@ -42,9 +42,9 @@ export const ElementoCampo = ({
             id={claCampo}
             //checked={value=='on'?true:false} 
             checked={value}
-            onChange={handleInputChange} 
+            onChange={handleInputChange}
             disabled={!editable}
-            />
+          />
           <label className="form-check-label" htmlFor={claCampo}>{lblCampo}</label>
         </div>
 
@@ -64,24 +64,49 @@ export const ElementoCampo = ({
 
       ) : type == 'select' ? ( // Si el tipo es 'select', mostrar un combo desplegable
         <div className="form-floating mb-3">
-          <select className="form-select" 
-            id={claCampo} 
-            value={value} 
+          <select className="form-select"
+            id={claCampo}
+            value={value}
             onChange={handleInputChange}
             disabled={!editable}
-            >
-          {[{ value: '-1', label: '' }, ...options].map((option, index) => (
-            // {options.map((option, index) => (
+          >
+            {[{ value: '-1', label: '' }, ...options].map((option, index) => (
+              // {options.map((option, index) => (
               <option key={index} value={option.value}>{option.label}</option>
             ))}
           </select>
           <label htmlFor={claCampo}>{lblCampo}</label>
         </div>)
 
+        : type ==  "password" ? ( // Si es una conttraseña o password
+        <div className="form-floating mb-3">
+          <input className="form-control"
+            type= {type}    //{showPwd ? "text" : "password"}
+            id={claCampo}
+            placeholder={lblCampo}
+            value={value}
+            onChange={handleInputChange}
+            disabled={!editable}
+          />
+          <label htmlFor="floatingInput">{lblCampo}</label>
+        </div>)
 
-        : (<p>Tipo de campo no válido</p>)
-        
-        }
+
+        : (
+          <div className="form-floating mb-3">
+            <input className="form-control"
+              type={type}
+              id={claCampo}
+              placeholder={lblCampo}
+              value={value}
+              onChange={handleInputChange}
+              disabled={!editable}
+            />
+            <label htmlFor="floatingInput">{lblCampo}</label>
+          </div>
+        )
+
+      }
 
 
 
