@@ -48,21 +48,8 @@ export const ElementoCampo = ({
           <label className="form-check-label" htmlFor={claCampo}>{lblCampo}</label>
         </div>
 
-      ) : type == 'text' ? ( // Si el tipo es 'texto', mostrar un campo texto
-        <div className="form-floating mb-3">
-          <input className="form-control"
-            type={type}
-            id={claCampo}
-            placeholder={lblCampo}
-            value={value}
-            onChange={handleInputChange}
-            disabled={!editable}
-          />
-          <label htmlFor="floatingInput">{lblCampo}</label>
-        </div>
-
-
       ) : type == 'select' ? ( // Si el tipo es 'select', mostrar un combo desplegable
+
         <div className="form-floating mb-3">
           <select className="form-select"
             id={claCampo}
@@ -76,12 +63,13 @@ export const ElementoCampo = ({
             ))}
           </select>
           <label htmlFor={claCampo}>{lblCampo}</label>
-        </div>)
+        </div>
 
-        : type ==  "password" ? ( // Si es una conttraseña o password
+      ) : type == "password" ? ( // Si es una conttraseña o password
+      
         <div className="form-floating mb-3">
           <input className="form-control"
-            type= {type}    //{showPwd ? "text" : "password"}
+            type={type}    //{showPwd ? "text" : "password"}
             id={claCampo}
             placeholder={lblCampo}
             value={value}
@@ -89,22 +77,22 @@ export const ElementoCampo = ({
             disabled={!editable}
           />
           <label htmlFor="floatingInput">{lblCampo}</label>
-        </div>)
+        </div>
 
-
-        : (
-          <div className="form-floating mb-3">
-            <input className="form-control"
-              type={type}
-              id={claCampo}
-              placeholder={lblCampo}
-              value={value}
-              onChange={handleInputChange}
-              disabled={!editable}
-            />
-            <label htmlFor="floatingInput">{lblCampo}</label>
-          </div>
-        )
+        //PARTE ELSE DEL CONDICIONAL AQUI ENTRAN VARIOS TYPES COMUNES COMO TEXT,NUMBER,DATE,EMAIL, ETC VALIDAR SI FUNCIONA el de arriba "password"
+      ) : (
+        <div className="form-floating mb-3">
+          <input className="form-control"
+            type={type}
+            id={claCampo}
+            placeholder={lblCampo}
+            value={value}
+            onChange={handleInputChange}
+            disabled={!editable}
+          />
+          <label htmlFor="floatingInput">{lblCampo}</label>
+        </div>
+      )
 
       }
 
