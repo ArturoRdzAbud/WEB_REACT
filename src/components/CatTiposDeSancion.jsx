@@ -65,16 +65,19 @@ const CatTiposDeSancion = () => {
     setClave('')
     setJuegosSuspension(0)
     setCausaBaja(false)
+    setAccion(0)
   };
   const cancelar = () => {
     console.log('Edición cancelada');
     inicializaCampos()
     setEsEditar(false)
+    setEsNuevo(false)
   };
   const nuevo = () => {
     inicializaCampos()
     setEsEditar(true)
     setEsNuevo(true)
+    setAccion(1)
   };
 
   //se ejecuta 1 vez al inicio se
@@ -92,8 +95,9 @@ const CatTiposDeSancion = () => {
 
   useEffect(() => {
     // Cambia la URL a la de tu API
-    const apiUrl = 'http://localhost:3000/ConsultarTiposDeSancion?pnIdLiga=1';
-    axios.get(apiUrl)
+    //const apiUrl = 'http://localhost:3000/ConsultarTiposDeSancion?pnIdLiga=1';
+    //axios.get(apiUrl)
+    axios.get('http://localhost:3000/ConsultarTiposDeSancion', { params: { pnIdLiga: ligaF } })
       .then(response => { setDatos(response.data); setDatosD(response.data) })
       .catch(error => console.error('Error al obtener datos:', error));
   }, [esEditar]); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
@@ -115,32 +119,37 @@ const CatTiposDeSancion = () => {
       header: 'Id',
       accessorKey: 'IdTipoSancion',
       footer: 'Id'
+      , visible: true
     },
     {
       header: 'Clave',
       accessorKey: 'Clave',
       footer: 'Clave'
+      , visible: true
     },
     {
       header: 'Descripción',
       accessorKey: 'Descripcion',
       footer: 'Descripción'
+      , visible: true
     },
     {
       header: 'Juegos Suspensión',
       accessorKey: 'JuegosSuspension',
-      footer: 'Juegos Suspension'
+      footer: 'Juegos Suspensión'
+      , visible: true
     },
     {
       header: 'Causa Baja',
       accessorKey: 'CausaBaja',
       footer: 'Causa Baja'
+      , visible: true
     },
     {
       header: 'Activa',
       accessorKey: 'Activo',
       footer: 'Activa'
-      //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
+      , visible: true
     }
   ];
 
@@ -170,6 +179,7 @@ const CatTiposDeSancion = () => {
           <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
           <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
           <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={ligaF} options={dataLiga} onInputChange={setLigaF} />
+          <p>Parrafo temporal para ver parametros del SP a Base de datos|@IdLiga={ligaF}|</p>
           <SimpleTable data={dataD} columns={columns} handleEdit={handleEdit} />
         </>
         :
@@ -189,7 +199,7 @@ const CatTiposDeSancion = () => {
             <button type="submit" className="btn btn-primary" >Guardar</button>
             <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
 
-            <p>Parrafo temporal para ver parametros del SP a Base de datos|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>
+            <p>Parrafo temporal para ver parametros del SP a Base de datos|@accion={accion}|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>
           </form>
         </div>
 
