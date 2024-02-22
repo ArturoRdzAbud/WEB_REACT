@@ -1,7 +1,8 @@
-import  { useReactTable, getCoreRowModel, flexRender, getPaginationRowModel
-            , getSortedRowModel, getFilteredRowModel
-            // ,useColumnVisibility 
-        } from "@tanstack/react-table";
+import {
+    useReactTable, getCoreRowModel, flexRender, getPaginationRowModel
+    , getSortedRowModel, getFilteredRowModel
+    // ,useColumnVisibility 
+} from "@tanstack/react-table";
 import React, { useState } from 'react';
 import dayjs from "dayjs";
 import { ElementoCampo } from './ElementoCampo';
@@ -27,7 +28,9 @@ function SimpleTable({ data, columns, handleEdit }) {
 
     })
 
-
+    const handleCheckboxChange = (row, isChecked) => {
+        row.isActive = isChecked;
+    };
 
 
     return (
@@ -44,13 +47,13 @@ function SimpleTable({ data, columns, handleEdit }) {
                         <tr key={headerGroup.id}>
                             {
                                 headerGroup.headers.map(header => (
-                                    // {header.column.columnDef.visible? (  //VALIDA SI ES VISIBLE
+                                    header.column.columnDef.visible && (//VALIDA SI ES VISIBLE
                                         <th key={header.id}
                                             onClick={header.column.getToggleSortingHandler()}>
                                             {flexRender(header.column.columnDef.header, header.getContext())}
                                             {{ asc: "⬆️", desc: "⬇️" }[header.column.getIsSorted() ?? null]}
                                         </th>
-                                    // ):null}
+                                    )
                                 ))
                             }
                         </tr>
@@ -61,13 +64,39 @@ function SimpleTable({ data, columns, handleEdit }) {
                     {table.getRowModel().rows.map((row) => (
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id}>
-                                    {cell.column.columnDef.visible ? (  //VALIDA SI ES VISIBLE
-                                        (cell.column.id == "Nombre" || cell.column.id == "Descripcion") ?    //VALIDA SI ES COLUMNA TIPO LINK
-                                            <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
-                                            : flexRender(cell.column.columnDef.cell, cell.getContext())
-                                    ):null}
-                                </td>
+                                cell.column.columnDef.visible && (  //VALIDA SI ES VISIBLE
+                                    <td key={cell.id}>
+                                        {
+                                            // let hasMeta = flexRender(cell.column.columnDef.cell, cell.getContext())
+
+                                            (cell.column.id == "Nombre" || cell.column.id == "Descripcion") ?    //VALIDA SI ES COLUMNA TIPO LINK
+                                                <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
+                                                // : (cell.column.id == "Activo") ?
+                                                : (cell.column.id.endsWith("Chk")) ?
+                                                
+                                                    // <ElementoCampo 
+                                                    // type="checkbox" 
+                                                    // lblCampo="" 
+                                                    // editable={false} 
+                                                    // valCampo={cell.renderValue().toString()}
+                                                    // onChange={(e) => {handleCheckboxChange(row, e.target.checked)}}
+                                                    // ></ElementoCampo> 
+
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={cell.renderValue().toString() == 'true'}
+                                                        onChange={(e) => {  
+                                                            handleCheckboxChange(row, e.target.checked);
+                                                        }}
+                                                        disabled={true}
+                                                    />
+                                                    :
+                                                    flexRender(cell.column.columnDef.cell, cell.getContext())
+                                                   
+                                        }
+                                    </td>
+                                )
+
                             ))}
                         </tr>
                     ))}
@@ -77,9 +106,11 @@ function SimpleTable({ data, columns, handleEdit }) {
                         <tr key={footerGroup.id}>
                             {
                                 footerGroup.headers.map(footer => (
-                                    <th key={footer.id}>
-                                        {flexRender(footer.column.columnDef.footer, footer.getContext())}
-                                    </th>
+                                    footer.column.columnDef.visible && (//VALIDA SI ES VISIBLE
+                                        <th key={footer.id}>
+                                            {flexRender(footer.column.columnDef.footer, footer.getContext())}
+                                        </th>
+                                    )
                                 ))
                             }
                         </tr>
