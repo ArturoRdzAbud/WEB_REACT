@@ -7,8 +7,8 @@ import { ElementoCampo } from './ElementoCampo';
 
 const CatTiposDeSancion = () => {
 
-  const [data, setDatos] = useState([]);
-  const [dataD, setDatosD] = useState([]);
+  const [datosTiposBd, setDatosTiposBd] = useState([]);
+  const [datosTipos, setDatosTipos] = useState([]);
   //Filtros
   const [esVerBaja, setEsVerBaja] = useState(false);
   const [ligaF, setLigaF] = useState(-1);
@@ -49,15 +49,17 @@ const CatTiposDeSancion = () => {
       console.log('Guardando Tipos de Sanción', data);
       inicializaCampos()
       setEsEditar(false)//regresa al grid
+      setEsNuevo(false)
     } catch (error) {
       console.error('Error al guardar el tipo de sanción', error);
     }
   };
   const inicializaCampos = () => {
     //TODO LIMPIAR CADA FILTRO A SU VALOR INICIAL
-    setEsVerBaja(false)
+    setEsVerBaja(true)
+    setActivo(true)
     setLigaF(-1)
-    //setTorneoF(-1)
+
     //Campos 
     setIdLiga(0)
     setIdTipoSancion(0)
@@ -65,16 +67,19 @@ const CatTiposDeSancion = () => {
     setClave('')
     setJuegosSuspension(0)
     setCausaBaja(false)
+    setAccion(0)
   };
   const cancelar = () => {
     console.log('Edición cancelada');
     inicializaCampos()
     setEsEditar(false)
+    setEsNuevo(false)
   };
   const nuevo = () => {
     inicializaCampos()
     setEsEditar(true)
     setEsNuevo(true)
+    setAccion(1)
   };
 
   //se ejecuta 1 vez al inicio se
@@ -92,21 +97,29 @@ const CatTiposDeSancion = () => {
 
   useEffect(() => {
     // Cambia la URL a la de tu API
-    const apiUrl = 'http://localhost:3000/ConsultarTiposDeSancion?pnIdLiga=1';
-    axios.get(apiUrl)
-      .then(response => { setDatos(response.data); setDatosD(response.data) })
-      .catch(error => console.error('Error al obtener datos:', error));
+    //const apiUrl = 'http://localhost:3000/ConsultarTiposDeSancion?pnIdLiga=1';
+    //axios.get(apiUrl)
+    if (esEditar) return//sale si es modo edicion
+    axios.get('http://localhost:3000/ConsultarTiposDeSancion', { params: { pnIdLiga: ligaF } })
+      .then(response => { setDatosTipos(response.data); setDatosTiposBd(response.data) })
+      .catch(error => console.error('Error al obtener datos:', error))
+      .finally(() => {
+        inicializaCampos()
+      });
   }, [esEditar]); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
 
-  useEffect(() => {
+  const filtraLocal = () => {
     // TODO IR FILTRANDO LOCALMENTE CAMPO POR CAMPO SIN IR A BASE DE DATOS
-    var datosFiltrados = data
-    datosFiltrados = esVerBaja ? data.filter(item => item.Activo) : data;
+    var datosFiltrados = datosTiposBd
+    datosFiltrados = !esVerBaja ? datosTiposBd.filter(item => item.Activo) : datosTiposBd;
     datosFiltrados = ligaF > 0 ? datosFiltrados.filter(item => item.IdLiga == ligaF) : datosFiltrados;
-    //datosFiltrados = torneoF > 0 ? datosFiltrados.filter(item => item.IdTorneo == torneoF) : datosFiltrados;
 
-    setDatosD(datosFiltrados);
-  }, [esVerBaja, ligaF]); //AGREGAR AQUI CADA FILTRO PARA QUE SE FILTRE CADA VEZ QUE CAMBIA UNO
+    setDatosTipos(datosFiltrados);
+  }
+
+  useEffect(() => {
+    filtraLocal()
+  }, [esVerBaja, ligaF]); //Se invoca al interactuar con los filtros arriba del grid
 
 
 
@@ -115,32 +128,39 @@ const CatTiposDeSancion = () => {
       header: 'Id',
       accessorKey: 'IdTipoSancion',
       footer: 'Id'
+      , visible: true
     },
     {
       header: 'Clave',
       accessorKey: 'Clave',
       footer: 'Clave'
+      , visible: true
     },
     {
       header: 'Descripción',
       accessorKey: 'Descripcion',
       footer: 'Descripción'
+      , visible: true
     },
     {
       header: 'Juegos Suspensión',
       accessorKey: 'JuegosSuspension',
-      footer: 'Juegos Suspension'
+      footer: 'Juegos Suspensión'
+      , visible: true
     },
     {
       header: 'Causa Baja',
       accessorKey: 'CausaBaja',
       footer: 'Causa Baja'
+      , visible: true
+      , cell: ({ getValue }) => (getValue() ? 'Si' : 'No')
     },
     {
       header: 'Activa',
       accessorKey: 'Activo',
       footer: 'Activa'
-      //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
+      , visible: true
+      , cell: ({ getValue }) => (getValue() ? 'Si' : 'No')
     }
   ];
 
@@ -163,14 +183,15 @@ const CatTiposDeSancion = () => {
 
   return (
     <div>
-      <h1>Tipos de Sanción</h1>
+      {esNuevo ? (<h1>Nuevo Tipos de Sanción</h1>) : esEditar ? <h1>Editar Tipos de Sanción</h1> : <h1>Tipos de Sanción</h1>}
       <hr></hr>
       {!esEditar ?
         <>
           <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
-          <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
+          <ElementoCampo type='checkbox' lblCampo="Ver Inactivos:" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
           <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={ligaF} options={dataLiga} onInputChange={setLigaF} />
-          <SimpleTable data={dataD} columns={columns} handleEdit={handleEdit} />
+          <p>Parrafo temporal para ver parametros del SP a Base de datos|@IdLiga={ligaF}|</p>
+          <SimpleTable data={datosTipos} columns={columns} handleEdit={handleEdit} />
         </>
         :
 
@@ -189,7 +210,7 @@ const CatTiposDeSancion = () => {
             <button type="submit" className="btn btn-primary" >Guardar</button>
             <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
 
-            <p>Parrafo temporal para ver parametros del SP a Base de datos|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>
+            <p>Parrafo temporal para ver parametros del SP a Base de datos|@accion={accion}|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>
           </form>
         </div>
 
