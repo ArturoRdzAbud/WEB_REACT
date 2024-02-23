@@ -9,6 +9,7 @@ export const ElementoCampo = ({
   //, valCampo
   , options = []// Nuevo prop para las opciones del combo desplegable
   , editable = true //para indicar si el campo es editable
+  , tamanioString = 255
   //,options = [{ value: '', label: 'Seleccionar' }, ...] // Agrega una opción por defecto al combo desplegable
 }) => {
 
@@ -76,6 +77,7 @@ export const ElementoCampo = ({
             value={value}
             onChange={handleInputChange}
             disabled={!editable}
+            maxLength={tamanioString}
           />
           <label htmlFor="floatingInput">{lblCampo}</label>
         </div>

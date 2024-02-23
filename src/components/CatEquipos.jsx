@@ -194,7 +194,7 @@ const CatEquipos = () => {
     },
     {
       header: 'Activo',
-      accessorKey: 'Activo',
+      accessorKey: 'ActivoChk',
       footer: 'Activo'
       ,visible:true
       //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
@@ -220,7 +220,7 @@ const CatEquipos = () => {
         {!esEditar ?//----------------------------MODO GRID pinta filtros al inicio
           <>
             <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
-            <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
+            <ElementoCampo type='checkbox' lblCampo="Ver Inactivos :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
             <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
             <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} />
             <SimpleTable data={datosEquipos} columns={columns} handleEdit={handleEdit} />
@@ -231,11 +231,11 @@ const CatEquipos = () => {
               <br />
               <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo} />
               <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={esNuevo} />
-              <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} />
+              <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100"/>
               <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
               <button type="submit" className="btn btn-primary" >Guardar</button>
               <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
-              <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sActivo={activo.toString()}|</p>
+              {/* <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sActivo={activo.toString()}|</p> */}
             </form>
           </div>
         }
