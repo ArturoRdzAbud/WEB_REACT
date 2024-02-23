@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
+import { AlertaEmergente } from './AlertaEmergente';
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
 
@@ -24,9 +25,15 @@ const CatTiposDeSancion = () => {
   const [activo, setActivo] = useState(false);
   const [juegosSuspension, setJuegosSuspension] = useState(0);
 
-  //datos de registri
+  //datos de registro
   const [idLiga, setIdLiga] = useState(0);
   const [accion, setAccion] = useState(0);
+
+  const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+
+  const onAceptar = () => {
+    setEsMuestraCamposReq(false)
+  };
 
   const guardarTiposDeSancion = async (e) => {
     e.preventDefault();
@@ -45,6 +52,11 @@ const CatTiposDeSancion = () => {
     const apiReq = 'http://localhost:3000/GuardarTiposDeSancion';
 
     try {
+      if (idLiga == -1) { setEsMuestraCamposReq(true); return }
+      if (clave.trim === '') { setEsMuestraCamposReq(true); return }
+      if (descripcion.trim === '') { setEsMuestraCamposReq(true); return }
+      if (juegosSuspension == '') { setEsMuestraCamposReq(true); return }
+
       await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
       console.log('Guardando Tipos de Sanción', data);
       inicializaCampos()
@@ -190,13 +202,11 @@ const CatTiposDeSancion = () => {
           <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
           <ElementoCampo type='checkbox' lblCampo="Ver Inactivos:" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
           <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={ligaF} options={dataLiga} onInputChange={setLigaF} />
-          <p>Parrafo temporal para ver parametros del SP a Base de datos|@IdLiga={ligaF}|</p>
+          {/*<p>Parrafo temporal para ver parametros del SP a Base de datos|@IdLiga={ligaF}|</p>*/}
           <SimpleTable data={datosTipos} columns={columns} handleEdit={handleEdit} />
         </>
         :
-
-
-        <div>
+        <>
           <form onSubmit={guardarTiposDeSancion}>
             <br />
             {/* <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} /> */}
@@ -210,10 +220,18 @@ const CatTiposDeSancion = () => {
             <button type="submit" className="btn btn-primary" >Guardar</button>
             <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
 
-            <p>Parrafo temporal para ver parametros del SP a Base de datos|@accion={accion}|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>
+            {/*<p>Parrafo temporal para ver parametros del SP a Base de datos|@accion={accion}|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>*/}
           </form>
-        </div>
-
+        </>
+      }
+      {esMuestraCamposReq &&
+        <AlertaEmergente
+          titulo={'Alerta'}
+          mensaje={'Los datos con * son requeridos, favor de validar.'}
+          mostrarBotonAceptar={true}
+          mostrarBotonCancelar={false}
+          onAceptar={onAceptar}
+        ></AlertaEmergente>
       }
     </div>
   );
