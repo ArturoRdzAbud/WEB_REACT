@@ -65,21 +65,8 @@ export const ElementoCampo = ({
           <label htmlFor={claCampo}>{lblCampo}</label>
         </div>
 
-      ) : type == "password" ? ( // Si es una conttraseña o password
-      
-        <div className="form-floating mb-3">
-          <input className="form-control"
-            type={type}    //{showPwd ? "text" : "password"}
-            id={claCampo}
-            placeholder={lblCampo}
-            value={value}
-            onChange={handleInputChange}
-            disabled={!editable}
-          />
-          <label htmlFor="floatingInput">{lblCampo}</label>
-        </div>
-
-        //PARTE ELSE DEL CONDICIONAL AQUI ENTRAN VARIOS TYPES COMUNES COMO TEXT,NUMBER,DATE,EMAIL, ETC VALIDAR SI FUNCIONA el de arriba "password"
+  
+        //PARTE ELSE DEL CONDICIONAL AQUI ENTRAN VARIOS TYPES COMUNES COMO TEXT,NUMBER,DATE,EMAIL, ETC VALIDAR SI FUNCIONA el de arriba "password" (Si jala)
       ) : (
         <div className="form-floating mb-3">
           <input className="form-control"
@@ -95,12 +82,6 @@ export const ElementoCampo = ({
       )
 
       }
-
-
-
-
-
-
 
 
     </>
