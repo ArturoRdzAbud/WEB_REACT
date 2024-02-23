@@ -1,0 +1,18 @@
+.header {
+    position: fixed; /* Establece la posición fija */
+    top: 0; /* Coloca el header en la parte superior */
+    left: 0;
+    width: 100%; /* Ancho del header */
+    /* background-color: #333; //Color de fondo */
+    background-color:#373a47;
+    color: #fff; /* Color de texto */
+    padding: 20px; /* Espacio interno */
+    z-index: 900; /* Asegúrate de que esté en la capa superior */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para resaltar */
+    /* margin-left: 100px; */
+    /* transform: translateX(100px) */
+  }
+  .text {
+    /* transform: translateX(-100px); Contrarresta el desplazamiento del header */
+  }
+  

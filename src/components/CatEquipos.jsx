@@ -3,6 +3,13 @@ import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
 import { AlertaEmergente } from './AlertaEmergente';
+import { SideBarHeader } from './SideBarHeader';
+import config from '../config'; // archivo configs globales del proy
+
+import Close from '../svg/icon-close.svg?react'
+import Save from '../svg/icon-save.svg?react'
+
+
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
@@ -42,7 +49,7 @@ const CatEquipos = () => {
       pnActivo: activo,
       pnAccion: accion
     };
-    const apiReq = 'http://localhost:3000/GuardarEquipo';
+    const apiReq = config.apiUrl+'/GuardarEquipo';
     try {
 
       if (claLiga == -1) { setEsMuestraCamposReq(true); return }
@@ -104,7 +111,7 @@ const CatEquipos = () => {
     filtraLocalCombo()//Asigna la Dependencia de combos 
 
     var datosFiltrados = datosEquiposBD
-    datosFiltrados = !esVerBaja ? datosEquiposBD.filter(item => item.Activo) : datosEquiposBD;
+    datosFiltrados = !esVerBaja ? datosEquiposBD.filter(item => item.ActivoChk) : datosEquiposBD;
     datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : datosFiltrados;
     datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
 
@@ -113,7 +120,7 @@ const CatEquipos = () => {
   //-------------------------------------------------------------------SECCION USE EFFFECT
   // llena arreglos de combos
   useEffect(() => {
-    var apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
+    var apiUrl = config.apiUrl+'/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
     axios.get(apiUrl)
       .then(response => {
         setDatosLiga(response.data)
@@ -121,7 +128,7 @@ const CatEquipos = () => {
       )
       .catch(error => console.error('Error al obtener LIGA', error));
 
-    apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarTorneosCmb%22';
+    apiUrl = config.apiUrl+'/ConsultarCombo?psSpSel=%22ConsultarTorneosCmb%22';
     axios.get(apiUrl)
       .then(response => {
         setDatosTorneoBD(response.data)
@@ -134,7 +141,7 @@ const CatEquipos = () => {
   //Carga equipos desde BD
   useEffect(() => {
     if (esEditar) return//sale si es modo edicion
-    const apiUrl = 'http://localhost:3000/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
+    const apiUrl = config.apiUrl+'/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
     axios.get(apiUrl)
       .then(response => {
         setDatosEquiposBD(response.data);
@@ -205,7 +212,7 @@ const CatEquipos = () => {
     setEsEditar(true)
     setNombre(rowData.original.Nombre)
     setIdEquipo(rowData.original.IdEquipo)
-    if (rowData.original.Activo == false) { setActivo(false) } else { setActivo(true) }
+    if (rowData.original.ActivoChk == false) { setActivo(false) } else { setActivo(true) }
 
     setClaLiga(rowData.original.IdLiga)
     setClaTorneo(rowData.original.IdTorneo)
@@ -214,16 +221,19 @@ const CatEquipos = () => {
 
   return (
     <>
+      <SideBarHeader titulo={esNuevo ? ('Nuevo Equipo') : esEditar ? 'Editar Equipo' : 'Equipos'}></SideBarHeader>
+      <br/><br/><br/><br/>
+      {/* <h1>hola</h1>
+      <hr></hr> */}
       <div>
-        {esNuevo ? (<h1>Nuevo Equipo</h1>) : esEditar ? <h1>Editar Equipo</h1> : <h1>Equipos</h1>}
-        <hr></hr>
+        {/* {esNuevo ? (<h1>Nuevo Equipo</h1>) : esEditar ? <h1>Editar Equipo</h1> : <h1>Equipos</h1>} */}
+        {/* <hr></hr> */}
         {!esEditar ?//----------------------------MODO GRID pinta filtros al inicio
           <>
-            <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
             <ElementoCampo type='checkbox' lblCampo="Ver Inactivos :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
             <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
             <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} />
-            <SimpleTable data={datosEquipos} columns={columns} handleEdit={handleEdit} />
+            <SimpleTable data={datosEquipos} columns={columns} handleEdit={handleEdit} handleNuevo={nuevo}/>
           </>
           ://----------------------------MODO EDICION/NUEVO REGISTRO
           <div>
@@ -233,8 +243,9 @@ const CatEquipos = () => {
               <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={esNuevo} />
               <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100"/>
               <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
-              <button type="submit" className="btn btn-primary" >Guardar</button>
-              <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
+              <button type="button" className="btn btn-primary" onClick={cancelar}><Close/></button>
+              <button type="submit" className="btn btn-primary" ><Save/></button>
+              
               {/* <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sActivo={activo.toString()}|</p> */}
             </form>
           </div>

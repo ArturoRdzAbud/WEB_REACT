@@ -8,7 +8,14 @@ import dayjs from "dayjs";
 import { ElementoCampo } from './ElementoCampo';
 import { useEffect } from "react";
 
-function SimpleTable({ data, columns, handleEdit }) {
+import Pagefirst from '../svg/page-first.svg?react'
+import Pageprev from '../svg/page-prev.svg?react'
+import Pagenext from '../svg/page-next.svg?react'
+import Pagelast from '../svg/page-last.svg?react'
+import Pagenew from '../svg/page-new.svg?react'
+import Pagetop from '../svg/page-top.svg?react'
+
+function SimpleTable({ data, columns, handleEdit, handleNuevo }) {
 
 
 
@@ -32,12 +39,25 @@ function SimpleTable({ data, columns, handleEdit }) {
         row.isActive = isChecked;
     };
 
+    const vuelveArriba = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
 
     return (
         <div>
 
-
-            <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtering} onInputChange={setFiltering} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ flexGrow: 1 }}>
+                    <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtering} onInputChange={setFiltering} />
+                </span>
+                <span>
+                    <button className="btn btn-primary" onClick={handleNuevo}><Pagenew /></button>
+                </span>
+            </div>
 
 
             <table border="1">
@@ -73,7 +93,7 @@ function SimpleTable({ data, columns, handleEdit }) {
                                                 <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
                                                 // : (cell.column.id == "Activo") ?
                                                 : (cell.column.id.endsWith("Chk")) ?
-                                                
+
                                                     // <ElementoCampo 
                                                     // type="checkbox" 
                                                     // lblCampo="" 
@@ -85,14 +105,14 @@ function SimpleTable({ data, columns, handleEdit }) {
                                                     <input
                                                         type="checkbox"
                                                         checked={cell.renderValue().toString() == 'true'}
-                                                        onChange={(e) => {  
+                                                        onChange={(e) => {
                                                             handleCheckboxChange(row, e.target.checked);
                                                         }}
                                                         disabled={true}
                                                     />
                                                     :
                                                     flexRender(cell.column.columnDef.cell, cell.getContext())
-                                                   
+
                                         }
                                     </td>
                                 )
@@ -121,22 +141,18 @@ function SimpleTable({ data, columns, handleEdit }) {
             </table>
 
 
-            <button className="btn btn-primary" onClick={() => table.setPageIndex(0)}>
-                Primera Página
-            </button>
 
-            <button className="btn btn-primary" onClick={() => (table.previousPage())}>
-                Página anterior
-            </button>
-
-
-            <button className="btn btn-primary" onClick={() => (table.nextPage())}>
-                Página siguiente
-            </button>
-
-            <button className="btn btn-primary" onClick={() => table.setPageIndex(table.getPageCount() - 1)}>
-                Última Página
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ flexGrow: 1 }}>
+                    <button className="btn btn-primary" onClick={() => table.setPageIndex(0)}><Pagefirst /></button>
+                    <button className="btn btn-primary" onClick={() => (table.previousPage())}><Pageprev /></button>
+                    <button className="btn btn-primary" onClick={() => (table.nextPage())}><Pagenext /></button>
+                    <button className="btn btn-primary" onClick={() => table.setPageIndex(table.getPageCount() - 1)}><Pagelast /></button>
+                </span>
+                <span>
+                    <button className="btn btn-primary" onClick={vuelveArriba}><Pagetop /></button>
+                </span>
+            </div>
 
 
         </div>
