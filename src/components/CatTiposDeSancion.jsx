@@ -3,6 +3,10 @@ import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
 import { AlertaEmergente } from './AlertaEmergente';
+import { SideBarHeader } from './SideBarHeader';
+import config from '../config'; // archivo configs globales del proy
+import Close from '../svg/icon-close.svg?react'
+import Save from '../svg/icon-save.svg?react'
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
 
@@ -49,7 +53,7 @@ const CatTiposDeSancion = () => {
       pnAccion: accion
     };
 
-    const apiReq = 'http://localhost:3000/GuardarTiposDeSancion';
+    const apiReq = config.apiUrl + '/GuardarTiposDeSancion';
 
     try {
       if (idLiga == -1) { setEsMuestraCamposReq(true); return }
@@ -97,7 +101,7 @@ const CatTiposDeSancion = () => {
   //se ejecuta 1 vez al inicio se
   // llenan combos
   useEffect(() => {
-    var apiUrl = 'http://localhost:3000/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
+    var apiUrl = config.apiUrl + '/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
     axios.get(apiUrl)
       .then(response => {
         setDatosLiga(response.data)
@@ -110,9 +114,11 @@ const CatTiposDeSancion = () => {
   useEffect(() => {
     // Cambia la URL a la de tu API
     //const apiUrl = 'http://localhost:3000/ConsultarTiposDeSancion?pnIdLiga=1';
+    const apiUrl = config.apiUrl + '/ConsultarTiposDeSancion';
     //axios.get(apiUrl)
     if (esEditar) return//sale si es modo edicion
-    axios.get('http://localhost:3000/ConsultarTiposDeSancion', { params: { pnIdLiga: ligaF } })
+    //axios.get('http://localhost:3000/ConsultarTiposDeSancion', { params: { pnIdLiga: ligaF } })
+    axios.get(apiUrl, { params: { pnIdLiga: ligaF } })
       .then(response => { setDatosTipos(response.data); setDatosTiposBd(response.data) })
       .catch(error => console.error('Error al obtener datos:', error))
       .finally(() => {
@@ -140,7 +146,7 @@ const CatTiposDeSancion = () => {
       header: 'Id',
       accessorKey: 'IdTipoSancion',
       footer: 'Id'
-      , visible: true
+      , visible: false
     },
     {
       header: 'Clave',
@@ -195,15 +201,17 @@ const CatTiposDeSancion = () => {
 
   return (
     <div>
-      {esNuevo ? (<h1>Nuevo Tipos de Sanción</h1>) : esEditar ? <h1>Editar Tipos de Sanción</h1> : <h1>Tipos de Sanción</h1>}
-      <hr></hr>
+      {/*{esNuevo ? (<h1>Nuevo Tipos de Sanción</h1>) : esEditar ? <h1>Editar Tipos de Sanción</h1> : <h1>Tipos de Sanción</h1>}*/}
+      <SideBarHeader titulo={esNuevo ? 'Nuevo Tipos de Sanción' : esEditar ? 'Editar Tipos de Sanción' : 'Tipos de Sanción'}></SideBarHeader>
+      <br /><br /><br /><br />
+      {/*<hr></hr>*/}
       {!esEditar ?
         <>
-          <button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>
+          {/*<button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>*/}
           <ElementoCampo type='checkbox' lblCampo="Ver Inactivos:" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
           <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={ligaF} options={dataLiga} onInputChange={setLigaF} />
           {/*<p>Parrafo temporal para ver parametros del SP a Base de datos|@IdLiga={ligaF}|</p>*/}
-          <SimpleTable data={datosTipos} columns={columns} handleEdit={handleEdit} />
+          <SimpleTable data={datosTipos} columns={columns} handleEdit={handleEdit} handleNuevo={nuevo} />
         </>
         :
         <>
