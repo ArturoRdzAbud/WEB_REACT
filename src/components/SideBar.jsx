@@ -15,10 +15,11 @@ import EquiposSvg from '../svg/equipos.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
 import Arbitrosvg from '../svg/arbitro.svg?react'
 import Tarjetasvg from '../svg/tarjetas.svg?react'
-import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react';
+import Programacionsvg from '../svg/evento-de-calendario.svg?react'
 
-
-
+import CatTiposDeSancion from './CatTiposDeSancion';
+import CatArbitro from './CatArbitro';
+import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 
 
 // export default props => {
@@ -95,6 +96,7 @@ export const SideBar = () => {
                             {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/RegdeArbitro' className='nav-link' > <Arbitrosvg />{' Registro de Arbitro'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
                         </li>
                     </ul>
                 </Menu>
@@ -107,6 +109,7 @@ export const SideBar = () => {
                         <Route path='/EquipoTorneo' element={<CatEquipoTorneo />} />
                         <Route path='/RegdeArbitro' element={<CatArbitro />} />
                         <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
+                        <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />
                     </Routes>
                 </div>
 
