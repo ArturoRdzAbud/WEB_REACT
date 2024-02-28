@@ -3,14 +3,22 @@ import { slide as Menu } from 'react-burger-menu';
 import '../css/Sidebar.css';
 
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
+
+//pantallas
 import Equipos from './Equipos'
 import CatEquipos from './CatEquipos';
+import CatTiposDeSancion from './CatTiposDeSancion';
+import CatArbitro from './CatArbitro';
+import CatEquipoTorneo from './CatEquipoTorneo';
+//Iconos
 import EquiposSvg from '../svg/equipos.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
 import Arbitrosvg from '../svg/arbitro.svg?react'
 import Tarjetasvg from '../svg/tarjetas.svg?react'
-import CatTiposDeSancion from './CatTiposDeSancion';
-import CatArbitro from './CatArbitro';
+import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react';
+
+
+
 
 
 // export default props => {
@@ -51,6 +59,7 @@ export const SideBar = () => {
         https://www.npmjs.com/package/react-burger-menu   
         https://tanstack.com/table/latest/docs/introduction
         https://iconsvg.xyz/
+        https://www.svgviewer.dev/
 
 
                 https://github.com/azouaoui-med/react-pro-sidebar/blob/master/storybook/Playground.tsx
@@ -82,6 +91,7 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/' className='nav-link' > <BalonSvg />{' Alta de Equipo'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/RegdeArbitro' className='nav-link' > <Arbitrosvg />{' Registro de Arbitro'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
@@ -94,6 +104,7 @@ export const SideBar = () => {
                     <Routes>
                         <Route path='/' element={<Equipos />} />
                         <Route path='/Equipos' element={<CatEquipos />} />
+                        <Route path='/EquipoTorneo' element={<CatEquipoTorneo />} />
                         <Route path='/RegdeArbitro' element={<CatArbitro />} />
                         <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
                     </Routes>
