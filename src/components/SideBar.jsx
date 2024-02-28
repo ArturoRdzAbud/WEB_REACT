@@ -16,9 +16,8 @@ import BalonSvg from '../svg/balon.svg?react'
 import Arbitrosvg from '../svg/arbitro.svg?react'
 import Tarjetasvg from '../svg/tarjetas.svg?react'
 import Programacionsvg from '../svg/evento-de-calendario.svg?react'
+import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react'
 
-import CatTiposDeSancion from './CatTiposDeSancion';
-import CatArbitro from './CatArbitro';
 import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 
 
