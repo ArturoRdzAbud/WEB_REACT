@@ -56,13 +56,14 @@ const CatTiposDeSancion = () => {
     const apiReq = config.apiUrl + '/GuardarTiposDeSancion';
 
     try {
+      console.log('Guardando Tipos de Sanción', data);
       if (idLiga == -1) { setEsMuestraCamposReq(true); return }
       if (clave.trim === '') { setEsMuestraCamposReq(true); return }
       if (descripcion.trim === '') { setEsMuestraCamposReq(true); return }
-      if (juegosSuspension == '') { setEsMuestraCamposReq(true); return }
+      if (juegosSuspension === '') { setEsMuestraCamposReq(true); return }
 
       await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-      console.log('Guardando Tipos de Sanción', data);
+      //console.log('Guardando Tipos de Sanción', data);
       inicializaCampos()
       setEsEditar(false)//regresa al grid
       setEsNuevo(false)
@@ -129,7 +130,7 @@ const CatTiposDeSancion = () => {
   const filtraLocal = () => {
     // TODO IR FILTRANDO LOCALMENTE CAMPO POR CAMPO SIN IR A BASE DE DATOS
     var datosFiltrados = datosTiposBd
-    datosFiltrados = !esVerBaja ? datosTiposBd.filter(item => item.Activo) : datosTiposBd;
+    datosFiltrados = !esVerBaja ? datosTiposBd.filter(item => item.ActivoChk) : datosTiposBd;
     datosFiltrados = ligaF > 0 ? datosFiltrados.filter(item => item.IdLiga == ligaF) : datosFiltrados;
 
     setDatosTipos(datosFiltrados);
@@ -174,9 +175,9 @@ const CatTiposDeSancion = () => {
       , cell: ({ getValue }) => (getValue() ? 'Si' : 'No')
     },
     {
-      header: 'Activa',
-      accessorKey: 'Activo',
-      footer: 'Activa'
+      header: 'Activo',
+      accessorKey: 'ActivoChk',
+      footer: 'Activo'
       , visible: true
       , cell: ({ getValue }) => (getValue() ? 'Si' : 'No')
     }
@@ -191,7 +192,7 @@ const CatTiposDeSancion = () => {
     setIdTipoSancion(rowData.original.IdTipoSancion)
     setJuegosSuspension(rowData.original.JuegosSuspension)
     setCausaBaja(rowData.original.CausaBaja)
-    if (rowData.original.Activo == false) { setActivo(false) } else { setActivo(true) }
+    if (rowData.original.ActivoChk == false) { setActivo(false) } else { setActivo(true) }
 
     setIdLiga(rowData.original.IdLiga)
     setAccion(0)//0 para MODIF 1 para nuevo
