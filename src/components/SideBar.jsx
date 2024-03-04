@@ -10,6 +10,7 @@ import CatEquipos from './CatEquipos';
 import CatTiposDeSancion from './CatTiposDeSancion';
 import CatArbitro from './CatArbitro';
 import CatEquipoTorneo from './CatEquipoTorneo';
+import CatJugador from './CatJugador';
 //Iconos
 import EquiposSvg from '../svg/equipos.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
@@ -97,6 +98,7 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/RegdeArbitro' className='nav-link' > <Arbitrosvg />{' Registro de Arbitro'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
+                            <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <Arbitrosvg />{' Jugadores'} </NavLink>
                         </li>
                     </ul>
                 </Menu>
@@ -110,6 +112,7 @@ export const SideBar = () => {
                         <Route path='/RegdeArbitro' element={<CatArbitro />} />
                         <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
                         <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />
+                        <Route path='/CatJugador' element={<CatJugador />} />
                     </Routes>
                 </div>
 
