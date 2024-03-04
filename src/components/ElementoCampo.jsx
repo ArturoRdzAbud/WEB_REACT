@@ -10,11 +10,19 @@ export const ElementoCampo = ({
   , options = []// Nuevo prop para las opciones del combo desplegable
   , editable = true //para indicar si el campo es editable
   , tamanioString = 255
+  // , ref 
+  // , setRef
   //,options = [{ value: '', label: 'Seleccionar' }, ...] // Agrega una opción por defecto al combo desplegable
 }) => {
 
   // const [value, setValue] = useState(nomCampo || '')
   const [value, setValue] = useState(nomCampo)
+
+  // const ref = useRef(null);
+  // setRef(ref);
+  // useEffect(() => {
+  //   setRef(ref.current);
+  // }, [setRef]);
 
   const handleInputChange = (event) => {
     // console.log(event)
@@ -28,6 +36,8 @@ export const ElementoCampo = ({
     }
   }
 
+  
+  
   // Actualiza el valor cuando cambia `nomCampo` externamente
   useEffect(() => {
     setValue(nomCampo);
@@ -45,6 +55,7 @@ export const ElementoCampo = ({
             checked={value}
             onChange={handleInputChange}
             disabled={!editable}
+            // ref={referencia}
           />
           <label className="form-check-label" htmlFor={claCampo}>{lblCampo}</label>
         </div>
@@ -57,6 +68,7 @@ export const ElementoCampo = ({
             value={value}
             onChange={handleInputChange}
             disabled={!editable}
+            // ref={ref}
           >
             {[{ value: '-1', label: '' }, ...options].map((option, index) => (
               // {options.map((option, index) => (
@@ -77,6 +89,7 @@ export const ElementoCampo = ({
             onChange={handleInputChange}
             disabled={!editable}
             maxLength={tamanioString}
+            // ref={referencia}
           />
           <label htmlFor="floatingInput">{lblCampo}</label>
         </div>
@@ -92,6 +105,7 @@ export const ElementoCampo = ({
             onChange={handleInputChange}
             disabled={!editable}
             maxLength={tamanioString}
+            // ref={referencia}
           />
           <label htmlFor="floatingInput">{lblCampo}</label>
         </div>

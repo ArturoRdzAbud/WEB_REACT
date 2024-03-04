@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
@@ -8,12 +8,22 @@ import config from '../config'; // archivo configs globales del proy
 
 import Close from '../svg/icon-close.svg?react'
 import Save from '../svg/icon-save.svg?react'
+import { useLocation } from 'react-router-dom';
 
 
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
 const CatEquipos = () => {
+  const location = useLocation();
+  // const { esNuevoP } = new URLSearchParams(location.search);
+  const buttonRefNuevo = useRef(null);
+  // const referencia = useRef(null);
+  const params = new URLSearchParams(location.search);
+  const esNuevoP = params.get('esNuevoP');
+
+
+
   const [datosEquiposBD, setDatosEquiposBD] = useState([]);
   const [datosEquipos, setDatosEquipos] = useState([]);
   //Filtros
@@ -35,7 +45,8 @@ const CatEquipos = () => {
   const [claLiga, setClaLiga] = useState(-1);
   const [claTorneo, setClaTorneo] = useState(-1);
   const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
-  
+  const [mounted, setMounted] = useState(false);
+
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
   };
@@ -49,11 +60,11 @@ const CatEquipos = () => {
       pnActivo: activo,
       pnAccion: accion
     };
-    const apiReq = config.apiUrl+'/GuardarEquipo';
+    const apiReq = config.apiUrl + '/GuardarEquipo';
     try {
 
       if (claLiga == -1) { setEsMuestraCamposReq(true); return }
-      if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
+      // if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
       if (nombre.trim === '') { setEsMuestraCamposReq(true); return }
       // console.log(esMuestraCamposReq)
       console.log('Guardando equipo', data);
@@ -73,7 +84,7 @@ const CatEquipos = () => {
     setNombre('')
     //DatosPantalla
     setClaLiga(-1)
-    setClaTorneo(-1)
+    setClaTorneo(0)//tinyint en bd no acepta negativos
 
     setIdEquipo(0)
     setNombre('')
@@ -116,11 +127,12 @@ const CatEquipos = () => {
     datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
 
     setDatosEquipos(datosFiltrados);
+    // console.log(ref1.current)
   };
   //-------------------------------------------------------------------SECCION USE EFFFECT
   // llena arreglos de combos
   useEffect(() => {
-    var apiUrl = config.apiUrl+'/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
+    var apiUrl = config.apiUrl + '/ConsultarCombo?psSpSel=%22ConsultarLigasCmb%22';
     axios.get(apiUrl)
       .then(response => {
         setDatosLiga(response.data)
@@ -128,7 +140,7 @@ const CatEquipos = () => {
       )
       .catch(error => console.error('Error al obtener LIGA', error));
 
-    apiUrl = config.apiUrl+'/ConsultarCombo?psSpSel=%22ConsultarTorneosCmb%22';
+    apiUrl = config.apiUrl + '/ConsultarCombo?psSpSel=%22ConsultarTorneosCmb%22';
     axios.get(apiUrl)
       .then(response => {
         setDatosTorneoBD(response.data)
@@ -136,12 +148,33 @@ const CatEquipos = () => {
       }
       )
       .catch(error => console.error('Error al obtener TORNEO', error));
+
+    // console.log(esNuevoP)
+    if (esNuevoP == '1') {
+      buttonRefNuevo.current.click();
+    }
+
+    // setClaLiga(3)
+    // ref1.value='2'
+    // console.log(claLiga)
+    // if (ref1.current) {
+    //   ref1.current.value = ref1.current.options[3].value;
+    //}
+    // console.log(ref1.current.options.length)
+
   }, []);// se ejecuta 1 vez al inicio solamente
+
+
+  useEffect(() => {
+    console.log(buttonRefNuevo.current)
+    // console.log(referencia.current)
+  }, []); // Asegúrate de que el useEffect se dispare cuando los datos del combo cambien
+
 
   //Carga equipos desde BD
   useEffect(() => {
     if (esEditar) return//sale si es modo edicion
-    const apiUrl = config.apiUrl+'/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
+    const apiUrl = config.apiUrl + '/ConsultarGrid?psSpSel=%22BuscarEquipos%22';
     axios.get(apiUrl)
       .then(response => {
         setDatosEquiposBD(response.data);
@@ -166,44 +199,44 @@ const CatEquipos = () => {
       header: 'Id',
       accessorKey: 'IdEquipo',
       footer: 'Id'
-      ,visible :false
+      , visible: false
     },
     {
       header: 'IdLiga',
       accessorKey: 'IdLiga',
       footer: 'IdLiga'
-      ,visible:false
+      , visible: false
     },
     {
       header: 'IdTorneo',
       accessorKey: 'IdTorneo',
       footer: 'IdTorneo'
-      ,visible:false
+      , visible: false
     },
     {
       header: 'Liga',
       accessorKey: 'Liga',
       footer: 'Liga'
-      ,visible:true
+      , visible: true
     },
     {
       header: 'Torneo',
       accessorKey: 'Torneo',
       footer: 'Torneo'
-      ,visible:true
+      , visible: false
     },
     {
       header: 'Nombre',
       accessorKey: 'Nombre',
       footer: 'Nombre'
-      ,visible:true
+      , visible: true
       //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
     },
     {
       header: 'Activo',
       accessorKey: 'ActivoChk',
       footer: 'Activo'
-      ,visible:true
+      , visible: true
       //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
     }
   ];
@@ -219,10 +252,14 @@ const CatEquipos = () => {
     setAccion(0)//0 para MODIF 1 para nuevo
   }
 
+  const setRef = (ref) => {
+    referencia.current = ref;
+  };
+
   return (
     <>
       <SideBarHeader titulo={esNuevo ? ('Nuevo Equipo') : esEditar ? 'Editar Equipo' : 'Equipos'}></SideBarHeader>
-      <br/><br/><br/><br/>
+      <br /><br /><br /><br />
       {/* <h1>hola</h1>
       <hr></hr> */}
       <div>
@@ -232,20 +269,21 @@ const CatEquipos = () => {
           <>
             <ElementoCampo type='checkbox' lblCampo="Ver Inactivos :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
             <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
-            <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} />
-            <SimpleTable data={datosEquipos} columns={columns} handleEdit={handleEdit} handleNuevo={nuevo}/>
+            {/* <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} /> */}
+            <SimpleTable data={datosEquipos} columns={columns} handleEdit={handleEdit} handleNuevo={nuevo} buttonRefNuevo={buttonRefNuevo} />
           </>
           ://----------------------------MODO EDICION/NUEVO REGISTRO
           <div>
             <form onSubmit={guardarEquipo}>
               <br />
-              <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo} />
-              <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={esNuevo} />
-              <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100"/>
+              <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo}  />
+              {/* <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={esNuevo} /> */}
+              <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100" />
               <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
-              <button type="button" className="btn btn-primary" onClick={cancelar}><Close/></button>
-              <button type="submit" className="btn btn-primary" ><Save/></button>
-              
+
+              <button type="button" className="btn btn-primary" onClick={cancelar}><Close /></button>
+              <button type="submit" className="btn btn-primary" ><Save /></button>
+
               {/* <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sActivo={activo.toString()}|</p> */}
             </form>
           </div>
