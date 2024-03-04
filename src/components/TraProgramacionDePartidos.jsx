@@ -305,8 +305,19 @@ const TraProgramacionDePartidos = () => {
               <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={false} />
               <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={false} />
               <ElementoCampo type="select" lblCampo="Jornada: " claCampo="campo" nomCampo={idJornada} options={datosJornada} onInputChange={setIdJornada} editable={false} />
-              <ElementoCampo type='text' lblCampo="Local: " claCampo="local" nomCampo={equipo1} onInputChange={setEquipo1} editable={false} />
-              <ElementoCampo type='text' lblCampo="Visitante: " claCampo="visitante" nomCampo={equipo2} onInputChange={setEquipo2} editable={false} />
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <span>
+                    <ElementoCampo type='text' lblCampo="Local: " claCampo="local" nomCampo={equipo1} onInputChange={setEquipo1} editable={false} />
+                </span>
+                <span>
+                    <h2>VS</h2>
+                </span>
+                <span>
+                    <ElementoCampo type='text' lblCampo="Visitante: " claCampo="visitante" nomCampo={equipo2} onInputChange={setEquipo2} editable={false} />
+                </span>
+            </div>
+
+            
               <ElementoCampo type='checkbox' lblCampo="Programado*: " claCampo="programado" nomCampo={programado} onInputChange={setProgramado} />
               <ElementoCampo type='datetime-local' lblCampo="Fecha Hora*:" claCampo="fechahora" nomCampo={fechaHora} onInputChange={setFechaHora} />
               <button type="submit" className="btn btn-primary" >Guardar</button>
