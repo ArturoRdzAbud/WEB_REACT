@@ -6,8 +6,7 @@ import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 
-import Close from '../svg/icon-close.svg?react'
-import Save from '../svg/icon-save.svg?react'
+import { ElementoBotones } from './ElementoBotones';
 import { useLocation } from 'react-router-dom';
 
 
@@ -276,15 +275,12 @@ const CatEquipos = () => {
           <div>
             <form onSubmit={guardarEquipo}>
               <br />
+              <ElementoBotones cancelar={cancelar}></ElementoBotones>
+
               <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo}  />
               {/* <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={esNuevo} /> */}
               <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100" />
               <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
-
-              <button type="button" className="btn btn-primary" onClick={cancelar}><Close /></button>
-              <button type="submit" className="btn btn-primary" ><Save /></button>
-
-              {/* <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sActivo={activo.toString()}|</p> */}
             </form>
           </div>
         }

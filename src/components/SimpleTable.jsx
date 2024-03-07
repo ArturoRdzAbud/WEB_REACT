@@ -1,10 +1,9 @@
 import {
     useReactTable, getCoreRowModel, flexRender, getPaginationRowModel
     , getSortedRowModel, getFilteredRowModel
-    // ,useColumnVisibility 
 } from "@tanstack/react-table";
 import React, { useState } from 'react';
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import { ElementoCampo } from './ElementoCampo';
 import { useEffect } from "react";
 
@@ -18,25 +17,23 @@ import Pagetop from '../svg/page-top.svg?react'
 function SimpleTable({ data
     , columns
     , handleEdit //para columna tipo link
-    // , handleEdit2//para otra columna tipo link
     , esOcultaBotonNuevo = false
     , handleNuevo//Evento al dar clic en nuevo
-    , buttonRefNuevo }) {
+    , buttonRefNuevo
+    , setData
+}) {
 
 
     useEffect(() => {
         table.setPageSize(20);
     }, [])
 
-
-
-
     const [sorting, setSorting] = useState([])
     const [filtering, setFiltering] = useState("")
-    // const { setColumnVisibility, getToggleHiddenProps } = useColumnVisibility();
 
     const table = useReactTable({
-        data, columns,
+        data,
+        columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -47,9 +44,25 @@ function SimpleTable({ data
 
     })
 
-    const handleCheckboxChange = (row, isChecked) => {
-        row.isActive = isChecked;
+    const handleCheckboxChange = (row, isChecked, idColumna) => {
+        // row.isActive = isChecked;
+
+        const newData = data.map((item, index) => {
+            if (index === row.index) {
+                // Actualiza el campo ActivoChk
+                return {
+                    ...item,
+                    [idColumna]: isChecked
+                    // Nombr3: isChecked
+                };
+            }
+            return item;
+        });
+        // Actualiza el estado de los datos de la tabla
+        setData(newData);
     };
+
+
 
     const vuelveArriba = () => {
         window.scrollTo({
@@ -87,14 +100,6 @@ function SimpleTable({ data
                     </span>
                 </div>
 
-                {/* {table.getPageCount() > 1 &&
-                    <div style={{ display: 'flex', alignItems: 'left' }}>
-                        <button type="button" className="btn btn-secondary" onClick={() => table.setPageIndex(0)}><Pagefirst /></button>
-                        <button type="button" className="btn btn-primary" onClick={() => (table.previousPage())}><Pageprev /></button>
-                        <button type="button" className="btn btn-primary" onClick={nextPage}><Pagenext /></button>
-                        <button type="button" className="btn btn-secondary" onClick={() => table.setPageIndex(table.getPageCount() - 1)}><Pagelast /></button>
-                    </div>
-                } */}
                 <table border="1">
 
                     <thead>
@@ -129,21 +134,14 @@ function SimpleTable({ data
                                                     // : (cell.column.id == "Activo") ?
                                                     : (cell.column.id.endsWith("Chk")) ?
 
-                                                        // <ElementoCampo 
-                                                        // type="checkbox" 
-                                                        // lblCampo="" 
-                                                        // editable={false} 
-                                                        // valCampo={cell.renderValue().toString()}
-                                                        // onChange={(e) => {handleCheckboxChange(row, e.target.checked)}}
-                                                        // ></ElementoCampo> 
-
                                                         <input
                                                             type="checkbox"
-                                                            checked={cell.renderValue().toString() == 'true'}
+                                                            checked={cell.renderValue().toString() == 'true' || cell.renderValue().toString() == '1'}
                                                             onChange={(e) => {
-                                                                handleCheckboxChange(row, e.target.checked);
+                                                                handleCheckboxChange(row, e.target.checked, cell.column.id);
                                                             }}
-                                                            disabled={true}
+                                                            disabled={!cell.column.id.endsWith("EditChk")}
+
                                                         />
                                                         :
                                                         flexRender(cell.column.columnDef.cell, cell.getContext())

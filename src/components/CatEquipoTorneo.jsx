@@ -2,18 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
+import { ElementoBotones } from './ElementoBotones';
 import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
-
-import Close from '../svg/icon-close.svg?react'
-import Save from '../svg/icon-save.svg?react'
-// import { useHistory } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
-
-
-
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
@@ -66,6 +59,35 @@ const CatEquipoTorneo = () => {
   };
   const guardarEquipo = async (e) => {
     e.preventDefault();
+
+    //convierte arreglo a xml para parametro sql
+    var xmlString
+    xmlString = ''
+    // console.log(datosEquipos)
+    // return
+    if (esEditarEquipos) {
+      const datosEquiposFiltrados = datosEquipos.filter((equipo) => {
+        return equipo.ActivoEditChk; 
+      });
+      const datosEquipos2 = datosEquiposFiltrados.map(({ IdLiga, IdEquipo }) => ({ IdLiga, IdEquipo }));
+      const xmlDoc = document.implementation.createDocument(null, "data");
+      const rootElement = xmlDoc.documentElement;
+      datosEquipos2.forEach(item => {
+        const itemElement = xmlDoc.createElement("item");
+        for (const key in item) {
+          if (item.hasOwnProperty(key)) {
+            const propElement = xmlDoc.createElement(key);
+            propElement.textContent = item[key];
+            itemElement.appendChild(propElement);
+          }
+        }
+        rootElement.appendChild(itemElement);
+      });
+      xmlString = new XMLSerializer().serializeToString(xmlDoc);
+      // console.log(xmlString);
+    }
+    // return
+
     const data = {
       pnIdLiga: claLiga,
       pnIdTorneo: claTorneo,
@@ -75,16 +97,13 @@ const CatEquipoTorneo = () => {
       psHorarioInicio: hi,
       psHorarioFin: hf,
       pnActivo: activo,
-      pnAccion: accion
+      pnAccion: accion,
+      pnEsEditarEquipos: esEditarEquipos,
+      psXmlEquipos: xmlString
     };
     const apiReq = config.apiUrl + '/GuardarTorneo';
     try {
 
-      // console.log(claLiga);
-      // console.log(claTorneo);
-      // console.log(claTipoTorneo);
-      // console.log(claLiga);
-      // console.log(claLiga);
       // todo validar requeridas las horas
 
       if (claLiga == -1) { setEsMuestraCamposReq(true); return }
@@ -101,8 +120,9 @@ const CatEquipoTorneo = () => {
       setEsEditar(false)//regresa al grid
       setEsEditarEquipos(false)
       setEsNuevo(false)
+
     } catch (error) {
-      console.error('Error al guardar el equipo', error);
+      console.error('Error al guardar el torneo', error);
     }
   };
   const inicializaCampos = () => {
@@ -164,12 +184,13 @@ const CatEquipoTorneo = () => {
   };
 
   const filtraLocalEquipos = () => {
+    // console.log('cellId')
     // filtraLocalCombo()//Asigna la Dependencia de combos 
     var datosFiltrados = datosEquiposBD
     datosFiltrados = datosEquiposBD//!esVerBaja ? datosEquiposBD.filter(item => item.ActivoChk) : datosEquiposBD;
     datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : datosFiltrados;
     datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
-
+    // console.log(datosFiltrados)
     setDatosEquipos(datosFiltrados);
   };
 
@@ -242,13 +263,12 @@ const CatEquipoTorneo = () => {
     filtraLocal()
   }, [esVerBaja, claLiga, claTorneo, claTipoTorneo]); //Se invoca al interactuar con los filtros arriba del grid
 
+  useEffect(() => {
+    if (!esEditarEquipos) return
+    filtraLocalEquipos()
+  }, [esEditarEquipos]); //Se invoca al interactuar con los filtros arriba del grid
+
   const columns = [
-    // {
-    //   header: 'Id',
-    //   accessorKey: 'IdEquipo',
-    //   footer: 'Id'
-    //   ,visible :false
-    // },
     {
       header: 'IdLiga',
       accessorKey: 'IdLiga',
@@ -267,24 +287,6 @@ const CatEquipoTorneo = () => {
       footer: 'IdTipoTorneo'
       , visible: false
     },
-    // {
-    //   header: 'Liga',
-    //   accessorKey: 'Liga',
-    //   footer: 'Liga'
-    //   ,visible:true
-    // },
-    // {
-    //   header: 'Torneo',
-    //   accessorKey: 'Torneo',
-    //   footer: 'Torneo'
-    //   ,visible:true
-    // },
-    // {
-    //   header: 'Tipo Torneo',
-    //   accessorKey: 'TipoTorneo',
-    //   footer: 'Tipo Torneo'
-    //   ,visible:true
-    // },
     {
       header: 'Nombre',
       accessorKey: 'Nombre',
@@ -317,36 +319,42 @@ const CatEquipoTorneo = () => {
     }
   ];
 
+
   const columnsEquipos = [
     {
       header: 'IdLiga',
       accessorKey: 'IdLiga',
       footer: 'IdLiga'
       , visible: false
+      , eseditable: false
     },
     {
       header: 'IdTorneo',
       accessorKey: 'IdTorneo',
       footer: 'IdTorneo'
       , visible: false
+      , eseditable: false
     },
     {
       header: 'IdEquipo',
       accessorKey: 'IdEquipo',
       footer: 'IdEquipo'
       , visible: false
+      , eseditable: false
     },
     {
       header: 'Nombre',
       accessorKey: 'Nombr3',//3 para Evitar que sea LINK
       footer: 'Nombre'
       , visible: true
+      , eseditable: false
     },
     {
       header: 'Activo',
-      accessorKey: 'ActivoChk',
+      accessorKey: 'ActivoEditChk',
       footer: 'Activo'
       , visible: true
+      , eseditable: true
     }
   ];
 
@@ -355,7 +363,8 @@ const CatEquipoTorneo = () => {
     setEsEditar(true)
     setEsEditarEquipos(false)
     if (cellId == 'Descripcion') {
-      filtraLocalEquipos
+      // console.log(cellId)
+      // filtraLocalEquipos
       setEsEditarEquipos(true)
     }
     setNombre(rowData.original.Nombre)
@@ -374,16 +383,12 @@ const CatEquipoTorneo = () => {
     <>
       <SideBarHeader titulo={esNuevo ? ('Nuevo Torneo') : esEditar ? 'Editar Torneo/Equipos' : 'Torneos'}></SideBarHeader>
       <br /><br /><br /><br />
-      {/* <h1>hola</h1>
-      <hr></hr> */}
+      
       <div>
-        {/* {esNuevo ? (<h1>Nuevo Equipo</h1>) : esEditar ? <h1>Editar Equipo</h1> : <h1>Equipos</h1>} */}
-        {/* <hr></hr> */}
         {!esEditar ?//----------------------------MODO GRID pinta filtros al inicio
           <>
             <ElementoCampo type='checkbox' lblCampo="Ver Inactivos :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
             <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
-            {/* <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} /> */}
             <ElementoCampo type="select" lblCampo="Tipo Torneo: " claCampo="campo" nomCampo={claTipoTorneo} options={datosTipoTorneo} onInputChange={setClaTipoTorneo} />
             <SimpleTable data={datosTorneos} columns={columns} handleEdit={handleEdit} handleNuevo={nuevo} />
           </>
@@ -391,10 +396,10 @@ const CatEquipoTorneo = () => {
           <div>
             <form onSubmit={guardarEquipo}>
               <br />
+              <ElementoBotones cancelar={cancelar}></ElementoBotones>
               {!esEditarEquipos &&
                 <>
                   <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo} />
-                  {/* <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={esNuevo} /> */}
                   <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100" />
                   <ElementoCampo type="select" lblCampo="Tipo Torneo*: " claCampo="campo" nomCampo={claTipoTorneo} options={datosTipoTorneo} onInputChange={setClaTipoTorneo} />
 
@@ -413,24 +418,16 @@ const CatEquipoTorneo = () => {
                   <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
                 </>
               }
-              <div style={{ display: 'flex',justifyContent: 'flex-end'}}>
-                <button type="button" className="btn btn-danger" onClick={cancelar}><Close /></button>
-                <button type="submit" className="btn btn-primary" ><Save /></button>
-              </div>
-              {/* <button type="button" className="btn btn-secondary" onClick={AgregarEquipo}>Agregar Equipo</button> */}
-
               {esEditarEquipos &&//se muestra solo cuando ya existe el torneo
                 <>
-                <ElementoCampo type='text' lblCampo="Torneo :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100" editable={false} />
-                <SimpleTable data={datosEquipos} columns={columnsEquipos} handleEdit={handleEdit} handleNuevo={AgregarEquipo} />
+                  <ElementoCampo type='text' lblCampo="Torneo :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100" editable={false} />
+                  <SimpleTable data={datosEquipos} setData={setDatosEquipos} columns={columnsEquipos} handleEdit={handleEdit} handleNuevo={AgregarEquipo} />
                 </>
               }
 
-              {/* <p>Parrafo temporal para ver parametros del SP a Base de datos|@intIdEquipo={idEquipo}|@sNombre={nombre}|@sActivo={activo.toString()}|</p> */}
             </form>
           </div>
         }
-        {/* {setEsCargaInicial(true)}   */}
 
         {esMuestraCamposReq &&
           <AlertaEmergente
