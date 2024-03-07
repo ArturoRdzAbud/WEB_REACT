@@ -129,7 +129,7 @@ export const CatArbitro = () => {
   //Carga equipos desde BD
   useEffect(() => {
     if (esEditar) return//sale si es modo edicion
-    axios.get('http://localhost:3000/ConsultarArbitros', { params: { pnIdLiga: idLiga }}) //&{ pnIdLiga: claLiga }
+    axios.get('http://localhost:3000/ConsultarArbitros', { params: { pnIdLiga: claLiga }}) //&{ pnIdLiga: claLiga }
     //axios.get(apiUrl)
       .then(response => {
         setDatosArbitroBD(response.data);
