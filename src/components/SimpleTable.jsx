@@ -23,13 +23,23 @@ function SimpleTable({ data
     , setData
 }) {
 
-
     useEffect(() => {
         table.setPageSize(20);
     }, [])
+    useEffect(() => {//asigna la pagina actual
+        const timeoutId = setTimeout(() => {
+            table.setPageIndex(numeroPag);
+        }, 0.0001);
+        return () => clearTimeout(timeoutId);
+    }, [data])
+
+
 
     const [sorting, setSorting] = useState([])
     const [filtering, setFiltering] = useState("")
+    const [numeroPag, setNumeroPag] = useState(0)
+
+
 
     const table = useReactTable({
         data,
@@ -38,13 +48,15 @@ function SimpleTable({ data
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        state: { sorting, globalFilter: filtering, },
+        state: { sorting, globalFilter: filtering},
         onSortingChange: setSorting,
         onGlobalFilterChange: setFiltering,
-
     })
 
+
+
     const handleCheckboxChange = (row, isChecked, idColumna) => {
+        setNumeroPag(table.getState().pagination.pageIndex)
         // row.isActive = isChecked;
 
         const newData = data.map((item, index) => {
@@ -58,8 +70,8 @@ function SimpleTable({ data
             }
             return item;
         });
-        // Actualiza el estado de los datos de la tabla
         setData(newData);
+
     };
 
 
@@ -71,8 +83,10 @@ function SimpleTable({ data
         });
     };
     const nextPage = () => {
-        if (table.getCanNextPage())
+        if (table.getCanNextPage()){
             table.nextPage()
+        }
+            
         // console.log(table.getPageCount())
         //https://tanstack.com/table/v8/docs/api/features/pagination#setpagesize
     }
