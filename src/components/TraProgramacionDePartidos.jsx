@@ -5,6 +5,7 @@ import { ElementoCampo } from './ElementoCampo';
 import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
+import dayjs from 'dayjs';
 
 import Close from '../svg/icon-close.svg?react'
 import Save from '../svg/icon-save.svg?react'
@@ -28,7 +29,6 @@ const TraProgramacionDePartidos = () => {
   const [equipo2, setEquipo2] = useState('');
   const [programado, setProgramado] = useState(0);
   const [fechaHora, setFechaHora] = useState('');
-  
 
   
   //DatosPantalla
@@ -51,6 +51,7 @@ const TraProgramacionDePartidos = () => {
       pnProgramado: programado,
       ptFechaHora: fechaHora
     };
+    console.log('parametro fecha hora ' + fechaHora)
     const apiReq = 'http://localhost:3000/GuardarProgramacionDePartidos';
     try {
 
@@ -269,6 +270,13 @@ const TraProgramacionDePartidos = () => {
       footer: 'Fecha Hora'
       ,visible:true
       //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
+    },
+    {
+      header: 'Fecha Hora2',
+      accessorKey: 'FechaHora2',
+      footer: 'Fecha Hora2'
+      ,visible:false
+      //cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')    //Código de referencia para cuando tengamos una columna fecha    
     }
   ];
 
@@ -281,8 +289,10 @@ const TraProgramacionDePartidos = () => {
     setEquipo1(rowData.original.Equipo1)
     setEquipo2(rowData.original.Equipo2)
     if (rowData.original.ProgramadoChk == false) { setProgramado(false) } else { setProgramado(true) }
-    setFechaHora(rowData.original.fechaHora)
+    setFechaHora(rowData.original.FechaHora2)
     setEsEditar(true)
+
+  
    
   }
 
