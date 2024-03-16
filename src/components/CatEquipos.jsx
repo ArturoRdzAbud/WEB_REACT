@@ -44,7 +44,6 @@ const CatEquipos = () => {
   const [claLiga, setClaLiga] = useState(-1);
   const [claTorneo, setClaTorneo] = useState(-1);
   const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
@@ -95,7 +94,18 @@ const CatEquipos = () => {
     inicializaCampos()
     setEsEditar(false)
     setEsNuevo(false)
+    if (esNuevoP){
+      regresa
+    }
   };
+  const regresa=()=>{
+    // const parametros = {
+    //   esNuevoP: 1,
+    //   esNuevo2P: '2',
+    // };
+    // const ruta = `/Equipos?esNuevoP=${parametros.esNuevoP}&esNuevo2P=${parametros.esNuevo2P}`;
+    // navigate(ruta);
+  }
   const nuevo = () => {
     // console.log('nuevo')
     inicializaCampos()
@@ -150,7 +160,10 @@ const CatEquipos = () => {
 
     // console.log(esNuevoP)
     if (esNuevoP == '1') {
+      // setClaLiga(5);
+      // console.log(claLiga)
       buttonRefNuevo.current.click();
+      // console.log(claLiga)
     }
 
     // setClaLiga(3)
@@ -165,7 +178,7 @@ const CatEquipos = () => {
 
 
   useEffect(() => {
-    console.log(buttonRefNuevo.current)
+    // console.log(buttonRefNuevo.current)
     // console.log(referencia.current)
   }, []); // Asegúrate de que el useEffect se dispare cuando los datos del combo cambien
 
@@ -186,6 +199,7 @@ const CatEquipos = () => {
   }, [esEditar]); // Se EJECUTA CUANDO CAMBIA la bandera esEditar
 
   useEffect(() => {
+    // console.log('filtraLocalCombo')
     filtraLocalCombo()
   }, [claLiga]);//Se llama al modificar el combo liga modo edicion/nuevo
 

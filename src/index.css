@@ -116,3 +116,61 @@ li-sidebar:hover {
   transform: translate(0, -11px) rotate(45deg);
 }
 
+
+
+/* 3dbutton */
+button {
+  /* --color: #1283d1; */
+  --color: inherit;
+  --dark-color: color-mix(in srgb, var(--color), black 20%);
+  --gradient-color: linear-gradient(var(--dark-color), var(--color));
+  --darker-gradient: linear-gradient(to bottom, #0006, #0008);
+  --border-color: var(--dark-color);
+
+  display: flex;
+  place-items: center;
+  /* padding: 1rem 1.5rem;
+  margin: 1.5rem; */
+  border: 0;
+
+  font-family: Montserrat, sans-serif;
+  text-shadow: 0 0 6px #0007;
+  font-size: 1rem;
+  color: #eee;
+
+  background: var(--gradient-color);
+  box-shadow:
+    0 7px 0 var(--border-color),
+    0 8px 3px #0004;
+  transition: transform 0.25s, box-shadow 0.25s;
+
+  & svg {
+    --size: 24px;
+
+    /* margin-right: 0.5rem; */
+    width: var(--size);
+    height: var(--size);
+
+    button:not([disabled]):active & path {
+      --fill: #888;
+    }
+  }
+
+  &.rounded {
+    border-radius: 10px;
+  }
+
+  &:active:not([disabled]) {
+    --fill: #888;
+
+    color: #888;
+    background: var(--darker-gradient), var(--gradient-color);
+    box-shadow: 0 2px 0 var(--border-color), 0 3px 3px #0000004d;
+    transform: translateY(5px);
+  }
+
+  &[disabled] {
+    filter: grayscale(1);
+    cursor: not-allowed;
+  }
+}

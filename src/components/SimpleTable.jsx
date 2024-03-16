@@ -18,13 +18,19 @@ function SimpleTable({ data
     , columns
     , handleEdit //para columna tipo link
     , esOcultaBotonNuevo = false
+    , esOcultaBotonArriba = false
+    , esOcultaFooter = false
+    , esOcultaFiltro = false
+    // , esOcultaLinkNombre = false
     , handleNuevo//Evento al dar clic en nuevo
     , buttonRefNuevo
     , setData
+    , pageSize = 20
+    // , esConLink = true
 }) {
 
     useEffect(() => {
-        table.setPageSize(20);
+        table.setPageSize(pageSize);
     }, [])
     useEffect(() => {//asigna la pagina actual
         const timeoutId = setTimeout(() => {
@@ -48,7 +54,7 @@ function SimpleTable({ data
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        state: { sorting, globalFilter: filtering},
+        state: { sorting, globalFilter: filtering },
         onSortingChange: setSorting,
         onGlobalFilterChange: setFiltering,
     })
@@ -83,10 +89,10 @@ function SimpleTable({ data
         });
     };
     const nextPage = () => {
-        if (table.getCanNextPage()){
+        if (table.getCanNextPage()) {
             table.nextPage()
         }
-            
+
         // console.log(table.getPageCount())
         //https://tanstack.com/table/v8/docs/api/features/pagination#setpagesize
     }
@@ -97,9 +103,11 @@ function SimpleTable({ data
             <div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ flexGrow: 1 }}>
-                        <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtering} onInputChange={setFiltering} />
-                    </span>
+                    {!esOcultaFiltro &&
+                        <span style={{ flexGrow: 1 }}>
+                            <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtering} onInputChange={setFiltering} />
+                        </span>
+                    }
                     {table.getPageCount() > 1 &&
                         <span >
                             <button type="button" className="btn btn-secondary" onClick={() => table.setPageIndex(0)}><Pagefirst /></button>
@@ -143,7 +151,7 @@ function SimpleTable({ data
                                             {
                                                 // let hasMeta = flexRender(cell.column.columnDef.cell, cell.getContext())
 
-                                                (cell.column.id == "Nombre" || cell.column.id == "Descripcion") ?    //VALIDA SI ES COLUMNA TIPO LINK
+                                                ((cell.column.id == "Nombre" || cell.column.id == "Descripcion")) ?    //VALIDA SI ES COLUMNA TIPO LINK
                                                     <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row, cell.column.id) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
                                                     // : (cell.column.id == "Activo") ?
                                                     : (cell.column.id.endsWith("Chk")) ?
@@ -157,8 +165,10 @@ function SimpleTable({ data
                                                             disabled={!cell.column.id.endsWith("EditChk")}
 
                                                         />
-                                                        :
-                                                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                                                        : (cell.column.id == "btnAdd") ?
+                                                        <button type="button" className="btn btn-secondary" onClick={vuelveArriba}><Pagetop /></button>
+                                                            :
+                                                            flexRender(cell.column.columnDef.cell, cell.getContext())
 
                                             }
                                         </td>
@@ -168,22 +178,24 @@ function SimpleTable({ data
                             </tr>
                         ))}
                     </tbody>
-                    <tfoot>
-                        {table.getFooterGroups().map(footerGroup => (
-                            <tr key={footerGroup.id}>
-                                {
-                                    footerGroup.headers.map(footer => (
-                                        footer.column.columnDef.visible && (//VALIDA SI ES VISIBLE
-                                            <th key={footer.id}>
-                                                {flexRender(footer.column.columnDef.footer, footer.getContext())}
-                                            </th>
-                                        )
-                                    ))
-                                }
-                            </tr>
-                        ))
-                        }
-                    </tfoot>
+                    {!esOcultaFooter &&
+                        <tfoot>
+                            {table.getFooterGroups().map(footerGroup => (
+                                <tr key={footerGroup.id}>
+                                    {
+                                        footerGroup.headers.map(footer => (
+                                            footer.column.columnDef.visible && (//VALIDA SI ES VISIBLE
+                                                <th key={footer.id}>
+                                                    {flexRender(footer.column.columnDef.footer, footer.getContext())}
+                                                </th>
+                                            )
+                                        ))
+                                    }
+                                </tr>
+                            ))
+                            }
+                        </tfoot>
+                    }
 
                 </table>
 
@@ -197,7 +209,9 @@ function SimpleTable({ data
                     <button type="button" className="btn btn-secondary" onClick={() => table.setPageIndex(table.getPageCount() - 1)}><Pagelast /></button> */}
                     </span>
                     <span>
-                        <button type="button" className="btn btn-secondary" onClick={vuelveArriba}><Pagetop /></button>
+                        {!esOcultaBotonArriba &&
+                            <button type="button" className="btn btn-secondary" onClick={vuelveArriba}><Pagetop /></button>
+                        }
                     </span>
                 </div>
 

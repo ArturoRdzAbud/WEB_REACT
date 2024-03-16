@@ -49,8 +49,9 @@ const CatEquipoTorneo = () => {
     const parametros = {
       esNuevoP: 1,
       esNuevo2P: '2',
+      claLigaP:claLiga
     };
-    const ruta = `/Equipos?esNuevoP=${parametros.esNuevoP}&esNuevo2P=${parametros.esNuevo2P}`;
+    const ruta = `/Equipos?esNuevoP=${parametros.esNuevoP}&esNuevo2P=${parametros.esNuevo2P}&claLigaP=${parametros.claLigaP}`;
     navigate(ruta);
   };
 

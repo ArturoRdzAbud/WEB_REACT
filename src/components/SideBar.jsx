@@ -10,6 +10,7 @@ import CatEquipos from './CatEquipos';
 import CatTiposDeSancion from './CatTiposDeSancion';
 import CatArbitro from './CatArbitro';
 import CatEquipoTorneo from './CatEquipoTorneo';
+import CatEquipoJugador from './CatEquipoJugador';
 import CatJugador from './CatJugador';
 //Iconos
 import EquiposSvg from '../svg/equipos.svg?react'
@@ -18,6 +19,7 @@ import Arbitrosvg from '../svg/arbitro.svg?react'
 import Tarjetasvg from '../svg/tarjetas.svg?react'
 import Programacionsvg from '../svg/evento-de-calendario.svg?react'
 import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react'
+import EquipoJugadorSvg from '../svg/menu-equipo-jugador.svg?react'
 
 import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 
@@ -52,6 +54,7 @@ export const SideBar = () => {
         //npm install react-router-dom
         //npm install @tanstack/react-table
         //npm install --save-dev vite-plugin-svgr
+        //20240312 npm install react-beautiful-dnd //https://medium.com/@wbern/getting-react-18s-strict-mode-to-work-with-react-beautiful-dnd-47bc909348e4
 
 
 
@@ -94,6 +97,7 @@ export const SideBar = () => {
                             {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/RegdeArbitro' className='nav-link' > <Arbitrosvg />{' Registro de Arbitro'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
@@ -109,6 +113,7 @@ export const SideBar = () => {
                         <Route path='/' element={<Equipos />} />
                         <Route path='/Equipos' element={<CatEquipos />} />
                         <Route path='/EquipoTorneo' element={<CatEquipoTorneo />} />
+                        <Route path='/EquipoJugador' element={<CatEquipoJugador />} />
                         <Route path='/RegdeArbitro' element={<CatArbitro />} />
                         <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
                         <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />
