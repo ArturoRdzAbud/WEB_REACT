@@ -7,6 +7,7 @@ import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 import { useNavigate } from 'react-router-dom';
+import Calendario from '../svg/icon-calendar.svg?react'
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
@@ -40,6 +41,8 @@ const CatEquipoTorneo = () => {
   const [claTorneo, setClaTorneo] = useState(-1);
   const [claTipoTorneo, setClaTipoTorneo] = useState(-1);
   const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+  const [esMuestraConfirmacion, setEsMuestraConfirmacion] = useState(false);
+  
   // const history = useHistory();
   const navigate = useNavigate();
 
@@ -57,6 +60,7 @@ const CatEquipoTorneo = () => {
 
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
+    setEsMuestraConfirmacion(false)
   };
   const guardarEquipo = async (e) => {
     e.preventDefault();
@@ -126,6 +130,32 @@ const CatEquipoTorneo = () => {
       console.error('Error al guardar el torneo', error);
     }
   };
+
+  const generarCalendario = async (e) => {
+    e.preventDefault();
+    const data = {
+      pnIdLiga: claLiga,
+      pnIdTorneo: claTorneo
+    };
+    const apiReq = config.apiUrl + '/GenerarCalendario';
+    try {
+
+      if (claLiga == -1) { setEsMuestraCamposReq(true); return }
+      // if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
+      if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
+      // console.log(esMuestraCamposReq)
+      console.log('Generando calendario', data);
+      // if (claLiga == claLiga) return
+      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
+      
+      setEsMuestraConfirmacion(true)
+
+
+    } catch (error) {
+      console.error('Error al generar el calendario', error);
+    }
+  };
+
   const inicializaCampos = () => {
     // console.log('Inicializa')
     setEsVerBaja(true)
@@ -397,7 +427,10 @@ const CatEquipoTorneo = () => {
           <div>
             <form onSubmit={guardarEquipo}>
               <br />
-              <ElementoBotones cancelar={cancelar}></ElementoBotones>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <button type="button" title="Generar Calendario" className="btn btn-info" onClick={generarCalendario}><Calendario /></button>
+                <ElementoBotones cancelar={cancelar}></ElementoBotones>
+            </div>              
               {!esEditarEquipos &&
                 <>
                   <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo} />
@@ -440,6 +473,18 @@ const CatEquipoTorneo = () => {
           ></AlertaEmergente>
           // : <p></p>
         }
+
+        {esMuestraConfirmacion &&
+          <AlertaEmergente
+            titulo={'Alerta'}
+            mensaje={'El calendario del torneo fué generado con éxito, favor de validar en la pantalla de programación de partidos.'}
+            mostrarBotonAceptar={true}
+            mostrarBotonCancelar={false}
+            onAceptar={onAceptar}
+          ></AlertaEmergente>
+          // : <p></p>
+        }
+
       </div>
     </>
   );
