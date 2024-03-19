@@ -10,8 +10,8 @@ export const ElementoBotones = ({
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button type="button" className="btn btn-danger" onClick={cancelar}><Close /></button>
-                <button type="submit" className="btn btn-primary" onClick={guardar}><Save /></button>
+                <button type="button" title="Cancelar" className="btn btn-danger" onClick={cancelar}><Close /></button>
+                <button type="submit" title="Guardar" className="btn btn-primary" onClick={guardar}><Save /></button>
             </div>
         </>
     )

@@ -49,7 +49,7 @@ const CatEquipoTorneo = () => {
     const parametros = {
       esNuevoP: 1,
       esNuevo2P: '2',
-      claLigaP:claLiga
+      claLigaP: claLiga
     };
     const ruta = `/Equipos?esNuevoP=${parametros.esNuevoP}&esNuevo2P=${parametros.esNuevo2P}&claLigaP=${parametros.claLigaP}`;
     navigate(ruta);
@@ -68,7 +68,7 @@ const CatEquipoTorneo = () => {
     // return
     if (esEditarEquipos) {
       const datosEquiposFiltrados = datosEquipos.filter((equipo) => {
-        return equipo.ActivoEditChk; 
+        return equipo.ActivoEditChk;
       });
       const datosEquipos2 = datosEquiposFiltrados.map(({ IdLiga, IdEquipo }) => ({ IdLiga, IdEquipo }));
       const xmlDoc = document.implementation.createDocument(null, "data");
@@ -384,7 +384,7 @@ const CatEquipoTorneo = () => {
     <>
       <SideBarHeader titulo={esNuevo ? ('Nuevo Torneo') : esEditar ? 'Editar Torneo/Equipos' : 'Torneos'}></SideBarHeader>
       <br /><br /><br /><br />
-      
+
       <div>
         {!esEditar ?//----------------------------MODO GRID pinta filtros al inicio
           <>
@@ -421,6 +421,7 @@ const CatEquipoTorneo = () => {
               }
               {esEditarEquipos &&//se muestra solo cuando ya existe el torneo
                 <>
+                  <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo} />
                   <ElementoCampo type='text' lblCampo="Torneo :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100" editable={false} />
                   <SimpleTable data={datosEquipos} setData={setDatosEquipos} columns={columnsEquipos} handleEdit={handleEdit} handleNuevo={AgregarEquipo} />
                 </>

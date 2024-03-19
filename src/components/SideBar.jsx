@@ -55,7 +55,7 @@ export const SideBar = () => {
         //npm install @tanstack/react-table
         //npm install --save-dev vite-plugin-svgr
         //20240312 npm install react-beautiful-dnd //https://medium.com/@wbern/getting-react-18s-strict-mode-to-work-with-react-beautiful-dnd-47bc909348e4
-
+            //para que funcione en desarrollo comentar el strictmode en el archivo main.jsx
 
 
 
