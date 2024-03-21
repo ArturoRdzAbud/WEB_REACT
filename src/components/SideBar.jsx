@@ -97,7 +97,7 @@ export const SideBar = () => {
                             {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores x Equipo'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/RegdeArbitro' className='nav-link' > <Arbitrosvg />{' Registro de Arbitro'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>

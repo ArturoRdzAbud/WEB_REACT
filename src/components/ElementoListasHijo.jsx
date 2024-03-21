@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // import dayjs from "dayjs";
 import { ElementoCampo } from './ElementoCampo';
 import { useEffect } from "react";
+import { ElementoBotones } from './ElementoBotones';
 
 
 export const ElementoListasHijo = ({
@@ -10,18 +11,46 @@ export const ElementoListasHijo = ({
     , data1 = []
     , encabezado = ''
     , esOcultaFiltro = false
+    , esOcultaGuardar = false
+    , filtraLocal
+    , filtro
+    , setFiltro
 }) => {
-    const [filtro, setFiltro] = useState("")
+    // const [filtro, setFiltro] = useState("")
+
+    // useEffect(() => {
+    //     // console.log(filtro)
+    //     filtraLocal
+    // }, [filtro]);
+
+
+
 
     return (
         <>
 
+            {/* <button onClick={filtraLocal}>HOLA</button> */}
+
             <div style={{ width: '100%', boxSizing: 'border-box' }}>
 
-                <label htmlFor="encabezadoLista" style={{ display: 'block', width: '100%' }}>{encabezado}</label>
-                {!esOcultaFiltro &&
-                    <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtro} onInputChange={setFiltro} width='95%'/>
-                }
+                {/* <h4 htmlFor="encabezadoLista" style={{ display: 'block', width: '100%' }}>{encabezado}</h4> */}
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h4 style={{ textAlign: 'left' }}>{encabezado}</h4>
+                    {!esOcultaFiltro ? (//&&
+                        <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtro} onInputChange={setFiltro} width='100%'
+                            onInputChange2={filtraLocal}
+                        />) : (
+                        <div style={{ height: '74px' }} />)
+                    }
+                </div>
+
+
+
+                {/* {!esOcultaGuardar &&
+                    <ElementoBotones></ElementoBotones>
+                } */}
+
                 {/* <span className="border border-primary"> */}
                 <Droppable droppableId={droppableId}>
                     {(provided) => (

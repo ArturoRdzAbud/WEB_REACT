@@ -15,7 +15,12 @@ import { ElementoListasHijo } from "./ElementoListasHijo"; // Ajusta la ruta
 
 // ];
 
-export const ElementoListas = ({ data1, data2, setData1, setData2,enc1,enc2 }) => {
+export const ElementoListas = ({ data1, data2, setData1, setData2,enc1,enc2
+  ,filtraLocal
+  // ,filtraLocal2
+  ,filtro
+  ,setFiltro
+}) => {
   // const [data1, setData1] = useState(initialData1);
   // const [data2, setData2] = useState(initialData2);
 
@@ -67,6 +72,13 @@ export const ElementoListas = ({ data1, data2, setData1, setData2,enc1,enc2 }) =
     }
   };
 
+  // const filtraLocalElementoListas() {
+    //  const filtraLocal2 = () => {
+    //   console.log('Evento enviado desde Hijo2');
+    //   filtraLocal; // Llamar a la función de manejo del evento proporcionada por el componente Padre
+    // };
+
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div style={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -97,8 +109,8 @@ export const ElementoListas = ({ data1, data2, setData1, setData2,enc1,enc2 }) =
           )}
         </Droppable> */}
 
-        <ElementoListasHijo droppableId={'list1'} data1={data1} encabezado={enc1}></ElementoListasHijo>
-        <ElementoListasHijo droppableId={'list2'} data1={data2} encabezado={enc2}></ElementoListasHijo>
+        <ElementoListasHijo droppableId={'list1'} data1={data1} encabezado={enc1} esOcultaFiltro={true}></ElementoListasHijo>
+        <ElementoListasHijo droppableId={'list2'} data1={data2} encabezado={enc2} esOcultaGuardar={true} filtraLocal={filtraLocal} filtro={filtro} setFiltro={setFiltro}></ElementoListasHijo>
         {/* <Droppable droppableId="list2">
           {(provided) => (
             <ul
