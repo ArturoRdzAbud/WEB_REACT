@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
-import { AlertaEmergente } from './AlertaEmergente';
+
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 
 import { ElementoBotones } from './ElementoBotones';
+import { CatEquiposRel1 } from './CatEquiposRel1';
+
 import { useLocation } from 'react-router-dom';
 
 
@@ -43,38 +45,10 @@ const CatEquipos = () => {
   //DatosPantalla
   const [claLiga, setClaLiga] = useState(-1);
   const [claTorneo, setClaTorneo] = useState(-1);
-  const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+  
 
-  const onAceptar = () => {
-    setEsMuestraCamposReq(false)
-  };
-  const guardarEquipo = async (e) => {
-    e.preventDefault();
-    const data = {
-      pnIdLiga: claLiga,
-      pnIdTorneo: claTorneo,
-      pnIdEquipo: idEquipo,
-      psNombre: nombre,
-      pnActivo: activo,
-      pnAccion: accion
-    };
-    const apiReq = config.apiUrl + '/GuardarEquipo';
-    try {
 
-      if (claLiga == -1) { setEsMuestraCamposReq(true); return }
-      // if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
-      if (nombre.trim === '') { setEsMuestraCamposReq(true); return }
-      // console.log(esMuestraCamposReq)
-      console.log('Guardando equipo', data);
-      // if (claLiga == claLiga) return
-      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-      inicializaCampos()
-      setEsEditar(false)//regresa al grid
-      setEsNuevo(false)
-    } catch (error) {
-      console.error('Error al guardar el equipo', error);
-    }
-  };
+  
   const inicializaCampos = () => {
     // console.log('Inicializa')
     setEsVerBaja(true)
@@ -287,29 +261,25 @@ const CatEquipos = () => {
           </>
           ://----------------------------MODO EDICION/NUEVO REGISTRO
           <div>
-            <form onSubmit={guardarEquipo}>
-              <br />
-              <ElementoBotones cancelar={cancelar}></ElementoBotones>
-
-              <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo}  />
-              {/* <ElementoCampo type="select" lblCampo="Torneo*: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={esNuevo} /> */}
-              <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="nombre" onInputChange={setNombre} nomCampo={nombre} tamanioString="100" />
-              <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
-            </form>
+            <CatEquiposRel1
+              claLiga={claLiga}
+              idEquipo={idEquipo}
+              datosLiga={datosLiga}
+              setClaLiga={setClaLiga}
+              esNuevo={esNuevo}
+              setEsEditar={setEsEditar}
+              setEsNuevo={setEsNuevo}
+              inicializaCampos={inicializaCampos}
+              cancelar={cancelar}
+              setNombre={setNombre}
+              nombre={nombre}
+              activo={activo}
+              setActivo={setActivo}
+              accion={accion}
+            ></CatEquiposRel1>
           </div>
         }
-        {/* {setEsCargaInicial(true)}   */}
-
-        {esMuestraCamposReq &&
-          <AlertaEmergente
-            titulo={'Alerta'}
-            mensaje={'Los datos con * son requeridos, favor de validar.'}
-            mostrarBotonAceptar={true}
-            mostrarBotonCancelar={false}
-            onAceptar={onAceptar}
-          ></AlertaEmergente>
-          // : <p></p>
-        }
+        
       </div>
     </>
   );

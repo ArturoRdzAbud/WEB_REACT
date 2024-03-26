@@ -92,7 +92,7 @@ const CatEquipoJugador = () => {
         setDatosEquipos(datosFiltrados);
 
     }
-    const filtraLocal = () => {
+    const filtraLocal = (esFiltraDisp) => {
 
         const regex = new RegExp(filtro, 'i');
         // return
@@ -114,7 +114,7 @@ const CatEquipoJugador = () => {
             datosFiltrados = datosFiltrados.filter(item => item.IdEquipo == 0)//Dsiponibles
             datosFiltrados = filtro != '' ? datosFiltrados.filter(item => regex.test(item.content)) : datosFiltrados;//Filtro disponibles
             setDatosJug(datosFiltrados);
-            setDatosJugEquipo(datosFiltrados2);
+            if (!esFiltraDisp) setDatosJugEquipo(datosFiltrados2);
         } else {
             setDatosJug(Empty1);
             setDatosJugEquipo(Empty2);

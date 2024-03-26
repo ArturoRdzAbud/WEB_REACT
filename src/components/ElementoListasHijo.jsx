@@ -39,7 +39,7 @@ export const ElementoListasHijo = ({
                     <h4 style={{ textAlign: 'left' }}>{encabezado}</h4>
                     {!esOcultaFiltro ? (//&&
                         <ElementoCampo type='text' lblCampo="Filtro :" claCampo="filtro" valCampo={filtro} onInputChange={setFiltro} width='100%'
-                            onInputChange2={filtraLocal}
+                            onInputChange2={() => filtraLocal(true)}
                         />) : (
                         <div style={{ height: '74px' }} />)
                     }
