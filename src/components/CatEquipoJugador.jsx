@@ -111,7 +111,7 @@ const CatEquipoJugador = () => {
 
         // datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
         if (datosFiltrados.length > 0) {
-            if (EsFiltroDisponibles == false) { datosFiltrados2 = datosFiltrados.filter(item => item.IdEquipo == claEquipo) }//Asignados
+            datosFiltrados2 = datosFiltrados.filter(item => item.IdEquipo == claEquipo)//Asignados
             datosFiltrados = datosFiltrados.filter(item => item.IdEquipo == 0)//Dsiponibles
             datosFiltrados = filtro != '' ? datosFiltrados.filter(item => regex.test(item.content)) : datosFiltrados;//Filtro disponibles
             setDatosJug(datosFiltrados);
