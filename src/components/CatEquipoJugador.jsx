@@ -32,6 +32,7 @@ const CatEquipoJugador = () => {
     const [datosTorneoBD, setDatosTorneoBD] = useState([]);//se guarda en otro arreglo para filtrarlo localmente
     const [datosEquiposBD, setDatosEquiposBD] = useState([]);
     const [datosEquipos, setDatosEquipos] = useState([]);
+    var datosFiltrados2 = []
     //>
     const [esEditar, setEsEditar] = useState(false);
     // const [esNuevo, setEsNuevo] = useState(false);
@@ -100,7 +101,7 @@ const CatEquipoJugador = () => {
         filtraLocalCombo()//Asigna la Dependencia de combos 
 
         var datosFiltrados = datosJugBD
-        var datosFiltrados2 = []
+        
         // datosFiltrados = !esVerBaja ? datosFiltrados.filter(item => item.ActivoChk) : datosFiltrados;
 
         //campos requeridos
@@ -110,7 +111,7 @@ const CatEquipoJugador = () => {
 
         // datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
         if (datosFiltrados.length > 0) {
-            datosFiltrados2 = datosFiltrados.filter(item => item.IdEquipo == claEquipo)//Asignados
+            if (EsFiltroDisponibles == false) { datosFiltrados2 = datosFiltrados.filter(item => item.IdEquipo == claEquipo) }//Asignados
             datosFiltrados = datosFiltrados.filter(item => item.IdEquipo == 0)//Dsiponibles
             datosFiltrados = filtro != '' ? datosFiltrados.filter(item => regex.test(item.content)) : datosFiltrados;//Filtro disponibles
             setDatosJug(datosFiltrados);
