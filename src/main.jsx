@@ -5,7 +5,7 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   //se comenta el modo estricto para que pueda funcionar el elmento listas
-  <React.StrictMode> 
+  //<React.StrictMode> 
     <App />
-    </React.StrictMode>,
+    //</React.StrictMode>,
 )
