@@ -91,7 +91,6 @@ const CatEquipoJugador = () => {
         datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : [];
         datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : [];
         setDatosEquipos(datosFiltrados);
-
     }
     const filtraLocal = (esFiltraDisp) => {
 
@@ -111,7 +110,8 @@ const CatEquipoJugador = () => {
 
         // datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
         if (datosFiltrados.length > 0) {
-            datosFiltrados2 = datosFiltrados.filter(item => item.IdEquipo == claEquipo)//Asignados
+            datosFiltrados2 = datosFiltrados.filter(item => item.IdTorneo == claTorneo)//Asignados
+            datosFiltrados2 = datosFiltrados2.filter(item => item.IdEquipo == claEquipo)//Asignados
             datosFiltrados = datosFiltrados.filter(item => item.IdEquipo == 0)//Dsiponibles
             datosFiltrados = filtro != '' ? datosFiltrados.filter(item => regex.test(item.content)) : datosFiltrados;//Filtro disponibles
             setDatosJug(datosFiltrados);
@@ -176,6 +176,15 @@ const CatEquipoJugador = () => {
     useEffect(() => {
         filtraLocalCombo()
     }, [claLiga, claTorneo]);//Se llama al modificar el combo liga modo edicion/nuevo
+
+    //LIMPIA CAMPOS HIJOS DE COMBOS AL MOVER PADRES
+    useEffect(() => {
+        setClaTorneo(-1)
+    }, [claLiga]);
+    useEffect(() => {
+        setClaEquipo(-1)
+    }, [claTorneo]);
+
 
     useEffect(() => {
         filtraLocal()
