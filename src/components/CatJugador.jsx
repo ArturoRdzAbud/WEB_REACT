@@ -247,7 +247,8 @@ const CatJugador = () => {
 
         const apiReq = config.apiUrl + '/GuardarJugadorFotografia';
         const formData = new FormData()
-        formData.append('image', foto)
+        //formData.append('image', foto)
+        formData.append('foto', foto)
         formData.append('pnIdLiga', idLiga)
         //formData.append('pnIdJugador', idJugador)
         console.log('antes de la llamada')
@@ -260,7 +261,9 @@ const CatJugador = () => {
         }
         else {
             try {
-                await axios.post(apiReq, { formData }, { 'Content-Type': 'multipart/form-data' });
+                // await axios.post(apiReq, { formData }, { 'Content-Type': 'multipart/form-data' });
+                await axios.post(apiReq, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+
                 //console.log(foto, idLiga, idJugador)
             } catch (error) {
                 console.error('Error al guardar fotografia', error);
@@ -374,32 +377,41 @@ const CatJugador = () => {
                             <div className='row'>
                                 <div className='col-7'>
                                     <input type='file' className='form-control' name="profile_pic" onChange={selectedFotoHandler} accept=".png, .jpg, .jpeg" />
-                                </div>
-                                <div className='col-3'>
-                                    <button type='button' onClick={guardarFoto} className='btn btn-primary col-12'>Cargar imagen</button>
+
+
+
                                 </div>
 
+                                {/* <form action="/GuardarJugadorFotografia" method="post" enctype="multipart/form-data">
+                                    <input type="file" name="foto">
+                                        <input type="submit" value="Enviar">
+                                        </form> */}
+
+                                        <div className='col-3'>
+                                            <button type='button' onClick={guardarFoto} className='btn btn-primary col-12'>Cargar imagen</button>
+                                        </div>
+
+                                    </div>
                             </div>
                         </div>
-                    </div>
 
+                    </>
+
+            }
+                    {
+                        esMuestraCamposReq &&
+                        <AlertaEmergente
+                            titulo={'Alerta'}
+                            mensaje={'Los datos con * son requeridos, favor de validar.'}
+                            mostrarBotonAceptar={true}
+                            mostrarBotonCancelar={false}
+                            onAceptar={onAceptar}
+                        ></AlertaEmergente>
+                    }
                 </>
-
-            }
-            {
-                esMuestraCamposReq &&
-                <AlertaEmergente
-                    titulo={'Alerta'}
-                    mensaje={'Los datos con * son requeridos, favor de validar.'}
-                    mostrarBotonAceptar={true}
-                    mostrarBotonCancelar={false}
-                    onAceptar={onAceptar}
-                ></AlertaEmergente>
-            }
-        </>
 
 
     )
 }
 
-export default CatJugador
+            export default CatJugador
