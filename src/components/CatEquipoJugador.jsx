@@ -9,6 +9,7 @@ import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 
 import { ElementoBotones } from './ElementoBotones';
+import { CatEquipoJugadorRel1 } from './CatEquipoJugadorRel1';
 import { useLocation } from 'react-router-dom';
 
 
@@ -110,10 +111,21 @@ const CatEquipoJugador = () => {
 
         // datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
         if (datosFiltrados.length > 0) {
-            datosFiltrados2 = datosFiltrados.filter(item => item.IdTorneo == claTorneo)//Asignados
-            datosFiltrados2 = datosFiltrados2.filter(item => item.IdEquipo == claEquipo)//Asignados
-            datosFiltrados = datosFiltrados.filter(item => item.IdEquipo == 0)//Dsiponibles
-            datosFiltrados = filtro != '' ? datosFiltrados.filter(item => regex.test(item.content)) : datosFiltrados;//Filtro disponibles
+
+            //Llena Asignados
+            datosFiltrados2 = datosFiltrados.filter(item => item.IdTorneo == claTorneo)
+            datosFiltrados2 = datosFiltrados2.filter(item => item.IdEquipo == claEquipo)
+            
+            //Llena Disponibles
+            datosFiltrados = datosFiltrados.filter(item => item.IdLiga == claLiga)
+            datosFiltrados = datosFiltrados.filter(item => item.IdTorneo == claTorneo)
+            datosFiltrados = datosFiltrados.filter(item => item.IdEquipo == 0)
+            datosFiltrados = filtro != '' ? datosFiltrados.filter(item => regex.test(item.content)) : datosFiltrados;//Aplica el Filtro en disponibles
+
+            // if(datosFiltrados.length==0){
+            //     datosFiltrados2 = filtro != '' ? datosFiltrados2.filter(item => regex.test(item.content)) : datosFiltrados2;//Aplica el Filtro en ASIGNADOS SI NO LO ENCUENTRA EN DISPONIBLES
+            // }
+
             setDatosJug(datosFiltrados);
             if (!esFiltraDisp) setDatosJugEquipo(datosFiltrados2);
         } else {
@@ -259,12 +271,22 @@ const CatEquipoJugador = () => {
 
     })
 
+    const [isOpen, setIsOpen] = useState(false);
+    const openModal = () => {
+        setIsOpen(true);
+        console.log('modal')
+    };
+
+
     return (
         <>
             <SideBarHeader titulo={'Jugadores x Equipo'}></SideBarHeader>
             <br /><br /><br /><br />
 
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button type="button" title="Copiar Jugadores" className="btn btn-secondary" onClick={openModal}>Copiar</button>
             <ElementoBotones guardar={guardar} esOcultaCancelar={true}></ElementoBotones>
+            </div>
 
             {/* <ElementoCampo type='checkbox' lblCampo="Ver Inactivos :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} /> */}
             <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
@@ -308,6 +330,8 @@ const CatEquipoJugador = () => {
                 ></AlertaEmergente>
                 // : <p></p>
             }
+
+            <CatEquipoJugadorRel1 isOpen={isOpen} setIsOpen={setIsOpen}></CatEquipoJugadorRel1>
 
 
         </>

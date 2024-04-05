@@ -250,13 +250,18 @@ const CatJugador = () => {
         //formData.append('image', foto)
         formData.append('foto', foto)
         formData.append('pnIdLiga', idLiga)
-        //formData.append('pnIdJugador', idJugador)
+        formData.append('pnIdJugador', idJugador)
         console.log('antes de la llamada')
         console.log('idLiga:' + idLiga)
 
+        // console.log(foto.size)
 
         if (!foto) {
             alert('Debe seleccionar un archivo')
+            return
+        }
+        else if(foto.size>1000000){
+            alert('El límite máximo del archivo es 1 MB. Favor de validar ')
             return
         }
         else {

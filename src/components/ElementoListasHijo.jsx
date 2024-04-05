@@ -59,7 +59,7 @@ export const ElementoListasHijo = ({
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                             className="list-group"
-                            style={{ border: '1px solid gray', padding: '8px', width: '95%' }} // Añadir borde alrededor de la lista
+                            style={{ border: '1px solid gray', padding: '8px', width: '95%' ,textAlign:'left' }} // Añadir borde alrededor de la lista
                         >
                             {data1.map((item, index) => (
                                 <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -69,6 +69,7 @@ export const ElementoListasHijo = ({
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                             className="list-group-item list-group-item-action"
+                                            // style={{textAlign:'left'}}
                                         >
                                             {item.content}
                                         </li>
