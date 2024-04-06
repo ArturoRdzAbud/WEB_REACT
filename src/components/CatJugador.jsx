@@ -26,6 +26,7 @@ const CatJugador = () => {
 
     const [esNuevo, setEsNuevo] = useState(false);
     const [esEditar, setEsEditar] = useState(false);
+    const [esFin, setEsFin] = useState(false);
 
 
     //datos de registro
@@ -72,6 +73,7 @@ const CatJugador = () => {
 
     const onAceptar = () => {
         setEsMuestraCamposReq(false)
+        setEsFin(false)
     };
 
     const columns = [
@@ -239,6 +241,7 @@ const CatJugador = () => {
         setIdGenero(-1)
         setFechaNacimiento('')
         setAccion(0)
+        setEsFin(false)
         //setFoto(null)
     }
 
@@ -268,7 +271,7 @@ const CatJugador = () => {
             try {
                 // await axios.post(apiReq, { formData }, { 'Content-Type': 'multipart/form-data' });
                 await axios.post(apiReq, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-
+                setEsFin(true)
                 //console.log(foto, idLiga, idJugador)
             } catch (error) {
                 console.error('Error al guardar fotografia', error);
@@ -412,6 +415,16 @@ const CatJugador = () => {
                             mostrarBotonCancelar={false}
                             onAceptar={onAceptar}
                         ></AlertaEmergente>
+                    }
+                    {esFin &&
+                        <AlertaEmergente
+                            titulo={'Alerta'}
+                            mensaje={'Los datos fueron guardados correctamente.'}
+                            mostrarBotonAceptar={true}
+                            mostrarBotonCancelar={false}
+                            onAceptar={onAceptar}
+                        ></AlertaEmergente>
+                        // : <p></p>
                     }
                 </>
 
