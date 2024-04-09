@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+
 
 export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen }) => {
     // const [isOpen, setIsOpen] = useState(isOpen);
@@ -32,7 +34,7 @@ export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen }) => {
             <button>Alam</button>
             )} */}
 
-            {isOpen && (
+            {/* {isOpen && ( */}
                 <>
 
                     {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -40,7 +42,7 @@ export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen }) => {
                 </button>
                 <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={closeModal}>Close</button> */}
 
-                    <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <Modal show={isOpen} onHide={closeModal}>
                         <div className="modal-dialog" role="document">
                             <div className="modal-content">
                                 <div className="modal-header">
@@ -58,10 +60,11 @@ export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Modal>
+
 
                 </>
-            )}
+            {/* )} */}
 
         </>
     )

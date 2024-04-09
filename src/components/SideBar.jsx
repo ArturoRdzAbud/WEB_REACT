@@ -57,6 +57,9 @@ export const SideBar = () => {
         //npm install --save-dev vite-plugin-svgr
         //20240312 npm install react-beautiful-dnd //https://medium.com/@wbern/getting-react-18s-strict-mode-to-work-with-react-beautiful-dnd-47bc909348e4
             //para que funcione en desarrollo comentar el strictmode en el archivo main.jsx
+        //20240408 npm install react-bootstrap bootstrap
+            // para que funcionene los modales bootstrap en react
+
 
 
 
