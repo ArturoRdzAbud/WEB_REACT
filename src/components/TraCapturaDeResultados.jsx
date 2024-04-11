@@ -45,6 +45,8 @@ const TraCapturaDeResultados = () => {
     e.preventDefault();
 
     //FALTA TRABAJAR EN ESTA PARTE CUANDO VEAMOS LO DE LA EDICIÓN DE GOLES
+    console.log(datosEquipo1)
+    return
 
     //convierte arreglo a xml para parametro sql
     var xmlString
@@ -408,7 +410,7 @@ const TraCapturaDeResultados = () => {
     },
     {
       header: 'Goles',
-      accessorKey: 'Goles',
+      accessorKey: 'GolesEditTxt',
       footer: 'Goles'
       , visible: true
     },

@@ -80,6 +80,21 @@ function SimpleTable({ data
 
     };
 
+    const handleTextboxChange = (row, value, idColumna) => {
+        setNumeroPag(table.getState().pagination.pageIndex)
+        const newData = data.map((item, index) => {
+            if (index === row.index) {
+                return {
+                    ...item,
+                    [idColumna]: value
+                };
+            }
+            return item;
+        });
+        setData(newData);
+    };
+
+
 
 
     const vuelveArriba = () => {
@@ -147,10 +162,10 @@ function SimpleTable({ data
                             <tr key={row.id}>
                                 {row.getVisibleCells().map((cell) => (
                                     cell.column.columnDef.visible && (  //VALIDA SI ES VISIBLE
+
                                         <td key={cell.id}>
                                             {
                                                 // let hasMeta = flexRender(cell.column.columnDef.cell, cell.getContext())
-
                                                 ((cell.column.id == "Nombre" || cell.column.id == "Descripcion")) ?    //VALIDA SI ES COLUMNA TIPO LINK
                                                     <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(row, cell.column.id) }}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</a>
                                                     // : (cell.column.id == "Activo") ?
@@ -166,9 +181,18 @@ function SimpleTable({ data
 
                                                         />
                                                         : (cell.column.id == "btnAdd") ?
-                                                        <button type="button" className="btn btn-secondary" onClick={vuelveArriba}><Pagetop /></button>
-                                                            :
-                                                            flexRender(cell.column.columnDef.cell, cell.getContext())
+                                                            <button type="button" className="btn btn-secondary" onClick={vuelveArriba}><Pagetop /></button>
+                                                            : (cell.column.id.endsWith("EditTxt")) ?
+                                                                <input
+                                                                    style={{width:50}}//ancho de col
+                                                                    min="0"//Solo Positivos
+                                                                    type="number"//solo nums
+                                                                    value={cell.renderValue().toString()}//trae el valor de BD
+                                                                    onChange={(e) => {//asigna valor
+                                                                        handleTextboxChange(row, e.target.value, cell.column.id);
+                                                                    }}
+                                                                /> :
+                                                                flexRender(cell.column.columnDef.cell, cell.getContext())
 
                                             }
                                         </td>
