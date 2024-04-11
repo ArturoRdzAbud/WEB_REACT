@@ -5,6 +5,7 @@ import ElementoListas from './ElementoListas';
 import StrictModeDroppable from './StrictModeDroppable';
 import { ElementoCampo } from './ElementoCampo';
 import { AlertaEmergente } from './AlertaEmergente';
+import { ElementoToastNotification } from './ElementoToastNotification';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 
@@ -53,6 +54,7 @@ const CatEquipoJugador = () => {
     const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
 
     const onAceptar = () => {
+        console.log('onaceptar')
         setEsMuestraCamposReq(false)
         setEsFin(false)
     };
@@ -101,7 +103,7 @@ const CatEquipoJugador = () => {
         filtraLocalCombo()//Asigna la Dependencia de combos 
 
         var datosFiltrados = datosJugBD
-        
+
         // datosFiltrados = !esVerBaja ? datosFiltrados.filter(item => item.ActivoChk) : datosFiltrados;
 
         //campos requeridos
@@ -115,7 +117,7 @@ const CatEquipoJugador = () => {
             //Llena Asignados
             datosFiltrados2 = datosFiltrados.filter(item => item.IdTorneo == claTorneo)
             datosFiltrados2 = datosFiltrados2.filter(item => item.IdEquipo == claEquipo)
-            
+
             //Llena Disponibles
             datosFiltrados = datosFiltrados.filter(item => item.IdLiga == claLiga)
             datosFiltrados = datosFiltrados.filter(item => item.IdTorneo == claTorneo)
@@ -248,6 +250,7 @@ const CatEquipoJugador = () => {
 
         const apiReq = config.apiUrl + '/GuardarJugadorxEquipo';
         try {
+            //console.log(esMuestraCamposReq)
 
             if (claLiga == -1) { setEsMuestraCamposReq(true); return }
             if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
@@ -284,8 +287,8 @@ const CatEquipoJugador = () => {
             <br /><br /><br /><br />
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button type="button" title="Copiar Jugadores" className="btn btn-secondary" onClick={openModal}>Copiar</button>
-            <ElementoBotones guardar={guardar} esOcultaCancelar={true}></ElementoBotones>
+                <button type="button" title="Copiar Jugadores" className="btn btn-secondary" onClick={openModal}>Copiar</button>
+                <ElementoBotones guardar={guardar} esOcultaCancelar={true}></ElementoBotones>
             </div>
 
             {/* <ElementoCampo type='checkbox' lblCampo="Ver Inactivos :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} /> */}
@@ -311,27 +314,42 @@ const CatEquipoJugador = () => {
 
 
             {esMuestraCamposReq &&
-                <AlertaEmergente
-                    titulo={'Alerta'}
+                // <AlertaEmergente
+                //     titulo={'Alerta'}
+                //     mensaje={'Los datos con * son requeridos, favor de validar.'}
+                //     mostrarBotonAceptar={true}
+                //     mostrarBotonCancelar={false}
+                //     onAceptar={onAceptar}
+                // ></AlertaEmergente>
+
+                <ElementoToastNotification
                     mensaje={'Los datos con * son requeridos, favor de validar.'}
-                    mostrarBotonAceptar={true}
-                    mostrarBotonCancelar={false}
                     onAceptar={onAceptar}
-                ></AlertaEmergente>
+                ></ElementoToastNotification>
+
                 // : <p></p>
             }
             {esFin &&
-                <AlertaEmergente
-                    titulo={'Alerta'}
-                    mensaje={'Los datos fueron guardados correctamente.'}
-                    mostrarBotonAceptar={true}
-                    mostrarBotonCancelar={false}
-                    onAceptar={onAceptar}
-                ></AlertaEmergente>
+                // <AlertaEmergente
+                //     titulo={'Alerta'}
+                //     mensaje={'Los datos fueron guardados correctamente.'}
+                //     mostrarBotonAceptar={true}
+                //     mostrarBotonCancelar={false}
+                //     onAceptar={onAceptar}
+                // ></AlertaEmergente>
+
+                <ElementoToastNotification
+                mensaje={'Los datos fueron guardados correctamente.'}
+                onAceptar={onAceptar}
+                ></ElementoToastNotification>
                 // : <p></p>
             }
 
-            <CatEquipoJugadorRel1 isOpen={isOpen} setIsOpen={setIsOpen}></CatEquipoJugadorRel1>
+            <CatEquipoJugadorRel1 isOpen={isOpen} setIsOpen={setIsOpen}
+                datosLiga={datosLiga} datosTorneoBD={datosTorneoBD}
+                setEsMuestraCamposReq={setEsMuestraCamposReq}
+                setEsFin={setEsFin}
+            ></CatEquipoJugadorRel1>
 
 
         </>
