@@ -112,10 +112,7 @@ const TraProgramacionDePartidos = () => {
   }
   const filtraLocal = () => {
     
-
-    console.log(claLiga)
-    console.log(claTorneo)
-    console.log(idJornada)
+    if (esEditar) return//sale si es modo edicion
 
     var datosFiltrados = datosProgramacionBD
     datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : datosFiltrados;
