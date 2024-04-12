@@ -4,6 +4,7 @@ import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
 import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
+import config from '../config'; // archivo configs globales del proy
 
 import dayjs from 'dayjs';
 
@@ -53,9 +54,13 @@ const TraCapturaDeResultados = () => {
     // return
     if (esEditar) {
       //const datosJugadoresEquipo1 = datosEquipo1.filter((equipo1) => {return equipo1.ActivoChk;});
-      const datosJugadoresEquipo1 = datosEquipo1.map(({ IdLiga, IdTorneo, IdJornada, IdEquipo }) => ({ IdLiga, IdTorneo, IdJornada, IdEquipo }));
+      console.log('muestra datosEquipo1');
+      console.log(datosEquipo1);
+      const datosJugadoresEquipo1 = datosEquipo1.map(({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, Goles, TAEditChk, TREditChk, AEditChk }) => ({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, Goles, TAEditChk, TREditChk, AEditChk }));
       const xmlDoc = document.implementation.createDocument(null, "data");
       const rootElement = xmlDoc.documentElement;
+      console.log('muestra datosJugadoresEquipo1');
+      console.log(datosJugadoresEquipo1);
       datosJugadoresEquipo1.forEach(item => {
         const itemElement = xmlDoc.createElement("item");
         for (const key in item) {
@@ -68,10 +73,11 @@ const TraCapturaDeResultados = () => {
         rootElement.appendChild(itemElement);
       });
       xmlString = new XMLSerializer().serializeToString(xmlDoc);
+      console.log('muestra xmlString');
       console.log(xmlString);
     }
-    return
-
+    
+    
     //convierte arreglo a xml para parametro sql
     var xmlString2
     xmlString2 = ''
@@ -79,9 +85,13 @@ const TraCapturaDeResultados = () => {
     // return
     if (esEditar) {
       //const datosJugadoresEquipo1 = datosEquipo1.filter((equipo1) => {return equipo1.ActivoChk;});
-      const datosJugadoresEquipo2 = datosEquipo2.map(({ IdLiga, IdTorneo, IdJornada, IdEquipo }) => ({ IdLiga, IdTorneo, IdJornada, IdEquipo }));
+      console.log('muestra datosEquipo2');
+      console.log(datosEquipo2);
+      const datosJugadoresEquipo2 = datosEquipo2.map(({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, Goles, TAEditChk, TREditChk, AEditChk }) => ({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, Goles, TAEditChk, TREditChk, AEditChk }));
       const xmlDoc2 = document.implementation.createDocument(null, "data");
       const rootElement2 = xmlDoc2.documentElement;
+      console.log('muestra datosJugadoresEquipo2');
+      console.log(datosJugadoresEquipo2);
       datosJugadoresEquipo2.forEach(item => {
         const itemElement2 = xmlDoc2.createElement("item");
         for (const key in item) {
@@ -94,18 +104,18 @@ const TraCapturaDeResultados = () => {
         rootElement2.appendChild(itemElement2);
       });
       xmlString2 = new XMLSerializer().serializeToString(xmlDoc2);
-      // console.log(xmlString);
+      console.log('muestra xmlString2');
+      console.log(xmlString2);
     }
-
+    
     const data = {
       pnIdLiga: claLiga,
       pnIdTorneo: claTorneo,
       pnIdJornada: idJornada,
-      pnIdEquipo: idEquipo1,
-      ptFechaHora: fechaHora,
-      pnEsEditarResultados: esEditarResultados,
-      psXmlEquipo1: xmlString,
-      psXmlEquipo2: xmlString2
+      //ptFechaHora: fechaHora,
+      //pnEsEditarResultados: esEditarResultados,
+      psXmlResultados1: xmlString,
+      psXmlResultados2: xmlString2
     };
     const apiReq = config.apiUrl + '/GuardarCapturaDeResultados';
     try {
@@ -114,16 +124,15 @@ const TraCapturaDeResultados = () => {
 
       if (claLiga == -1) { setEsMuestraCamposReq(true); return }
       if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
-      if (idJornada == -1) { setEsMuestraCamposReq(true); return }
-      if (idEquipo1 == -1) { setEsMuestraCamposReq(true); return }
-      if (fechaHora.trim == '') { setEsMuestraCamposReq(true); return }
+      if (idJornada == -1) { setEsMuestraCamposReq(true); return }      
+      //if (fechaHora.trim == '') { setEsMuestraCamposReq(true); return }
       // console.log(esMuestraCamposReq)
       console.log('Guardando Captura de Resultados', data);
       // if (claLiga == claLiga) return
       await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
       inicializaCampos()
       setEsEditar(false)//regresa al grid
-      setEsNuevo(false)
+      
 
     } catch (error) {
       console.error('Error al guardar la captura de resultados', error);
