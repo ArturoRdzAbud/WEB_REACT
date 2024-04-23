@@ -45,10 +45,7 @@ const TraCapturaDeResultados = () => {
   const guardarCapturaDeResultados = async (e) => {
     e.preventDefault();
 
-    //FALTA TRABAJAR EN ESTA PARTE CUANDO VEAMOS LO DE LA EDICIÓN DE GOLES
-    console.log(datosEquipo1)
-    return
-
+   
     //convierte arreglo a xml para parametro sql
     var xmlString
     xmlString = ''
@@ -56,13 +53,9 @@ const TraCapturaDeResultados = () => {
     // return
     if (esEditar) {
       //const datosJugadoresEquipo1 = datosEquipo1.filter((equipo1) => {return equipo1.ActivoChk;});
-      console.log('muestra datosEquipo1');
-      console.log(datosEquipo1);
-      const datosJugadoresEquipo1 = datosEquipo1.map(({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, Goles, TAEditChk, TREditChk, AEditChk }) => ({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, Goles, TAEditChk, TREditChk, AEditChk }));
+      const datosJugadoresEquipo1 = datosEquipo1.map(({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, GolesEditTxt, TAEditChk, TREditChk, AEditChk }) => ({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, GolesEditTxt, TAEditChk, TREditChk, AEditChk }));
       const xmlDoc = document.implementation.createDocument(null, "data");
       const rootElement = xmlDoc.documentElement;
-      console.log('muestra datosJugadoresEquipo1');
-      console.log(datosJugadoresEquipo1);
       datosJugadoresEquipo1.forEach(item => {
         const itemElement = xmlDoc.createElement("item");
         for (const key in item) {
@@ -75,8 +68,6 @@ const TraCapturaDeResultados = () => {
         rootElement.appendChild(itemElement);
       });
       xmlString = new XMLSerializer().serializeToString(xmlDoc);
-      console.log('muestra xmlString');
-      console.log(xmlString);
     }
     
     
@@ -87,13 +78,9 @@ const TraCapturaDeResultados = () => {
     // return
     if (esEditar) {
       //const datosJugadoresEquipo1 = datosEquipo1.filter((equipo1) => {return equipo1.ActivoChk;});
-      console.log('muestra datosEquipo2');
-      console.log(datosEquipo2);
-      const datosJugadoresEquipo2 = datosEquipo2.map(({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, Goles, TAEditChk, TREditChk, AEditChk }) => ({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, Goles, TAEditChk, TREditChk, AEditChk }));
+      const datosJugadoresEquipo2 = datosEquipo2.map(({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, GolesEditTxt, TAEditChk, TREditChk, AEditChk }) => ({ IdLiga, IdTorneo, IdJornada, IdEquipo, IdJugador, GolesEditTxt, TAEditChk, TREditChk, AEditChk }));
       const xmlDoc2 = document.implementation.createDocument(null, "data");
       const rootElement2 = xmlDoc2.documentElement;
-      console.log('muestra datosJugadoresEquipo2');
-      console.log(datosJugadoresEquipo2);
       datosJugadoresEquipo2.forEach(item => {
         const itemElement2 = xmlDoc2.createElement("item");
         for (const key in item) {
@@ -106,8 +93,6 @@ const TraCapturaDeResultados = () => {
         rootElement2.appendChild(itemElement2);
       });
       xmlString2 = new XMLSerializer().serializeToString(xmlDoc2);
-      console.log('muestra xmlString2');
-      console.log(xmlString2);
     }
     
     const data = {
@@ -129,9 +114,10 @@ const TraCapturaDeResultados = () => {
       if (idJornada == -1) { setEsMuestraCamposReq(true); return }      
       //if (fechaHora.trim == '') { setEsMuestraCamposReq(true); return }
       // console.log(esMuestraCamposReq)
-      console.log('Guardando Captura de Resultados', data);
+     
       // if (claLiga == claLiga) return
-      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
+      await axios.post(apiReq, { data });
+      //console.log(data)
       inicializaCampos()
       setEsEditar(false)//regresa al grid
       
@@ -231,7 +217,6 @@ const TraCapturaDeResultados = () => {
      
       //Obtiene la información de los jugadores del equipo 1
       apiUrl = 'http://localhost:3000/ConsultarJugadoresEquipo';
-      console.log(apiUrl)
       axios.get(apiUrl,{ params: { pnIdLiga: claLiga, pnIdTorneo: claTorneo, pnIdJornada: idJornada, pnIdEquipo: idEquipo1 } })
         .then(response => {
           setDatosEquipo1BD(response.data);
@@ -487,7 +472,7 @@ const TraCapturaDeResultados = () => {
     },
     {
       header: 'Goles',
-      accessorKey: 'Goles',
+      accessorKey: 'GolesEditTxt',
       footer: 'Goles'
       , visible: true
       , eseditable: true
@@ -524,7 +509,6 @@ const TraCapturaDeResultados = () => {
     setFechaHora(rowData.original.FechaHora2)
     setEsEditar(false)
     if (id == 'Descripcion') {
-       console.log(id)
       setEsEditar(true)
     }
      
