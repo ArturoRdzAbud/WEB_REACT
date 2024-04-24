@@ -6,6 +6,7 @@ export const ElementoImagen = ({hexData}) => {
   useEffect(() => {
     // Supongamos que 'hexData' contiene la cadena hexadecimal de la imagen
     // const hexData = hexData;
+    // console.log('inicio')
     console.log(hexData)
 
     // Convertir la cadena hexadecimal a un ArrayBuffer
