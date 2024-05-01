@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import '../css/Image.css';
 
-export const ElementoImagen = ({hexData}) => {
+export const ElementoImagen = ({ hexData }) => {
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
     // Supongamos que 'hexData' contiene la cadena hexadecimal de la imagen
     // const hexData = hexData;
     // console.log('inicio')
-    console.log(hexData)
+    //console.log(hexData)
 
     // Convertir la cadena hexadecimal a un ArrayBuffer
     const arrayBuffer = hexStringToBuffer(hexData);
