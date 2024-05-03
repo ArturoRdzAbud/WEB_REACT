@@ -51,7 +51,6 @@ const TraProgramacionDePartidos = () => {
       pnProgramado: programado,
       ptFechaHora: fechaHora
     };
-    console.log('parametro fecha hora ' + fechaHora)
     const apiReq = 'http://localhost:3000/GuardarProgramacionDePartidos';
     try {
 
@@ -59,8 +58,7 @@ const TraProgramacionDePartidos = () => {
       if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
       if (idJornada == -1) { setEsMuestraCamposReq(true); return }
       // console.log(esMuestraCamposReq)
-      console.log('Guardando Programación de Partidos', data);
-      // if (claLiga == claLiga) return
+          // if (claLiga == claLiga) return
       await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
       inicializaCampos()
       setEsEditar(false)//regresa al grid
@@ -87,7 +85,7 @@ const TraProgramacionDePartidos = () => {
   
 
   const handleLiga = (value, claLiga) => {//limpia combos hijo 
-    // console.log('handleLiga')
+   
     setClaLiga(value)
     setClaTorneo(-1)
     setIdJornada(-1)
@@ -97,7 +95,7 @@ const TraProgramacionDePartidos = () => {
   const filtraLocalComboTorneo = () => {
      //console.log('filtraLocalComboTorneo')
     var datosFiltrados = datosTorneoBD
-    datosFiltrados = claLiga > 0 ? datosTorneoBD.filter(item => item.IdLiga == claLiga) : datosTorneoBD;
+    datosFiltrados = claLiga > 0 ? datosTorneoBD.filter(item => item.IdLiga == claLiga) : [];
     setDatosTorneo(datosFiltrados);
     //console.log(datosFiltrados)
   }
@@ -105,8 +103,8 @@ const TraProgramacionDePartidos = () => {
      //console.log('filtraLocalComboJornada')
 
     var datosFiltrados = datosJornadaBD
-    datosFiltrados = claLiga > 0 ? datosJornadaBD.filter(item => item.IdLiga == claLiga) : datosJornadaBD;
-    datosFiltrados = claTorneo > 0 ? datosJornadaBD.filter(item => item.IdTorneo == claTorneo) : datosJornadaBD;
+    datosFiltrados = claLiga > 0 ? datosJornadaBD.filter(item => item.IdLiga == claLiga) : [];
+    datosFiltrados = claTorneo > 0 ? datosJornadaBD.filter(item => item.IdTorneo == claTorneo) : [];
     setDatosJornada(datosFiltrados);
     //console.log(datosFiltrados)
   }
@@ -120,7 +118,7 @@ const TraProgramacionDePartidos = () => {
     datosFiltrados = idJornada > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornada) : datosFiltrados;
 
     setDatosProgramacion(datosFiltrados);
-    console.log(datosFiltrados)
+    
 
   };
   //-------------------------------------------------------------------SECCION USE EFFFECT
@@ -138,7 +136,7 @@ const TraProgramacionDePartidos = () => {
     axios.get(apiUrl)
       .then(response => {
         setDatosTorneoBD(response.data)
-        setDatosTorneo(response.data)
+        //setDatosTorneo(response.data)
       }
       )
       .catch(error => console.error('Error al obtener TORNEO', error));
@@ -147,7 +145,7 @@ const TraProgramacionDePartidos = () => {
     axios.get(apiUrl)
       .then(response => {
         setDatosJornadaBD(response.data)
-        setDatosJornada(response.data)
+        //setDatosJornada(response.data)
       }
       )
       .catch(error => console.error('Error al obtener Jornadas', error));
