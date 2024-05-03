@@ -1,4 +1,3 @@
-//import React, { useState } from 'react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SimpleTable from './SimpleTable';
@@ -7,10 +6,10 @@ import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 import { ElementoBotones } from './ElementoBotones'
+import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses';
 //import Close from '../svg/icon-close.svg?react'
 //import Save  from '../svg/icon-save.svg?react'
-//import dayjs from 'dayjs';
-
+import { ElementoImagen } from './ElementoImagen'
 
 
 const CatJugador = () => {
@@ -42,16 +41,15 @@ const CatJugador = () => {
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [foto, setFoto] = useState(null);
     const [accion, setAccion] = useState(0);
+    const [userProfileImage, setUserProfileImage] = useState('');
+    const [fotosn, setFotosn] = useState(null);
+    const [login, setLogin] = useState('');
+    const [password, setPassword] = useState('');
 
     const selectedFotoHandler = e => {
         console.log('File info working!')
         console.log(e.target.files[0]);
-        //const formData = new FormData();
-        //FILE INFO NAME WILL BE "my-image-file"
-        //formData.append('piFotografia', e.target.files[0]);
-        //setFoto(formData)
         setFoto(e.target.files[0])
-        //console.log(foto)
 
     }
 
@@ -165,6 +163,28 @@ const CatJugador = () => {
 
     }, []);
 
+
+    useEffect(() => {
+        // Cambia la URL a la de tu API
+        const apiUrl = config.apiUrl + '/ConsultarJugadoresFoto';
+        //axios.get(apiUrl)
+        console.log(idLiga, idJugador)
+        if (idLiga > 0 && idJugador > 0) {
+            //axios.get('http://localhost:3000/ConsultarJugadores', { params: { pnIdLiga: ligaF } })
+            axios.get(apiUrl, { params: { pnFotosn: fotosn, pnIdLiga: idLiga, pnIdJugador: idJugador } }
+                , {
+                    responseType: 'blob' // Indicar que esperamos una respuesta binaria
+                })
+                .then(response => {
+                    // Convertir la respuesta binaria a una URL de objeto
+                    //console.log(response.data[0].HexadecimalData)
+                    setUserProfileImage(response.data[0].HexadecimalData)
+
+                })
+                .catch(error => console.error('Error al obtener datos:', error))
+        }
+    }, [esEditar]);
+
     useEffect(() => {
         // Cambia la URL a la de tu API
         const apiUrl = config.apiUrl + '/ConsultarJugadores';
@@ -208,7 +228,9 @@ const CatJugador = () => {
         //setFechaNacimiento(isNaN(rowData.original.FechaNacimiento) ? dayjs(rowData.original.FechaNacimiento).format('YYYY-MM-DD') : '')
 
         setIdLiga(rowData.original.IdLiga)
-        setAccion(0)//0 para MODIF 1 para nuevo        
+        setAccion(0)//0 para MODIF 1 para nuevo  
+        setFotosn(1)
+        console.log('trae foto?:' + fotosn)
     }
 
     const nuevo = () => {
@@ -223,6 +245,7 @@ const CatJugador = () => {
         inicializaCampos()
         setEsEditar(false)
         setEsNuevo(false)
+        //console.log("foto:" + foto)
     }
 
     const inicializaCampos = () => {
@@ -242,7 +265,8 @@ const CatJugador = () => {
         setFechaNacimiento('')
         setAccion(0)
         setEsFin(false)
-        //setFoto(null)
+        setUserProfileImage('')
+        setFoto(null)
     }
 
     const guardarFoto = async (e) => {
@@ -250,7 +274,6 @@ const CatJugador = () => {
 
         const apiReq = config.apiUrl + '/GuardarJugadorFotografia';
         const formData = new FormData()
-        //formData.append('image', foto)
         formData.append('foto', foto)
         formData.append('pnIdLiga', idLiga)
         formData.append('pnIdJugador', idJugador)
@@ -263,16 +286,14 @@ const CatJugador = () => {
             alert('Debe seleccionar un archivo')
             return
         }
-        else if(foto.size>1000000){
+        else if (foto.size > 1000000) {
             alert('El límite máximo del archivo es 1 MB. Favor de validar ')
             return
         }
         else {
             try {
-                // await axios.post(apiReq, { formData }, { 'Content-Type': 'multipart/form-data' });
                 await axios.post(apiReq, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
                 setEsFin(true)
-                //console.log(foto, idLiga, idJugador)
             } catch (error) {
                 console.error('Error al guardar fotografia', error);
             }
@@ -281,9 +302,6 @@ const CatJugador = () => {
 
     const guardarJugador = async (e) => {
         e.preventDefault();
-
-        //const formData = new FormData()
-        //formData.append('piFotografia', foto)
 
         const data = {
             pnIdLiga: idLiga,
@@ -342,20 +360,20 @@ const CatJugador = () => {
                     <form onSubmit={guardarJugador}>
                         <br />
                         <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo} />
-                        <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="Nombre" nomCampo={nombre} onInputChange={setNombre} />
+                        <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="Nombre" nomCampo={nombre} onInputChange={setNombre} tamanioString={100} />
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='number' lblCampo="Numero* :" claCampo="Numero" nomCampo={numero} onInputChange={setNumero} />
+                                <ElementoCampo type='number' lblCampo="Numero* :" claCampo="Numero" nomCampo={numero} onInputChange={setNumero} tamanioString={3} />
                             </span>
                             <span style={{ flexGrow: 1 }}>
                                 <h2></h2>
                             </span>
                             <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='number' lblCampo="Teléfono* :" claCampo="Telefono" nomCampo={telefono} onInputChange={setTelefono} />
+                                <ElementoCampo type='tel' lblCampo="Teléfono* :" claCampo="Telefono" nomCampo={telefono} onInputChange={setTelefono} tamanioString={10} />
                             </span>
                         </div>
-                        <ElementoCampo type='text' lblCampo="Correo* :" claCampo="Correo" nomCampo={correo} onInputChange={setCorreo} />
-                        <ElementoCampo type='text' lblCampo="CURP* :" claCampo="Curp" nomCampo={curp} onInputChange={setCurp} />
+                        <ElementoCampo type='email' lblCampo="Correo* :" claCampo="Correo" nomCampo={correo} onInputChange={setCorreo} tamanioString={50} />
+                        <ElementoCampo type='text' lblCampo="CURP* :" claCampo="Curp" nomCampo={curp} onInputChange={setCurp} tamanioString={18} />
                         <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -367,69 +385,82 @@ const CatJugador = () => {
                                 <h2></h2>
                             </span>
                             <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type="select" lblCampo="Genero*: " claCampo="campo" nomCampo={idGenero} options={dataGenero} onInputChange={setIdGenero} />
+                                <ElementoCampo type="select" lblCampo="Genero*: " claCampo="genero" nomCampo={idGenero} options={dataGenero} onInputChange={setIdGenero} />
                             </span>
                         </div>
-
-
-
 
                         {/*<p>Parrafo temporal para ver parametros del SP a Base de datos|@IdLiga={idLiga}|@IdJugador={idJugador}|@fN={fechaNacimiento}|@IdGenero={idGenero}|@Activo={activo.toString()}|</p>*/}
                         {/*<button type="submit" className="btn btn-primary" title="Guardar">Guardar</button>*/}
                         {/*<button type="button" className="btn btn-primary" onClick={cancelar} title="Cancelar">Cancelar</button>*/}
-                        <ElementoBotones cancelar={cancelar}></ElementoBotones>
-                    </form>
-                    <div><img alt="foto"></img></div>
-                    <div className='container mt-2'>
-                        <div className='card p-3'>
-                            <div className='row'>
-                                <div className='col-7'>
-                                    <input type='file' className='form-control' name="profile_pic" onChange={selectedFotoHandler} accept=".png, .jpg, .jpeg" />
 
 
+
+                        <div>
+                            {userProfileImage ? (
+                                // Mostrar la imagen si los datos están disponibles
+                                <ElementoImagen hexData={userProfileImage}></ElementoImagen>
+                            ) : (
+                                // Mostrar un mensaje de carga mientras se obtienen los datos
+                                <p>Cargando imagen...</p>
+                            )}
+                        </div>
+
+
+                        <div className='container mt-2'>
+                            <div className='card p-3'>
+                                <div className='row'>
+                                    <div className='col-7'>
+                                        <input type='file' className='form-control' name="profile_pic" onChange={selectedFotoHandler} accept=".png, .jpg, .jpeg" />
+                                    </div>
+
+                                    <div className='col-3'>
+                                        <button type='button' onClick={guardarFoto} className='btn btn-primary col-12'>Cargar imagen</button>
+                                    </div>
 
                                 </div>
-
-                                {/* <form action="/GuardarJugadorFotografia" method="post" enctype="multipart/form-data">
-                                    <input type="file" name="foto">
-                                        <input type="submit" value="Enviar">
-                                        </form> */}
-
-                                        <div className='col-3'>
-                                            <button type='button' onClick={guardarFoto} className='btn btn-primary col-12'>Cargar imagen</button>
-                                        </div>
-
-                                    </div>
                             </div>
                         </div>
 
-                    </>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ flexGrow: 1 }}>
+                                <ElementoCampo type='text' lblCampo="Usuario :" claCampo="Login" nomCampo={'login'} onInputChange={setLogin} tamanioString={30} />
+                            </span>
+                            <span style={{ flexGrow: 1 }}>
+                                <h2></h2>
+                            </span>
+                            <span style={{ flexGrow: 1 }}>
+                                <ElementoCampo type='password' lblCampo="Contraseña :" claCampo="Password" nomCampo={'password'} onInputChange={setPassword} tamanioString={30} />
+                            </span>
+                        </div>
+                        <ElementoBotones cancelar={cancelar}></ElementoBotones>
+                    </form>
+                </>
 
             }
-                    {
-                        esMuestraCamposReq &&
-                        <AlertaEmergente
-                            titulo={'Alerta'}
-                            mensaje={'Los datos con * son requeridos, favor de validar.'}
-                            mostrarBotonAceptar={true}
-                            mostrarBotonCancelar={false}
-                            onAceptar={onAceptar}
-                        ></AlertaEmergente>
-                    }
-                    {esFin &&
-                        <AlertaEmergente
-                            titulo={'Alerta'}
-                            mensaje={'Los datos fueron guardados correctamente.'}
-                            mostrarBotonAceptar={true}
-                            mostrarBotonCancelar={false}
-                            onAceptar={onAceptar}
-                        ></AlertaEmergente>
-                        // : <p></p>
-                    }
-                </>
+            {
+                esMuestraCamposReq &&
+                <AlertaEmergente
+                    titulo={'Alerta'}
+                    mensaje={'Los datos con * son requeridos, favor de validar.'}
+                    mostrarBotonAceptar={true}
+                    mostrarBotonCancelar={false}
+                    onAceptar={onAceptar}
+                ></AlertaEmergente>
+            }
+            {esFin &&
+                <AlertaEmergente
+                    titulo={'Alerta'}
+                    mensaje={'Los datos fueron guardados correctamente.'}
+                    mostrarBotonAceptar={true}
+                    mostrarBotonCancelar={false}
+                    onAceptar={onAceptar}
+                ></AlertaEmergente>
+                // : <p></p>
+            }
+        </>
 
 
     )
 }
 
-            export default CatJugador
+export default CatJugador
