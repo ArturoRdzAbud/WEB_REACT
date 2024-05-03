@@ -11,8 +11,8 @@ import dayjs from 'dayjs';
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
 const TraCapturaDeResultados = () => {
-  const [datosResultadosBD, setdatosResultadosBD] = useState([]);
-  const [datosResultados, setdatosResultados] = useState([]);
+  const [datosResultadosBD, setDatosResultadosBD] = useState([]);
+  const [datosResultados, setDatosResultados] = useState([]);
   const [datosEquipo1BD, setDatosEquipo1BD] = useState([]);
   const [datosEquipo1, setDatosEquipo1] = useState([]);
   const [datosEquipo2BD, setDatosEquipo2BD] = useState([]);
@@ -37,6 +37,11 @@ const TraCapturaDeResultados = () => {
   const [claTorneo, setClaTorneo] = useState(-1);
   const [idJornada, setIdJornada] = useState(-1);
   const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+  const [esRegresaDeEditar, setEsRegresaDeEditar] = useState(false);
+  const [claLigaSel, setClaLigaSel] = useState(-1);
+  const [claTorneoSel, setClaTorneoSel] = useState(-1);
+  const [idJornadaSel, setIdJornadaSel] = useState(-1);
+
   
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
@@ -118,6 +123,7 @@ const TraCapturaDeResultados = () => {
       // if (claLiga == claLiga) return
       await axios.post(apiReq, { data });
       //console.log(data)
+      setEsRegresaDeEditar(true)
       inicializaCampos()
       setEsEditar(false)//regresa al grid
       
@@ -131,6 +137,10 @@ const TraCapturaDeResultados = () => {
  
   const inicializaCampos = () => {
     //DatosPantalla
+   
+    setClaLigaSel(claLiga);
+    setClaTorneoSel(claTorneo);
+    setIdJornadaSel(idJornada);
     setClaLiga(-1)
     setClaTorneo(-1)
     setIdJornada(-1)
@@ -139,6 +149,8 @@ const TraCapturaDeResultados = () => {
     setFechaHora('')
   };
   const cancelar = () => {
+    console.log('esRegresaDeEditar =' + esRegresaDeEditar)
+    setEsRegresaDeEditar(true)
     inicializaCampos()
     setEsEditar(false)    
   };
@@ -153,14 +165,14 @@ const TraCapturaDeResultados = () => {
 
   const filtraLocalComboTorneo = () => {    
     var datosFiltrados = datosTorneoBD
-    datosFiltrados = claLiga > 0 ? datosTorneoBD.filter(item => item.IdLiga == claLiga) : datosTorneoBD;
+    datosFiltrados = claLiga > 0 ? datosTorneoBD.filter(item => item.IdLiga == claLiga) : [];
     setDatosTorneo(datosFiltrados);
   }
 
   const filtraLocalComboJornada = () => {
     var datosFiltrados = datosJornadaBD
-    datosFiltrados = claLiga > 0 ? datosJornadaBD.filter(item => item.IdLiga == claLiga) : datosJornadaBD;
-    datosFiltrados = claTorneo > 0 ? datosJornadaBD.filter(item => item.IdTorneo == claTorneo) : datosJornadaBD;
+    datosFiltrados = claLiga > 0 ? datosJornadaBD.filter(item => item.IdLiga == claLiga) : [];
+    datosFiltrados = claTorneo > 0 ? datosJornadaBD.filter(item => item.IdTorneo == claTorneo) : [];
     setDatosJornada(datosFiltrados);
   }
 
@@ -169,14 +181,33 @@ const TraCapturaDeResultados = () => {
     {
         return//sale si es modo edicion
     }
-    
+
+    console.log('ENTRA A FILTRA LOCAL')
+    console.log(claLiga,claTorneo,idJornada)
+
     var datosFiltrados = datosResultadosBD
-    datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : datosFiltrados;
-    datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
-    datosFiltrados = idJornada > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornada) : datosFiltrados;
 
-    setdatosResultados(datosFiltrados);
-
+    /*
+    if (esRegresaDeEditar)
+    {
+      console.log('entra a esregresaeditar = true')
+       datosFiltrados = claLigaSel > 0 ? datosFiltrados.filter(item => item.IdLiga == claLigaSel) : datosFiltrados;
+       datosFiltrados = claTorneoSel > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneoSel) : datosFiltrados;
+       datosFiltrados = idJornadaSel > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornadaSel) : datosFiltrados;
+    }
+    else
+    {*/
+       datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : datosFiltrados;
+       datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
+       datosFiltrados = idJornada > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornada) : datosFiltrados;
+    //}
+    
+    setDatosResultados(datosFiltrados);
+    
+    console.log(datosFiltrados)
+    console.log(datosResultados)
+    console.log(datosResultadosBD)
+    
   };
 
   //-------------------------------------------------------------------SECCION USE EFFFECT
@@ -194,7 +225,7 @@ const TraCapturaDeResultados = () => {
     axios.get(apiUrl)
       .then(response => {
         setDatosTorneoBD(response.data)
-        setDatosTorneo(response.data)
+        //setDatosTorneo(response.data)
       }
       )
       .catch(error => console.error('Error al obtener los torneos', error));
@@ -203,7 +234,7 @@ const TraCapturaDeResultados = () => {
     axios.get(apiUrl)
       .then(response => {
         setDatosJornadaBD(response.data)
-        setDatosJornada(response.data)
+        //setDatosJornada(response.data)
       }
       )
       .catch(error => console.error('Error al obtener las Jornadas', error));
@@ -237,16 +268,23 @@ const TraCapturaDeResultados = () => {
 
     //Obtiene la información de los partidos programados, según la liga, torneo y jornada especificados
     var apiUrl = 'http://localhost:3000/ConsultarCapturaDeResultados';
-    axios.get(apiUrl,{ params: { pnIdLiga: claLiga, pnIdTorneo: claTorneo, pnIdJornada: idJornada } })
+    axios.get(apiUrl,{ params: { pnIdLiga: claLiga, pnIdTorneo: claTorneo, pnIdJornada: idJornada, pnEsRegresaDeEditar: esRegresaDeEditar } })
       .then(response => {
-        setdatosResultadosBD(response.data);
-        setdatosResultados(response.data);
+        setDatosResultadosBD(response.data);
+        //setDatosResultados(response.data);
       })
       .catch(error => console.error('Error al obtener datos:', error))
-      .finally(() => {
-        inicializaCampos()
-      });
-
+    
+      console.log('ENTRA A USEEFFECT ESEDITAR: ' + esRegresaDeEditar)
+      if (esRegresaDeEditar)
+      {
+        console.log('LLAMA A FILTRA LOCAL: ' + claLigaSel, claTorneoSel, idJornadaSel)
+        setClaLiga(claLigaSel)
+        setClaTorneo(claTorneoSel)
+        setIdJornada(idJornadaSel)
+        filtraLocal();
+      }
+    
 
   }, [esEditar]); // Se EJECUTA CUANDO CAMBIA la bandera esEditar
 
@@ -525,7 +563,7 @@ const TraCapturaDeResultados = () => {
             <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
             <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} />
             <ElementoCampo type="select" lblCampo="Jornada: " claCampo="campo" nomCampo={idJornada} options={datosJornada} onInputChange={setIdJornada} />
-            <SimpleTable data={datosResultados} columns={columns} handleEdit={handleEdit} />
+            <SimpleTable data={datosResultados} setData={setDatosResultados} columns={columns} handleEdit={handleEdit} />
           </>
           ://----------------------------MODO EDICION
           <div>

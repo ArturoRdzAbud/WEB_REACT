@@ -1,0 +1,5 @@
+.labelLeft {
+  display: inline-block;
+  width: 100%; /* Ajusta el ancho según sea necesario */
+  text-align: left;
+}

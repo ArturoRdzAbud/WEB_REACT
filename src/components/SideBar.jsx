@@ -23,6 +23,7 @@ import EquipoJugadorSvg from '../svg/menu-equipo-jugador.svg?react'
 
 import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 import TraCapturaDeResultados from './TraCapturaDeResultados';
+import EstEstadisticaPorEquipo from './EstEstadisticaPorEquipo';
 
 
 // export default props => {
@@ -108,6 +109,8 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
                             <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <Arbitrosvg />{' Jugadores'} </NavLink>
                             <NavLink onClick={closeMenu} to='/CapturaDeResultados' className='nav-link' > <Programacionsvg />{' Captura De Resultados '} </NavLink>
+                            <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <Programacionsvg />{' Estadistica por equipo '} </NavLink>
+                            
                         </li>
                     </ul>
                 </Menu>
@@ -124,6 +127,8 @@ export const SideBar = () => {
                         <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />
                         <Route path='/CatJugador' element={<CatJugador />} />
                         <Route path='/CapturaDeResultados' element={<TraCapturaDeResultados />} />
+                        <Route path='/EstEstadisticaPorEquipo' element={<EstEstadisticaPorEquipo />} />
+                        
                     </Routes>
                 </div>
 
