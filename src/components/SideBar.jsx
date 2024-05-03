@@ -12,6 +12,7 @@ import CatArbitro from './CatArbitro';
 import CatEquipoTorneo from './CatEquipoTorneo';
 import CatEquipoJugador from './CatEquipoJugador';
 import CatJugador from './CatJugador';
+import TraEstadisticaJugador from './TraEstadisticaJugador';
 //Iconos
 import EquiposSvg from '../svg/equipos.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
@@ -20,6 +21,7 @@ import Tarjetasvg from '../svg/tarjetas.svg?react'
 import Programacionsvg from '../svg/evento-de-calendario.svg?react'
 import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react'
 import EquipoJugadorSvg from '../svg/menu-equipo-jugador.svg?react'
+import EstadisticaJugadorSvg from '../svg/menu-estadistica-jugador.svg?react'
 
 import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 import TraCapturaDeResultados from './TraCapturaDeResultados';
@@ -69,6 +71,7 @@ export const SideBar = () => {
         https://tanstack.com/table/latest/docs/introduction
         https://iconsvg.xyz/
         https://www.svgviewer.dev/
+        https://picsvg.com/
 
 
                 https://github.com/azouaoui-med/react-pro-sidebar/blob/master/storybook/Playground.tsx
@@ -108,6 +111,7 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
                             <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <Arbitrosvg />{' Jugadores'} </NavLink>
                             <NavLink onClick={closeMenu} to='/CapturaDeResultados' className='nav-link' > <Programacionsvg />{' Captura De Resultados '} </NavLink>
+                            <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica x Jugador '} </NavLink>
                         </li>
                     </ul>
                 </Menu>
@@ -124,6 +128,7 @@ export const SideBar = () => {
                         <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />
                         <Route path='/CatJugador' element={<CatJugador />} />
                         <Route path='/CapturaDeResultados' element={<TraCapturaDeResultados />} />
+                        <Route path='/EstadisticaJugador' element={<TraEstadisticaJugador />} />
                     </Routes>
                 </div>
 
