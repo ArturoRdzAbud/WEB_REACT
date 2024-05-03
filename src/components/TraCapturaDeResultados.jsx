@@ -197,16 +197,16 @@ const TraCapturaDeResultados = () => {
     }
     else
     {*/
-       datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : datosFiltrados;
-       datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
-       datosFiltrados = idJornada > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornada) : datosFiltrados;
+       datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : [];
+       datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : [];
+       datosFiltrados = idJornada > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornada) : [];
     //}
     
     setDatosResultados(datosFiltrados);
     
-    console.log(datosFiltrados)
-    console.log(datosResultados)
-    console.log(datosResultadosBD)
+    // console.log(datosFiltrados)
+    // console.log(datosResultados)
+    // console.log(datosResultadosBD)
     
   };
 
@@ -243,6 +243,7 @@ const TraCapturaDeResultados = () => {
 
   //Carga la consulta de resultados desde BD
   useEffect(() => {
+    // console.log('ENTRA A USEEFFECT ESEDITAR: 0') 
     if (esEditar) 
     {
      
@@ -270,20 +271,34 @@ const TraCapturaDeResultados = () => {
     var apiUrl = 'http://localhost:3000/ConsultarCapturaDeResultados';
     axios.get(apiUrl,{ params: { pnIdLiga: claLiga, pnIdTorneo: claTorneo, pnIdJornada: idJornada, pnEsRegresaDeEditar: esRegresaDeEditar } })
       .then(response => {
+        console.log('carga BD')
         setDatosResultadosBD(response.data);
         //setDatosResultados(response.data);
       })
+
+        .then(()=>{
+          console.log('ENTRA A USEEFFECT ESEDITAR: ' + esRegresaDeEditar)
+          if (esRegresaDeEditar)
+          {
+            console.log('LLAMA A FILTRA LOCAL: ' + claLigaSel, claTorneoSel, idJornadaSel)
+            setClaLiga(claLigaSel)
+            setClaTorneo(claTorneoSel)
+            setIdJornada(idJornadaSel)
+            filtraLocal();
+          }
+        })
+
       .catch(error => console.error('Error al obtener datos:', error))
     
-      console.log('ENTRA A USEEFFECT ESEDITAR: ' + esRegresaDeEditar)
-      if (esRegresaDeEditar)
-      {
-        console.log('LLAMA A FILTRA LOCAL: ' + claLigaSel, claTorneoSel, idJornadaSel)
-        setClaLiga(claLigaSel)
-        setClaTorneo(claTorneoSel)
-        setIdJornada(idJornadaSel)
-        filtraLocal();
-      }
+      // console.log('ENTRA A USEEFFECT ESEDITAR: ' + esRegresaDeEditar)
+      // if (esRegresaDeEditar)
+      // {
+      //   console.log('LLAMA A FILTRA LOCAL: ' + claLigaSel, claTorneoSel, idJornadaSel)
+      //   setClaLiga(claLigaSel)
+      //   setClaTorneo(claTorneoSel)
+      //   setIdJornada(idJornadaSel)
+      //   filtraLocal();
+      // }
     
 
   }, [esEditar]); // Se EJECUTA CUANDO CAMBIA la bandera esEditar
@@ -563,7 +578,7 @@ const TraCapturaDeResultados = () => {
             <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
             <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} />
             <ElementoCampo type="select" lblCampo="Jornada: " claCampo="campo" nomCampo={idJornada} options={datosJornada} onInputChange={setIdJornada} />
-            <SimpleTable data={datosResultados} setData={setDatosResultados} columns={columns} handleEdit={handleEdit} />
+            <SimpleTable data={datosResultados} setData={setDatosResultados} columns={columns} handleEdit={handleEdit} esOcultaBotonNuevo={true}/>
           </>
           ://----------------------------MODO EDICION
           <div>
