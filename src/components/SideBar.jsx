@@ -22,6 +22,8 @@ import Programacionsvg from '../svg/evento-de-calendario.svg?react'
 import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react'
 import EquipoJugadorSvg from '../svg/menu-equipo-jugador.svg?react'
 import EstadisticaJugadorSvg from '../svg/menu-estadistica-jugador.svg?react'
+import EstadisticaEquipoSvg from '../svg/menu-estadistica-equipo.svg?react'
+import CapturaResultadosSvg from '../svg/menu-captura-resultados.svg?react'
 
 import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 import TraCapturaDeResultados from './TraCapturaDeResultados';
@@ -111,8 +113,8 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
                             <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <Arbitrosvg />{' Jugadores'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/CapturaDeResultados' className='nav-link' > <Programacionsvg />{' Captura De Resultados '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <Programacionsvg />{' Estadistica por equipo '} </NavLink>
+                            <NavLink onClick={closeMenu} to='/CapturaDeResultados' className='nav-link' > <CapturaResultadosSvg />{' Captura De Resultados '} </NavLink>
+                            <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por equipo '} </NavLink>
                             
                             <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica x Jugador '} </NavLink>
                         </li>

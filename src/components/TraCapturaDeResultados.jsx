@@ -118,11 +118,10 @@ const TraCapturaDeResultados = () => {
       if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
       if (idJornada == -1) { setEsMuestraCamposReq(true); return }      
       //if (fechaHora.trim == '') { setEsMuestraCamposReq(true); return }
-      // console.log(esMuestraCamposReq)
      
-      // if (claLiga == claLiga) return
+     
       await axios.post(apiReq, { data });
-      //console.log(data)
+     
       setEsRegresaDeEditar(true)
       inicializaCampos()
       setEsEditar(false)//regresa al grid
@@ -182,31 +181,17 @@ const TraCapturaDeResultados = () => {
         return//sale si es modo edicion
     }
 
-    console.log('ENTRA A FILTRA LOCAL')
-    console.log(claLiga,claTorneo,idJornada)
-
     var datosFiltrados = datosResultadosBD
 
-    /*
-    if (esRegresaDeEditar)
-    {
-      console.log('entra a esregresaeditar = true')
-       datosFiltrados = claLigaSel > 0 ? datosFiltrados.filter(item => item.IdLiga == claLigaSel) : datosFiltrados;
-       datosFiltrados = claTorneoSel > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneoSel) : datosFiltrados;
-       datosFiltrados = idJornadaSel > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornadaSel) : datosFiltrados;
-    }
-    else
-    {*/
-       datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : [];
-       datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : [];
-       datosFiltrados = idJornada > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornada) : [];
-    //}
+    
+    datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : [];
+    datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : [];
+    datosFiltrados = idJornada > 0 ? datosFiltrados.filter(item => item.IdJornada == idJornada) : [];
+  
     
     setDatosResultados(datosFiltrados);
     
-    // console.log(datosFiltrados)
-    // console.log(datosResultados)
-    // console.log(datosResultadosBD)
+    
     
   };
 
@@ -269,18 +254,15 @@ const TraCapturaDeResultados = () => {
 
     //Obtiene la información de los partidos programados, según la liga, torneo y jornada especificados
     var apiUrl = 'http://localhost:3000/ConsultarCapturaDeResultados';
-    axios.get(apiUrl,{ params: { pnIdLiga: claLiga, pnIdTorneo: claTorneo, pnIdJornada: idJornada, pnEsRegresaDeEditar: esRegresaDeEditar } })
+    axios.get(apiUrl,{ params: { pnIdLiga: claLiga, pnIdTorneo: claTorneo, pnIdJornada: idJornada } })
       .then(response => {
-        console.log('carga BD')
         setDatosResultadosBD(response.data);
         //setDatosResultados(response.data);
       })
 
         .then(()=>{
-          console.log('ENTRA A USEEFFECT ESEDITAR: ' + esRegresaDeEditar)
           if (esRegresaDeEditar)
           {
-            console.log('LLAMA A FILTRA LOCAL: ' + claLigaSel, claTorneoSel, idJornadaSel)
             setClaLiga(claLigaSel)
             setClaTorneo(claTorneoSel)
             setIdJornada(idJornadaSel)
@@ -289,16 +271,6 @@ const TraCapturaDeResultados = () => {
         })
 
       .catch(error => console.error('Error al obtener datos:', error))
-    
-      // console.log('ENTRA A USEEFFECT ESEDITAR: ' + esRegresaDeEditar)
-      // if (esRegresaDeEditar)
-      // {
-      //   console.log('LLAMA A FILTRA LOCAL: ' + claLigaSel, claTorneoSel, idJornadaSel)
-      //   setClaLiga(claLigaSel)
-      //   setClaTorneo(claTorneoSel)
-      //   setIdJornada(idJornadaSel)
-      //   filtraLocal();
-      // }
     
 
   }, [esEditar]); // Se EJECUTA CUANDO CAMBIA la bandera esEditar
@@ -575,9 +547,10 @@ const TraCapturaDeResultados = () => {
       <div>        
         {!esEditar ?//----------------------------MODO GRID pinta filtros al inicio
           <>
-            <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
-            <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} />
-            <ElementoCampo type="select" lblCampo="Jornada: " claCampo="campo" nomCampo={idJornada} options={datosJornada} onInputChange={setIdJornada} />
+            <ElementoCampo type="select" lblCampo="Liga:* " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
+            <ElementoCampo type="select" lblCampo="Torneo:* " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} />
+            <ElementoCampo type="select" lblCampo="Jornada:* " claCampo="campo" nomCampo={idJornada} options={datosJornada} onInputChange={setIdJornada} />
+            <label htmlFor="label" className="labelLeft">Los filtros con * son requeridos</label>
             <SimpleTable data={datosResultados} setData={setDatosResultados} columns={columns} handleEdit={handleEdit} esOcultaBotonNuevo={true}/>
           </>
           ://----------------------------MODO EDICION
