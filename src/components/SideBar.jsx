@@ -5,7 +5,7 @@ import '../css/Sidebar.css';
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 
 //pantallas
-import Equipos from './Equipos'
+
 import CatEquipos from './CatEquipos';
 import CatTiposDeSancion from './CatTiposDeSancion';
 import CatArbitro from './CatArbitro';
@@ -103,7 +103,6 @@ export const SideBar = () => {
                     onClose={handleIsOpen}>
                     <ul className='navbar-nav'>
                         <li className="nav-item">
-                            <NavLink onClick={closeMenu} to='/' className='nav-link' > <BalonSvg />{' Alta de Equipo'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
@@ -124,7 +123,7 @@ export const SideBar = () => {
 
                 <div className='container'>
                     <Routes>
-                        <Route path='/' element={<Equipos />} />
+                        
                         <Route path='/Equipos' element={<CatEquipos />} />
                         <Route path='/EquipoTorneo' element={<CatEquipoTorneo />} />
                         <Route path='/EquipoJugador' element={<CatEquipoJugador />} />
