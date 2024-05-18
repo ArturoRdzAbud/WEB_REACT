@@ -13,6 +13,7 @@ import CatEquipoTorneo from './CatEquipoTorneo';
 import CatEquipoJugador from './CatEquipoJugador';
 import CatJugador from './CatJugador';
 import TraEstadisticaJugador from './TraEstadisticaJugador';
+import CatLiga from './CatLiga';
 //Iconos
 import EquiposSvg from '../svg/equipos.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
@@ -24,6 +25,7 @@ import EquipoJugadorSvg from '../svg/menu-equipo-jugador.svg?react'
 import EstadisticaJugadorSvg from '../svg/menu-estadistica-jugador.svg?react'
 import EstadisticaEquipoSvg from '../svg/menu-estadistica-equipo.svg?react'
 import CapturaResultadosSvg from '../svg/menu-captura-resultados.svg?react'
+import LigaSvg from '../svg/menu-liga.svg?react'
 
 import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 import TraCapturaDeResultados from './TraCapturaDeResultados';
@@ -103,6 +105,7 @@ export const SideBar = () => {
                     onClose={handleIsOpen}>
                     <ul className='navbar-nav'>
                         <li className="nav-item">
+                            <NavLink onClick={closeMenu} to='/Liga' className='nav-link' > <LigaSvg />{' Ligas '} </NavLink>
                             <NavLink onClick={closeMenu} to='/' className='nav-link' > <BalonSvg />{' Alta de Equipo'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
@@ -136,6 +139,7 @@ export const SideBar = () => {
                         <Route path='/EstEstadisticaPorEquipo' element={<EstEstadisticaPorEquipo />} />
                         
                         <Route path='/EstadisticaJugador' element={<TraEstadisticaJugador />} />
+                        <Route path='/Liga' element={<CatLiga />} />
                     </Routes>
                 </div>
 
