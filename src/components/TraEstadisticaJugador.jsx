@@ -50,7 +50,8 @@ export const TraEstadisticaJugador = () => {
         var datosFiltrados = datosJugBD
         //campos requeridos
         datosFiltrados = claLiga > 0 ? datosFiltrados.filter(item => item.IdLiga == claLiga) : [];
-        datosFiltrados = claTorneo > 0 ? datosFiltrados : [];
+        datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : [];
+        // datosFiltrados = claTorneo > 0 ? datosFiltrados : [];
         setDatosJug(datosFiltrados);
     };
     // llena arreglos de combos
