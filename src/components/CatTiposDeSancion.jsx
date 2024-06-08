@@ -110,7 +110,7 @@ const CatTiposDeSancion = () => {
       )
       .catch(error => console.error('Error al obtener LIGA', error));
 
-  }, []);
+  }, []);   // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
     // Cambia la URL a la de tu API
@@ -125,7 +125,7 @@ const CatTiposDeSancion = () => {
       .finally(() => {
         inicializaCampos()
       });
-  }, [esEditar]); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
+  }, [esEditar]);  // useEffect se ejecuta cuando se modifica la propiedad esEditar
 
   const filtraLocal = () => {
     // TODO IR FILTRANDO LOCALMENTE CAMPO POR CAMPO SIN IR A BASE DE DATOS
