@@ -24,7 +24,8 @@ export const ElementoToastNotification = ({ titulo, mensaje, mostrarBotonAceptar
     useEffect(() => {
         // handleAceptar()
 
-        const delay = 3000; // 1 segundo (1000 milisegundos)
+        // const delay = 3000; // 1 segundo (1000 milisegundos)
+        const delay = 6000; // 1 segundo (1000 milisegundos)
         const timerId = setTimeout(() => {
             handleAceptar();
         }, delay);

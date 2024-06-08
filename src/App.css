@@ -40,3 +40,16 @@
 .read-the-docs {
   color: #888;
 }
+
+/* imagen en blanco  */
+.blank-box {
+  width: 100px; /* Ajusta el tamaño según sea necesario */
+  height: 100px; /* Ajusta el tamaño según sea necesario */
+  background-color: #f0f0f0; /* Color del recuadro */
+  border: 2px solid black; /* Borde del recuadro */
+  padding: 4px;
+}
+.image-with-border {
+  border: 2px solid black; /* Define el grosor y el color del borde */
+  padding: 4px;            /* Opcional: Añade un poco de espacio alrededor de la imagen */
+}

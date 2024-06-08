@@ -10,6 +10,8 @@ import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses';
 //import Close from '../svg/icon-close.svg?react'
 //import Save  from '../svg/icon-save.svg?react'
 import { ElementoImagen } from './ElementoImagen'
+import { alignPropType } from 'react-bootstrap/esm/types';
+import { ElementoToastNotification } from './ElementoToastNotification';
 
 
 const CatJugador = () => {
@@ -45,6 +47,7 @@ const CatJugador = () => {
     const [fotosn, setFotosn] = useState(null);
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [alertaMensaje, setAlertaMensaje] = useState('');
 
     const selectedFotoHandler = e => {
         console.log('File info working!')
@@ -72,6 +75,9 @@ const CatJugador = () => {
     const onAceptar = () => {
         setEsMuestraCamposReq(false)
         setEsFin(false)
+    };
+    const onAceptarC = () => {
+        setAlertaMensaje('')
     };
 
     const columns = [
@@ -340,11 +346,25 @@ const CatJugador = () => {
             if (nombre.trim == '') { setEsMuestraCamposReq(true); return }
             if (numero === '') { setEsMuestraCamposReq(true); return }
 
-            await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*', "Content-Type": "multipart/form-data" });
+            await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*', "Content-Type": "multipart/form-data" })
+                .then(response => {
+                    console.log('response:')
+                    console.log(response.data)
+                    // console.log(response.data.originalError.info.message) 
 
-            inicializaCampos()
-            setEsEditar(false)//regresa al grid
-            setEsNuevo(false)
+                    if (!response.data == '') {
+                        console.log('vacio')
+                        console.log(response.data.originalError.info.message)
+                        setAlertaMensaje(response.data.originalError.info.message)
+                        // return
+                    } else {
+                        inicializaCampos()
+                        setEsEditar(false)//regresa al grid
+                        setEsNuevo(false)
+                    }
+                })
+
+
         } catch (error) {
             console.error('Error al guardar el jugador', error);
         }
@@ -378,37 +398,44 @@ const CatJugador = () => {
                                 <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="Nombre" nomCampo={nombre} onInputChange={setNombre} tamanioString={100} />
                                 <ElementoCampo type='number' lblCampo="Numero* :" claCampo="Numero" nomCampo={numero} onInputChange={setNumero} tamanioString={3} />
                                 <ElementoCampo type='tel' lblCampo="Teléfono* :" claCampo="Telefono" nomCampo={telefono} onInputChange={setTelefono} tamanioString={10} />
+
+                                <ElementoCampo type='email' lblCampo="Correo* :" claCampo="Correo" nomCampo={correo} onInputChange={setCorreo} tamanioString={50} />
+                                <ElementoCampo type='date' lblCampo="Fecha de Nacimiento* :" claCampo="FechaNacimiento" nomCampo={fechaNacimiento} onInputChange={setFechaNacimiento} />
+                                {/*<input type='date' placeholder="Fecha de Nacimiento* :" id="FechaNacimiento" nomCampo={fechaNacimiento} onChange={setFechaNacimiento} className="form-control" />*/}
+
+
                             </span>
-                            <span style={{ flexGrow: 1 }}>
+                            <span style={{ flexGrow: 0.5 }}>
                                 <h2></h2>
                             </span>
                             <span style={{ flexGrow: 1 }}>
-                                <div hidden={false}>
+                                <div hidden={false} >
                                     {userProfileImage ? (
                                         // Mostrar la imagen si los datos están disponibles
                                         <ElementoImagen hexData={userProfileImage}></ElementoImagen>
                                     ) : (
                                         // Mostrar un mensaje de carga mientras se obtienen los datos
-                                        <p>Cargando imagen...</p>
+                                        <div className="blank-box"></div>
                                     )}
                                 </div>
+
+                                <ElementoCampo type='text' lblCampo="CURP* :" claCampo="Curp" nomCampo={curp} onInputChange={setCurp} tamanioString={18} />
+                                <ElementoCampo type="select" lblCampo="Genero*: " claCampo="genero" nomCampo={idGenero} options={dataGenero} onInputChange={setIdGenero} />
+                                <ElementoCampo type='text' lblCampo="Usuario :" claCampo="Login" nomCampo={login} onInputChange={setLogin} tamanioString={30} />
+                                <ElementoCampo type='password' lblCampo="Contraseña :" claCampo="Password" onInputChange={setPassword} tamanioString={30} />
+
                             </span>
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='email' lblCampo="Correo* :" claCampo="Correo" nomCampo={correo} onInputChange={setCorreo} tamanioString={50} />
-                                <ElementoCampo type='date' lblCampo="Fecha de Nacimiento* :" claCampo="FechaNacimiento" nomCampo={fechaNacimiento} onInputChange={setFechaNacimiento} />
-                                {/*<input type='date' placeholder="Fecha de Nacimiento* :" id="FechaNacimiento" nomCampo={fechaNacimiento} onChange={setFechaNacimiento} className="form-control" />*/}
-                                <ElementoCampo type='text' lblCampo="Usuario :" claCampo="Login" nomCampo={login} onInputChange={setLogin} tamanioString={30} />
+
                             </span>
                             <span style={{ flexGrow: 1 }}>
                                 <h2></h2>
                             </span>
                             <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='text' lblCampo="CURP* :" claCampo="Curp" nomCampo={curp} onInputChange={setCurp} tamanioString={18} />
-                                <ElementoCampo type="select" lblCampo="Genero*: " claCampo="genero" nomCampo={idGenero} options={dataGenero} onInputChange={setIdGenero} />
-                                <ElementoCampo type='password' lblCampo="Contraseña :" claCampo="Password" onInputChange={setPassword} tamanioString={30} />
+
                             </span>
                         </div>
 
@@ -476,6 +503,20 @@ const CatJugador = () => {
                 ></AlertaEmergente>
                 // : <p></p>
             }
+               {alertaMensaje &&
+                    // <AlertaEmergente
+                    //     titulo={'Alerta'}
+                    //     mensaje={'Los datos con * son requeridos, favor de validar.'}
+                    //     mostrarBotonAceptar={true}
+                    //     mostrarBotonCancelar={false}
+                    //     onAceptar={onAceptar}
+                    // ></AlertaEmergente>
+                    <ElementoToastNotification
+                        mensaje={alertaMensaje}
+                        onAceptar={onAceptarC}
+                    ></ElementoToastNotification>
+                    // : <p></p>
+                }
         </>
 
 
