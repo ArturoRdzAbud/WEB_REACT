@@ -57,10 +57,10 @@ const CatTiposDeSancion = () => {
 
     try {
       console.log('Guardando Tipos de Sanción', data);
-      if (idLiga == -1) { setEsMuestraCamposReq(true); return }
-      if (clave.trim === '') { setEsMuestraCamposReq(true); return }
-      if (descripcion.trim === '') { setEsMuestraCamposReq(true); return }
-      if (juegosSuspension === '') { setEsMuestraCamposReq(true); return }
+      if (idLiga == 0) { setEsMuestraCamposReq(true); return }
+      if (clave.trim() == '') { setEsMuestraCamposReq(true); return }
+      if (descripcion.trim() == '') { setEsMuestraCamposReq(true); return }
+      if (juegosSuspension === null || juegosSuspension === '' || juegosSuspension < 0 || isNaN(juegosSuspension)) { setEsMuestraCamposReq(true); return }
 
       await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
       //console.log('Guardando Tipos de Sanción', data);
@@ -110,7 +110,7 @@ const CatTiposDeSancion = () => {
       )
       .catch(error => console.error('Error al obtener LIGA', error));
 
-  }, []);
+  }, []);   // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
     // Cambia la URL a la de tu API
@@ -125,7 +125,7 @@ const CatTiposDeSancion = () => {
       .finally(() => {
         inicializaCampos()
       });
-  }, [esEditar]); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
+  }, [esEditar]);  // useEffect se ejecuta cuando se modifica la propiedad esEditar
 
   const filtraLocal = () => {
     // TODO IR FILTRANDO LOCALMENTE CAMPO POR CAMPO SIN IR A BASE DE DATOS
@@ -222,7 +222,7 @@ const CatTiposDeSancion = () => {
             <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo} />
             <ElementoCampo type='text' lblCampo="Clave* :" claCampo="Clave" onInputChange={setClave} nomCampo={clave} editable={esNuevo} />
             <ElementoCampo type='text' lblCampo="Descripción* :" claCampo="Descripcion" onInputChange={setDescripcion} nomCampo={descripcion} />
-            <ElementoCampo type='number' lblCampo="Juegos de Suspención* :" claCampo="JuegosSuspencion" nomCampo={juegosSuspension} onInputChange={setJuegosSuspension} />
+            <ElementoCampo type='number' lblCampo="Juegos de Suspensión* :" claCampo="JuegosSuspension" nomCampo={juegosSuspension} onInputChange={setJuegosSuspension} />
             <ElementoCampo type='checkbox' lblCampo="Causa Baja* :" claCampo="CausaBaja" nomCampo={causaBaja} onInputChange={setCausaBaja} />
             <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
 

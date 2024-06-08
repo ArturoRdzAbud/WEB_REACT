@@ -5,7 +5,7 @@ import '../css/Sidebar.css';
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 
 //pantallas
-import Equipos from './Equipos'
+
 import CatEquipos from './CatEquipos';
 import CatTiposDeSancion from './CatTiposDeSancion';
 import CatArbitro from './CatArbitro';
@@ -112,7 +112,7 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores x Equipo'} </NavLink>
                             {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
-                            <NavLink onClick={closeMenu} to='/RegdeArbitro' className='nav-link' > <Arbitrosvg />{' Registro de Arbitro'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/Arbitros' className='nav-link' > <Arbitrosvg />{' Árbitros'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
                             <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <Arbitrosvg />{' Jugadores'} </NavLink>
@@ -127,11 +127,11 @@ export const SideBar = () => {
 
                 <div className='container'>
                     <Routes>
-                        <Route path='/' element={<Equipos />} />
+                        
                         <Route path='/Equipos' element={<CatEquipos />} />
                         <Route path='/EquipoTorneo' element={<CatEquipoTorneo />} />
                         <Route path='/EquipoJugador' element={<CatEquipoJugador />} />
-                        <Route path='/RegdeArbitro' element={<CatArbitro />} />
+                        <Route path='/Arbitros' element={<CatArbitro />} />
                         <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
                         <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />
                         <Route path='/CatJugador' element={<CatJugador />} />
