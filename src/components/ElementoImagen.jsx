@@ -38,7 +38,7 @@ export const ElementoImagen = ({ hexData }) => {
   return (
     <div>
       {/* Utilizar la URL de la imagen en el atributo src del elemento img */}
-      <img src={imageUrl} alt="Imagen" />
+      <img src={imageUrl} alt="Imagen" className="image-with-border" />
     </div>
   );
 };

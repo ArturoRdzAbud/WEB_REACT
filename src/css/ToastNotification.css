@@ -43,7 +43,8 @@
     transform: translateY(1.875rem);
     opacity: 0;
     visibility: hidden;
-    animation: fade-in 3s linear;
+    /* animation: fade-in 3s linear; */
+    animation: fade-in 6s linear;
 
     /* position: fixed;
     top: 20px; 
@@ -81,7 +82,8 @@
         var(--notification-primary)
     );
     border-radius: inherit;
-    animation: progress 2.5s 0.3s linear;
+    /* animation: progress 2.5s 0.3s linear; */
+    animation: progress 5s 0.6s linear;
 }
 
 @keyframes fade-in {
