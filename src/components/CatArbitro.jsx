@@ -49,8 +49,8 @@ export const CatArbitro = () => {
 
      const selectedFotoHandler = e => {
       console.log('ARCHIVO SELECCIONADO:')
-      console.log(e.target.files[0]);
       setFotografia(null)
+      setUserProfileImage('')
       setFotografia(e.target.files[0])
 
      };
@@ -64,11 +64,7 @@ export const CatArbitro = () => {
           formData.append('pnIdLiga', idLiga)
           formData.append('pnIdArbitro', idArbitro)
           console.log('GUARDAR FOTOGRAFIA')
-          console.log('idLiga:' + idLiga, 'idArbitro' + idArbitro)
-          console.log(fotografia)
-
-          // console.log(fotografia.size)
-
+          
           if (!fotografia) {
               alert('Debe seleccionar un archivo')
               return
@@ -105,7 +101,7 @@ export const CatArbitro = () => {
       if (idPais == 0) { setEsMuestraCamposReq(true); return }
       if (idEstado == 0) { setEsMuestraCamposReq(true); return }
       if (idMunicipio == 0) { setEsMuestraCamposReq(true); return }
-      if ( juegosArbitrados === null || juegosArbitrados === '' || juegosArbitrados < 0 || isNaN(juegosArbitrados)) { console.log('ENTRA VALIDACIÓN JUEGOS ARBITRADOS'); setEsMuestraCamposReq(true); return }
+      if ( juegosArbitrados === null || juegosArbitrados === '' || juegosArbitrados < 0 || isNaN(juegosArbitrados)) { setEsMuestraCamposReq(true); return }
       
   
       const data = {
@@ -124,17 +120,23 @@ export const CatArbitro = () => {
   
       const apiReq = 'http://localhost:3000/GuardarArbitro';
       console.log('Guardando los datos.', data);
-      try {
+      //try {
         
         
-        await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
+        await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+        //.then(response => {
+          console.log('guardo correctamente')
+        //  console.log(response)
+        //}
+        //)
+        .catch(error => console.error('Error al guardar arbitros', error));
         
         inicializaCampos()
         setEsEditar(false)//regresa al grid
         setEsNuevo(false)
-      } catch (error) {
-        console.error('Error al guardar los datos.', error);
-      }
+      //} catch (error) {
+      //  console.error('Error al guardar los datos.', error);
+      //}
     };
 
 
@@ -164,7 +166,6 @@ export const CatArbitro = () => {
     };
    
     const cancelar = () => {
-      console.log('Edición cancelada');
       inicializaCampos()
       setEsEditar(false)
       setEsNuevo(false)
@@ -218,7 +219,6 @@ export const CatArbitro = () => {
       // Cambia la URL a la de tu API
       const apiUrl = config.apiUrl + '/ConsultarArbitros';
       if (esEditar) return//sale si es modo edicion
-      console.log(apiUrl)
       axios.get(apiUrl, { params: { pnIdLiga: ligaF } })
         .then(response => { setDatosArbitro(response.data); setDatosArbitroBd(response.data) })
         .catch(error => console.error('Error al obtener datos:', error))
@@ -229,14 +229,12 @@ export const CatArbitro = () => {
   
     useEffect(() => {
       consultarArbitroFoto();
-      console.log('se ejecuta el useEffect: ' + esEditar)
     }, [esEditar]);
 
     const consultarArbitroFoto = () => {
        // Cambia la URL a la de tu API
        const apiUrl = config.apiUrl + '/ConsultarArbitroFoto';
        //axios.get(apiUrl)
-       console.log('CONSULTA IdLiga: ' + idLiga, 'IdArbitro: ' + idArbitro, 'Bandera Foto:' + fotosn)
        if (idLiga > 0 && idArbitro > 0) {
            
            axios.get(apiUrl, { params: { pnFotosn: fotosn, pnIdLiga: idLiga, pnIdArbitro: idArbitro } }
@@ -245,8 +243,8 @@ export const CatArbitro = () => {
                })
                .then(response => {
                    // Convertir la respuesta binaria a una URL de objeto
-                   //console.log(response.data[0].HexadecimalData)
-                   setUserProfileImage(response.data[0].HexadecimalData)
+                  
+                   setUserProfileImage(response.data[0].HexadecimalData)      
 
                })
                .catch(error => console.error('Error al obtener datos:', error))
@@ -254,16 +252,15 @@ export const CatArbitro = () => {
     };
     
     const filtraLocalCombo = (pais,estado) => {
-      console.log(pais)
-
+      
       var datosFiltrados = datosEstadoBD
       datosFiltrados = pais > 0 ? datosFiltrados.filter(item => item.IdPais == pais) : [];
-      // console.log(datosFiltrados)
+      
       setDatosEstado(datosFiltrados);
 
       datosFiltrados = datosMunicipioBD
       datosFiltrados = estado > 0 ? datosFiltrados.filter(item => item.IdPais == pais && item.IdEstados == estado) : [];
-      // console.log(datosFiltrados)
+      
       setDatosMunicipio(datosFiltrados);
   };
    
