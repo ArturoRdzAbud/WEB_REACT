@@ -153,6 +153,7 @@ const CatEquipoTorneo = () => {
 
     } catch (error) {
       console.error('Error al generar el calendario', error);
+      
     }
   };
 

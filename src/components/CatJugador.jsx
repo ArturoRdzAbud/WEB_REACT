@@ -88,21 +88,21 @@ const CatJugador = () => {
             visible: true
         },
         {
-            header: 'Número',
+            header: '#Num',
             accessorKey: 'Numero',
-            footer: 'Número',
+            footer: '#Num',
             visible: true
         },
         {
-            header: 'Telefono',
+            header: 'Tel.',
             accessorKey: 'Telefono',
-            footer: 'Telefono',
+            footer: 'Tel.',
             visible: true
         },
         {
-            header: 'Fecha Nacimiento',
+            header: 'Fecha Nac.',
             accessorKey: 'FechaNacimiento',
-            footer: 'Fecha Nacimiento',
+            footer: 'Fecha Nac.',
             visible: true
             , cell: ({ getValue }) => (isNaN(getValue()) ? getValue() : '')
             //, cell: info => dayjs(info.getValue()).format('DD/MM/YYYY')
@@ -131,6 +131,12 @@ const CatJugador = () => {
             accessorKey: 'Correo',
             footer: 'Correo',
             visible: true
+        },
+        {
+            header: 'Login',
+            accessorKey: 'Login',
+            footer: 'Login',
+            visible: false
         },
         {
             header: 'Activo',
@@ -215,6 +221,7 @@ const CatJugador = () => {
 
     const handleEdit = (rowData) => {
         setEsEditar(true)
+        console.log(rowData.original)
 
         setNombre(rowData.original.Nombre || "")
         setNumero(rowData.original.Numero || "")
@@ -226,6 +233,7 @@ const CatJugador = () => {
         setIdGenero(rowData.original.IdGenero || "")
         setFechaNacimiento(isNaN(rowData.original.FechaNacimiento) ? formatDate(rowData.original.FechaNacimiento) : '')
         //setFechaNacimiento(isNaN(rowData.original.FechaNacimiento) ? dayjs(rowData.original.FechaNacimiento).format('YYYY-MM-DD') : '')
+        setLogin(rowData.original.Login || "")
 
         setIdLiga(rowData.original.IdLiga)
         setAccion(0)//0 para MODIF 1 para nuevo  
@@ -314,6 +322,8 @@ const CatJugador = () => {
             pnIdGenero: idGenero,
             psCorreo: correo,
             piFotografia: foto,
+            psLogin: login,
+            psPassword: password,
             pnActivo: activo,
             pnAccion: accion
         };
@@ -351,41 +361,54 @@ const CatJugador = () => {
                     {/*<button type="button" className="btn btn-primary" onClick={nuevo}>Nuevo</button>*/}
                     <ElementoCampo type='checkbox' lblCampo="Ver Inactivos:" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} />
                     <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={ligaF} options={dataLiga} onInputChange={setLigaF} />
-                    <p>Parrafo temporal para ver parametros del SP a Base de datos|@IdLiga={ligaF}|@Activo={esVerBaja.toString()}|</p>
+                    {/* <p>Parrafo temporal para ver parametros del SP a Base de datos|@IdLiga={ligaF}|@Activo={esVerBaja.toString()}|</p> */}
                     <SimpleTable data={datosJugador} columns={columns} handleEdit={handleEdit} handleNuevo={nuevo} />
 
                 </>
                 :
                 <>
-                    <form onSubmit={guardarJugador}>
+                    <form onSubmit={guardarJugador} autoComplete="off">
                         <br />
-                        <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo} />
-                        <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="Nombre" nomCampo={nombre} onInputChange={setNombre} tamanioString={100} />
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='number' lblCampo="Numero* :" claCampo="Numero" nomCampo={numero} onInputChange={setNumero} tamanioString={3} />
-                            </span>
-                            <span style={{ flexGrow: 1 }}>
-                                <h2></h2>
-                            </span>
-                            <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='tel' lblCampo="Teléfono* :" claCampo="Telefono" nomCampo={telefono} onInputChange={setTelefono} tamanioString={10} />
-                            </span>
-                        </div>
-                        <ElementoCampo type='email' lblCampo="Correo* :" claCampo="Correo" nomCampo={correo} onInputChange={setCorreo} tamanioString={50} />
-                        <ElementoCampo type='text' lblCampo="CURP* :" claCampo="Curp" nomCampo={curp} onInputChange={setCurp} tamanioString={18} />
-                        <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
+
+
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='date' lblCampo="Fecha de Nacimiento* :" claCampo="FechaNacimiento" nomCampo={fechaNacimiento} onInputChange={setFechaNacimiento} />
-                                {/*<input type='date' placeholder="Fecha de Nacimiento* :" id="FechaNacimiento" nomCampo={fechaNacimiento} onChange={setFechaNacimiento} className="form-control" />*/}
+                                <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo} />
+                                <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="Nombre" nomCampo={nombre} onInputChange={setNombre} tamanioString={100} />
+                                <ElementoCampo type='number' lblCampo="Numero* :" claCampo="Numero" nomCampo={numero} onInputChange={setNumero} tamanioString={3} />
+                                <ElementoCampo type='tel' lblCampo="Teléfono* :" claCampo="Telefono" nomCampo={telefono} onInputChange={setTelefono} tamanioString={10} />
                             </span>
                             <span style={{ flexGrow: 1 }}>
                                 <h2></h2>
                             </span>
                             <span style={{ flexGrow: 1 }}>
+                                <div hidden={false}>
+                                    {userProfileImage ? (
+                                        // Mostrar la imagen si los datos están disponibles
+                                        <ElementoImagen hexData={userProfileImage}></ElementoImagen>
+                                    ) : (
+                                        // Mostrar un mensaje de carga mientras se obtienen los datos
+                                        <p>Cargando imagen...</p>
+                                    )}
+                                </div>
+                            </span>
+                        </div>
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ flexGrow: 1 }}>
+                                <ElementoCampo type='email' lblCampo="Correo* :" claCampo="Correo" nomCampo={correo} onInputChange={setCorreo} tamanioString={50} />
+                                <ElementoCampo type='date' lblCampo="Fecha de Nacimiento* :" claCampo="FechaNacimiento" nomCampo={fechaNacimiento} onInputChange={setFechaNacimiento} />
+                                {/*<input type='date' placeholder="Fecha de Nacimiento* :" id="FechaNacimiento" nomCampo={fechaNacimiento} onChange={setFechaNacimiento} className="form-control" />*/}
+                                <ElementoCampo type='text' lblCampo="Usuario :" claCampo="Login" nomCampo={login} onInputChange={setLogin} tamanioString={30} />
+                            </span>
+                            <span style={{ flexGrow: 1 }}>
+                                <h2></h2>
+                            </span>
+                            <span style={{ flexGrow: 1 }}>
+                                <ElementoCampo type='text' lblCampo="CURP* :" claCampo="Curp" nomCampo={curp} onInputChange={setCurp} tamanioString={18} />
                                 <ElementoCampo type="select" lblCampo="Genero*: " claCampo="genero" nomCampo={idGenero} options={dataGenero} onInputChange={setIdGenero} />
+                                <ElementoCampo type='password' lblCampo="Contraseña :" claCampo="Password" onInputChange={setPassword} tamanioString={30} />
                             </span>
                         </div>
 
@@ -394,15 +417,16 @@ const CatJugador = () => {
                         {/*<button type="button" className="btn btn-primary" onClick={cancelar} title="Cancelar">Cancelar</button>*/}
 
 
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ flexGrow: 1 }}>
 
-                        <div>
-                            {userProfileImage ? (
-                                // Mostrar la imagen si los datos están disponibles
-                                <ElementoImagen hexData={userProfileImage}></ElementoImagen>
-                            ) : (
-                                // Mostrar un mensaje de carga mientras se obtienen los datos
-                                <p>Cargando imagen...</p>
-                            )}
+                            </span>
+                            <span style={{ flexGrow: 1 }}>
+                                <h2></h2>
+                            </span>
+                            <span style={{ flexGrow: 1 }}>
+
+                            </span>
                         </div>
 
 
@@ -412,26 +436,21 @@ const CatJugador = () => {
                                     <div className='col-7'>
                                         <input type='file' className='form-control' name="profile_pic" onChange={selectedFotoHandler} accept=".png, .jpg, .jpeg" />
                                     </div>
-
+                                    {/* <span style={{ flexGrow: 1 }}>
+                                        <h2></h2>
+                                    </span> */}
                                     <div className='col-3'>
                                         <button type='button' onClick={guardarFoto} className='btn btn-primary col-12'>Cargar imagen</button>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='text' lblCampo="Usuario :" claCampo="Login" nomCampo={'login'} onInputChange={setLogin} tamanioString={30} />
-                            </span>
-                            <span style={{ flexGrow: 1 }}>
-                                <h2></h2>
-                            </span>
-                            <span style={{ flexGrow: 1 }}>
-                                <ElementoCampo type='password' lblCampo="Contraseña :" claCampo="Password" nomCampo={'password'} onInputChange={setPassword} tamanioString={30} />
-                            </span>
-                        </div>
+
+                        <br></br>
+                        <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
+                        <br></br>
+
                         <ElementoBotones cancelar={cancelar}></ElementoBotones>
                     </form>
                 </>
