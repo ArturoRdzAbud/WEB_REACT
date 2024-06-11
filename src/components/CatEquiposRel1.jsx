@@ -5,6 +5,7 @@ import { ElementoCampo } from './ElementoCampo';
 import { ElementoBotones } from './ElementoBotones';
 import { AlertaEmergente } from './AlertaEmergente';
 import config from '../config'; // archivo configs globales del proy
+import { ElementoToastNotification } from './ElementoToastNotification';
 
 export const CatEquiposRel1 = ({
     claLiga
@@ -24,6 +25,7 @@ export const CatEquiposRel1 = ({
 }) => {
 
     const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+    const [alertaMensaje, setAlertaMensaje] = useState('');
 
     const guardarEquipo = async (e) => {
         // console.log(claLiga)
@@ -45,11 +47,27 @@ export const CatEquiposRel1 = ({
           if (nombre.trim === '') { setEsMuestraCamposReq(true); return }
           // console.log(esMuestraCamposReq)
           console.log('Guardando equipo', data);
-          // if (claLiga == claLiga) return
-          await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-          inicializaCampos()
-          setEsEditar(false)//regresa al grid
-          setEsNuevo(false)
+          
+          await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+          .then(response => {    
+            if (!response.data == '') {
+                console.log('REGRESA ERROR:')
+                if (response.data.originalError === undefined) {
+                    console.log(response.data)
+                    setAlertaMensaje(response.data)
+                }
+                else {
+                    console.log(response.data.originalError.info.message)
+                    setAlertaMensaje(response.data.originalError.info.message)
+                }
+            } else {
+              console.log('guardo correctamente')  
+              inicializaCampos()
+              setEsEditar(false)//regresa al grid
+              setEsNuevo(false)
+            }
+          })
+
         } catch (error) {
           console.error('Error al guardar el equipo', error);
         }
@@ -59,6 +77,9 @@ export const CatEquiposRel1 = ({
         setEsMuestraCamposReq(false)
       };
       
+      const onAceptarC = () => {
+        setAlertaMensaje('')
+      };
 
     return (
         <>
@@ -81,6 +102,12 @@ export const CatEquiposRel1 = ({
                     onAceptar={onAceptar}
                 ></AlertaEmergente>
                 // : <p></p>
+            }
+            {alertaMensaje &&
+              <ElementoToastNotification
+                  mensaje={alertaMensaje}
+                  onAceptar={onAceptarC}
+              ></ElementoToastNotification>
             }
 
         </>

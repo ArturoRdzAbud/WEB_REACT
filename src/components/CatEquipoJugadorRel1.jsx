@@ -4,6 +4,7 @@ import { ElementoCampo } from './ElementoCampo';
 import { ElementoBotones } from './ElementoBotones';
 import axios from 'axios';
 import config from '../config'; // archivo configs globales del proy
+import { ElementoToastNotification } from './ElementoToastNotification';
 
 export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen, datosLiga, datosTorneoBD, setEsMuestraCamposReq, setEsFin }) => {
     // const [isOpen, setIsOpen] = useState(isOpen);
@@ -14,6 +15,10 @@ export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen, datosLiga, datosTorneo
 
     const closeModal = () => {
         setIsOpen(false);
+    };
+
+    const onAceptarC = () => {
+        setAlertaMensaje('')
     };
 
     // const saveModal = () => {
@@ -33,8 +38,24 @@ export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen, datosLiga, datosTorneo
             if (claLigaDestino == -1) { setEsMuestraCamposReq(true); return }
             if (claTorneoDestino == -1) { setEsMuestraCamposReq(true); return }
             console.log('Copiando Jugadores x Equipo', data);
-            await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-            setEsFin(true)
+            await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+            .then(response => {    
+                if (!response.data == '') {
+                    console.log('REGRESA ERROR:')
+                    if (response.data.originalError === undefined) {
+                        console.log(response.data)
+                        setAlertaMensaje(response.data)
+                    }
+                    else {
+                        console.log(response.data.originalError.info.message)
+                        setAlertaMensaje(response.data.originalError.info.message)
+                    }
+                } else {
+                  console.log('guardo correctamente')  
+                  setEsFin(true)
+                }
+              })
+            
         } catch (error) {
             console.error('Error al COPIAR los jugadores x equipo', error);
         }
@@ -48,6 +69,9 @@ export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen, datosLiga, datosTorneo
     const [claTorneoOrigen, setClaTorneoOrigen] = useState(-1);
     const [claLigaDestino, setClaLigaDestino] = useState(-1);
     const [claTorneoDestino, setClaTorneoDestino] = useState(-1);
+    const [alertaMensaje, setAlertaMensaje] = useState('');
+
+
     const handleLigaOrigen = (value, claLigaOrigen) => {//limpia combos hijo 
         setClaLigaOrigen(value)
         setClaTorneoOrigen(-1)
@@ -140,7 +164,13 @@ export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen, datosLiga, datosTorneo
                         </div>
                     </div>
                 </Modal>
-
+                
+                {alertaMensaje &&
+                    <ElementoToastNotification
+                        mensaje={alertaMensaje}
+                        onAceptar={onAceptarC}
+                    ></ElementoToastNotification>
+                }
 
             </>
             {/* )} */}

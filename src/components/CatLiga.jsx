@@ -48,6 +48,7 @@ const CatLiga = () => {
 
     const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
     const [esMuestraConfirmacion, setEsMuestraConfirmacion] = useState(false);
+    const [alertaMensaje, setAlertaMensaje] = useState('');
 
     // const history = useHistory();
     const navigate = useNavigate();
@@ -67,6 +68,12 @@ const CatLiga = () => {
         setEsMuestraConfirmacion(false)
         setEsFin(false)
     };
+
+    const onAceptarC = () => {
+        setAlertaMensaje('')
+    };
+    
+
     const guardarLiga = async (e) => {
         e.preventDefault();
 
@@ -84,29 +91,36 @@ const CatLiga = () => {
         };
         const apiReq = config.apiUrl + '/GuardarLiga';
         try {
-            // if (claLiga == -1) { setEsMuestraCamposReq(true); return }
-
-            // console.log(ligaNombre.trim())
-            // return
-
+            
             if (ligaNombre.trim() === '') { setEsMuestraCamposReq(true); return }
             if (!ligaPais > 0) { setEsMuestraCamposReq(true); return }
             if (!ligaEstado > 0) { setEsMuestraCamposReq(true); return }
             if (!ligaMunicipio > 0) { setEsMuestraCamposReq(true); return }
 
             console.log('Guardando Liga', data);
-            await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-
-            setEsFin(true)
-
-            // inicializaCampos()
-            // setEsEditar(false)
-            // setEsNuevo(false)
-            
+            await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+            .then(response => {    
+                if (!response.data == '') {
+                    console.log('REGRESA ERROR:')
+                    if (response.data.originalError === undefined) {
+                        console.log(response.data)
+                        setAlertaMensaje(response.data)
+                    }
+                    else {
+                        console.log(response.data.originalError.info.message)
+                        setAlertaMensaje(response.data.originalError.info.message)
+                    }
+                } else {
+                    console.log('guardo correctamente')  
+                    setEsFin(true)
+                }
+              })
+                        
 
         } catch (error) {
             console.error('Error al guardar LIGA', error);
         }
+           
     };
 
 
@@ -426,6 +440,12 @@ const CatLiga = () => {
                     <ElementoToastNotification
                         mensaje={'Los datos fueron guardados correctamente.'}
                         onAceptar={onAceptar}
+                    ></ElementoToastNotification>
+                }
+                {alertaMensaje &&
+                    <ElementoToastNotification
+                        mensaje={alertaMensaje}
+                        onAceptar={onAceptarC}
                     ></ElementoToastNotification>
                 }
 

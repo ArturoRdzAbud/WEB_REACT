@@ -4,6 +4,7 @@ import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
 import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
+import { ElementoToastNotification } from './ElementoToastNotification';
 import config from '../config'; // archivo configs globales del proy
 import dayjs from 'dayjs';
 
@@ -36,10 +37,16 @@ const TraProgramacionDePartidos = () => {
   const [claTorneo, setClaTorneo] = useState(-1);
   const [idJornada, setIdJornada] = useState(-1);
   const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+  const [alertaMensaje, setAlertaMensaje] = useState('');
   
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
   };
+
+  const onAceptarC = () => {
+    setAlertaMensaje('')
+  };
+
   const guardarProgramacionDePartidos = async (e) => {
     e.preventDefault();
     const data = {
@@ -59,9 +66,25 @@ const TraProgramacionDePartidos = () => {
       if (idJornada == -1) { setEsMuestraCamposReq(true); return }
       // console.log(esMuestraCamposReq)
           // if (claLiga == claLiga) return
-      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-      inicializaCampos()
-      setEsEditar(false)//regresa al grid
+      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+      .then(response => {    
+        if (!response.data == '') {
+            console.log('REGRESA ERROR:')
+            if (response.data.originalError === undefined) {
+                console.log('response.data: ' + response.data)
+                setAlertaMensaje(response.data)
+            }
+            else {
+                console.log('response.data.originalError.info.message: ' + response.data.originalError.info.message)
+                setAlertaMensaje(response.data.originalError.info.message)
+            }
+        } else {
+          console.log('guardo correctamente')  
+          inicializaCampos()
+          setEsEditar(false)//regresa al grid
+        }
+      })    
+
     } catch (error) {
       console.error('Error al guardar el equipo', error);
     }
@@ -343,6 +366,13 @@ const TraProgramacionDePartidos = () => {
           ></AlertaEmergente>
           // : <p></p>
         }
+        {alertaMensaje &&
+          <ElementoToastNotification
+              mensaje={alertaMensaje}
+              onAceptar={onAceptarC}
+          ></ElementoToastNotification>
+        }
+        
       </div>
     </>
   );

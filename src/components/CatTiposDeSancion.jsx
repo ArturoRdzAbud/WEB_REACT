@@ -7,6 +7,7 @@ import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 import Close from '../svg/icon-close.svg?react'
 import Save from '../svg/icon-save.svg?react'
+import { ElementoToastNotification } from './ElementoToastNotification';
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
 
@@ -34,9 +35,14 @@ const CatTiposDeSancion = () => {
   const [accion, setAccion] = useState(0);
 
   const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+  const [alertaMensaje, setAlertaMensaje] = useState('');
 
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
+  };
+
+  const onAceptarC = () => {
+    setAlertaMensaje('')
   };
 
   const guardarTiposDeSancion = async (e) => {
@@ -56,17 +62,26 @@ const CatTiposDeSancion = () => {
     const apiReq = config.apiUrl + '/GuardarTiposDeSancion';
 
     try {
-      console.log('Guardando Tipos de Sanción', data);
+      //console.log('Guardando Tipos de Sanción', data);
       if (idLiga == 0) { setEsMuestraCamposReq(true); return }
       if (clave.trim() == '') { setEsMuestraCamposReq(true); return }
       if (descripcion.trim() == '') { setEsMuestraCamposReq(true); return }
       if (juegosSuspension === null || juegosSuspension === '' || juegosSuspension < 0 || isNaN(juegosSuspension)) { setEsMuestraCamposReq(true); return }
 
-      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-      //console.log('Guardando Tipos de Sanción', data);
-      inicializaCampos()
-      setEsEditar(false)//regresa al grid
-      setEsNuevo(false)
+      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+      .then(response => {    
+        if (!response.data == '') {
+            console.log('REGRESA ERROR:')
+            console.log(response.data.originalError.info.message)
+            setAlertaMensaje(response.data.originalError.info.message)
+        } else {
+          console.log('guardo correctamente')  
+          inicializaCampos()
+          setEsEditar(false)//regresa al grid
+          setEsNuevo(false)
+        }
+      })
+     
     } catch (error) {
       console.error('Error al guardar el tipo de sanción', error);
     }
@@ -241,6 +256,12 @@ const CatTiposDeSancion = () => {
           mostrarBotonCancelar={false}
           onAceptar={onAceptar}
         ></AlertaEmergente>
+      }
+      {alertaMensaje &&
+          <ElementoToastNotification
+              mensaje={alertaMensaje}
+              onAceptar={onAceptarC}
+          ></ElementoToastNotification>
       }
     </div>
   );

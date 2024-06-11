@@ -5,6 +5,7 @@ import { ElementoCampo } from './ElementoCampo';
 import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
+import { ElementoToastNotification } from './ElementoToastNotification';
 
 import dayjs from 'dayjs';
 
@@ -41,10 +42,15 @@ const TraCapturaDeResultados = () => {
   const [claLigaSel, setClaLigaSel] = useState(-1);
   const [claTorneoSel, setClaTorneoSel] = useState(-1);
   const [idJornadaSel, setIdJornadaSel] = useState(-1);
+  const [alertaMensaje, setAlertaMensaje] = useState('');
 
   
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
+  };
+
+  const onAceptarC = () => {
+    setAlertaMensaje('')
   };
 
   const guardarCapturaDeResultados = async (e) => {
@@ -116,17 +122,28 @@ const TraCapturaDeResultados = () => {
 
       if (claLiga == -1) { setEsMuestraCamposReq(true); return }
       if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
-      if (idJornada == -1) { setEsMuestraCamposReq(true); return }      
-      //if (fechaHora.trim == '') { setEsMuestraCamposReq(true); return }
+      if (idJornada == -1) { setEsMuestraCamposReq(true); return }         
      
-     
-      await axios.post(apiReq, { data });
-     
-      setEsRegresaDeEditar(true)
-      inicializaCampos()
-      setEsEditar(false)//regresa al grid
+      await axios.post(apiReq, { data })
+      .then(response => {    
+        if (!response.data == '') {
+            console.log('REGRESA ERROR:')
+            if (response.data.originalError === undefined) {
+                console.log('response.data: ' + response.data)
+                setAlertaMensaje(response.data)
+            }
+            else {
+                console.log('response.data.originalError.info.message: ' + response.data.originalError.info.message)
+                setAlertaMensaje(response.data.originalError.info.message)
+            }
+        } else {
+          console.log('guardo correctamente')  
+          setEsRegresaDeEditar(true)
+          inicializaCampos()
+          setEsEditar(false)//regresa al grid
+        }
+      })    
       
-
     } catch (error) {
       console.error('Error al guardar la captura de resultados', error);
     }
@@ -602,6 +619,13 @@ const TraCapturaDeResultados = () => {
           ></AlertaEmergente>
           // : <p></p>
         }
+        {alertaMensaje &&
+          <ElementoToastNotification
+              mensaje={alertaMensaje}
+              onAceptar={onAceptarC}
+          ></ElementoToastNotification>
+        }
+        
       </div>
     </>
   );

@@ -52,12 +52,17 @@ const CatEquipoJugador = () => {
     const [claTorneo, setClaTorneo] = useState(-1);
     const [claEquipo, setClaEquipo] = useState(-1);
     const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+    const [alertaMensaje, setAlertaMensaje] = useState('');
 
     const onAceptar = () => {
         console.log('onaceptar')
         setEsMuestraCamposReq(false)
         setEsFin(false)
     };
+
+    const onAceptarC = () => {
+        setAlertaMensaje('')
+      };
 
     const inicializaCampos = () => {
         setEsVerBaja(true)
@@ -250,23 +255,32 @@ const CatEquipoJugador = () => {
 
         const apiReq = config.apiUrl + '/GuardarJugadorxEquipo';
         try {
-            //console.log(esMuestraCamposReq)
-
+           
             if (claLiga == -1) { setEsMuestraCamposReq(true); return }
             if (claTorneo == -1) { setEsMuestraCamposReq(true); return }
             if (claEquipo == -1) { setEsMuestraCamposReq(true); return }
-            // if (xmlString == '') { setEsMuestraCamposReq(true); return }
-            // if (nombre.trim === '') { setEsMuestraCamposReq(true); return }
+            
             console.log('Guardando Jugadores x Equipo', data);
-            // if (claLiga == claLiga) return
-            await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-
-            // return
-            // inicializaCampos()
-            // setEsEditar(true)//regresa al grid
-            setEsEditar(false)
-            // setEsNuevo(false)
-            setEsFin(true)
+           
+            await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+            .then(response => {    
+              if (!response.data == '') {
+                  console.log('REGRESA ERROR:')
+                  if (response.data.originalError === undefined) {
+                      console.log('response.data: ' + response.data)
+                      setAlertaMensaje(response.data)
+                  }
+                  else {
+                      console.log('response.data.originalError.info.message: ' + response.data.originalError.info.message)
+                      setAlertaMensaje(response.data.originalError.info.message)
+                  }
+              } else {
+                console.log('guardo correctamente')  
+                setEsEditar(false)
+                // setEsNuevo(false)
+                setEsFin(true)
+              }
+            })
 
         } catch (error) {
             console.error('Error al guardar los jugadores x equipo', error);
@@ -344,7 +358,12 @@ const CatEquipoJugador = () => {
                 ></ElementoToastNotification>
                 // : <p></p>
             }
-
+            {alertaMensaje &&
+                <ElementoToastNotification
+                    mensaje={alertaMensaje}
+                    onAceptar={onAceptarC}
+                ></ElementoToastNotification>
+            }
             <CatEquipoJugadorRel1 isOpen={isOpen} setIsOpen={setIsOpen}
                 datosLiga={datosLiga} datosTorneoBD={datosTorneoBD}
                 setEsMuestraCamposReq={setEsMuestraCamposReq}

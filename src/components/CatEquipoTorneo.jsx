@@ -8,6 +8,7 @@ import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 import { useNavigate } from 'react-router-dom';
 import Calendario from '../svg/icon-calendar.svg?react'
+import { ElementoToastNotification } from './ElementoToastNotification';
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
@@ -42,6 +43,7 @@ const CatEquipoTorneo = () => {
   const [claTipoTorneo, setClaTipoTorneo] = useState(-1);
   const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
   const [esMuestraConfirmacion, setEsMuestraConfirmacion] = useState(false);
+  const [alertaMensaje, setAlertaMensaje] = useState('');
   
   // const history = useHistory();
   const navigate = useNavigate();
@@ -62,6 +64,12 @@ const CatEquipoTorneo = () => {
     setEsMuestraCamposReq(false)
     setEsMuestraConfirmacion(false)
   };
+
+  const onAceptarC = () => {
+    setAlertaMensaje('')
+  };
+
+
   const guardarEquipo = async (e) => {
     e.preventDefault();
 
@@ -120,11 +128,28 @@ const CatEquipoTorneo = () => {
       // console.log(esMuestraCamposReq)
       console.log('Guardando Torneo', data);
       // if (claLiga == claLiga) return
-      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-      inicializaCampos()
-      setEsEditar(false)//regresa al grid
-      setEsEditarEquipos(false)
-      setEsNuevo(false)
+      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+      .then(response => {    
+        if (!response.data == '') {
+            console.log('REGRESA ERROR:')
+            if (response.data.originalError === undefined) {
+                console.log(response.data)
+                setAlertaMensaje(response.data)
+            }
+            else {
+                console.log(response.data.originalError.info.message)
+                setAlertaMensaje(response.data.originalError.info.message)
+            }
+        } else {
+          console.log('guardo correctamente')  
+          inicializaCampos()
+          setEsEditar(false)//regresa al grid
+          setEsEditarEquipos(false)
+          setEsNuevo(false)
+        }
+      })
+
+     
 
     } catch (error) {
       console.error('Error al guardar el torneo', error);
@@ -146,9 +171,23 @@ const CatEquipoTorneo = () => {
       // console.log(esMuestraCamposReq)
       console.log('Generando calendario', data);
       // if (claLiga == claLiga) return
-      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' });
-      
-      setEsMuestraConfirmacion(true)
+      await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
+      .then(response => {    
+        if (!response.data == '') {
+            console.log('REGRESA ERROR:')
+            if (response.data.originalError === undefined) {
+                console.log(response.data)
+                setAlertaMensaje(response.data)
+            }
+            else {
+                console.log(response.data.originalError.info.message)
+                setAlertaMensaje(response.data.originalError.info.message)
+            }
+        } else {
+          console.log('guardo correctamente')  
+          setEsMuestraConfirmacion(true)
+        }
+      })
 
 
     } catch (error) {
@@ -485,6 +524,12 @@ const CatEquipoTorneo = () => {
             onAceptar={onAceptar}
           ></AlertaEmergente>
           // : <p></p>
+        }
+        {alertaMensaje &&
+          <ElementoToastNotification
+              mensaje={alertaMensaje}
+              onAceptar={onAceptarC}
+          ></ElementoToastNotification>
         }
 
       </div>

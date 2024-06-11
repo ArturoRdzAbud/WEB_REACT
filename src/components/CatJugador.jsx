@@ -306,8 +306,20 @@ const CatJugador = () => {
         }
         else {
             try {
-                await axios.post(apiReq, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-                setEsFin(true)
+                await axios.post(apiReq, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+                .then(response => {
+                    console.log('response:')
+                    console.log(response.data)
+                    
+                    if (!response.data == '') {
+                        console.log('vacio')
+                        console.log(response.data.originalError.info.message)
+                        setAlertaMensaje(response.data.originalError.info.message)
+                    } else {
+                        setEsFin(true)
+                    }
+                })
+                
             } catch (error) {
                 console.error('Error al guardar fotografia', error);
             }
@@ -347,17 +359,13 @@ const CatJugador = () => {
             if (numero === '') { setEsMuestraCamposReq(true); return }
 
             await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*', "Content-Type": "multipart/form-data" })
-                .then(response => {
-                    console.log('response:')
-                    console.log(response.data)
-                    // console.log(response.data.originalError.info.message) 
-
+                .then(response => {                   
                     if (!response.data == '') {
-                        console.log('vacio')
+                        console.log('REGRESA ERROR:')
                         console.log(response.data.originalError.info.message)
                         setAlertaMensaje(response.data.originalError.info.message)
-                        // return
                     } else {
+                        console.log('guardo correctamente')  
                         inicializaCampos()
                         setEsEditar(false)//regresa al grid
                         setEsNuevo(false)
@@ -503,20 +511,12 @@ const CatJugador = () => {
                 ></AlertaEmergente>
                 // : <p></p>
             }
-               {alertaMensaje &&
-                    // <AlertaEmergente
-                    //     titulo={'Alerta'}
-                    //     mensaje={'Los datos con * son requeridos, favor de validar.'}
-                    //     mostrarBotonAceptar={true}
-                    //     mostrarBotonCancelar={false}
-                    //     onAceptar={onAceptar}
-                    // ></AlertaEmergente>
-                    <ElementoToastNotification
-                        mensaje={alertaMensaje}
-                        onAceptar={onAceptarC}
-                    ></ElementoToastNotification>
-                    // : <p></p>
-                }
+            {alertaMensaje &&
+                <ElementoToastNotification
+                    mensaje={alertaMensaje}
+                    onAceptar={onAceptarC}
+                ></ElementoToastNotification>
+            }
         </>
 
 

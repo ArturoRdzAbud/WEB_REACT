@@ -6,6 +6,7 @@ import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 import { ElementoImagen } from './ElementoImagen'
+import { ElementoToastNotification } from './ElementoToastNotification';
 
 export const CatArbitro = () => {
     const [datosArbitro, setDatosArbitro] = useState([]);
@@ -46,6 +47,7 @@ export const CatArbitro = () => {
      const [accion, setAccion] = useState(0);
 
      const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+     const [alertaMensaje, setAlertaMensaje] = useState('');
 
      const selectedFotoHandler = e => {
       console.log('ARCHIVO SELECCIONADO:')
@@ -76,9 +78,17 @@ export const CatArbitro = () => {
           else {
               try {
                   await axios.post(apiReq, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+                  console.log('guardo correctamente')  
                   setEsFin(true)
-              } catch (error) {
-                  console.error('Error al guardar fotografia', error);
+                                 
+              } catch (error) {               
+                  if (!error.message == '') {
+                      console.log('REGRESA ERROR:')
+                      console.error('Error al guardar fotografia', error);
+                      setAlertaMensaje('Error al guardar fotografia: ' + error.message)
+                      
+                  }
+                  
               }
           }
 
@@ -86,9 +96,13 @@ export const CatArbitro = () => {
 
       };
 
-     const onAceptar = () => {
-      setEsMuestraCamposReq(false)
-      setEsFin(false)
+      const onAceptar = () => {
+        setEsMuestraCamposReq(false)
+        setEsFin(false)
+      };
+
+      const onAceptarC = () => {
+        setAlertaMensaje('')
       };
 
      const guardarArbitro = async (e) => {
@@ -120,23 +134,34 @@ export const CatArbitro = () => {
   
       const apiReq = 'http://localhost:3000/GuardarArbitro';
       console.log('Guardando los datos.', data);
-      //try {
-        
+
+      try {
         
         await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*' })
-        //.then(response => {
-          console.log('guardo correctamente')
-        //  console.log(response)
-        //}
-        //)
-        .catch(error => console.error('Error al guardar arbitros', error));
+        .then(response => {    
+          if (!response.data == '') {
+              console.log('REGRESA ERROR:')
+              if (response.data.originalError === undefined) {
+                  console.log('response.data: ' + response.data)
+                  setAlertaMensaje(response.data)
+              }
+              else {
+                  console.log('response.data.originalError.info.message: ' + response.data.originalError.info.message)
+                  setAlertaMensaje(response.data.originalError.info.message)
+              }
+          } else {
+            console.log('guardo correctamente')  
+            inicializaCampos()
+            setEsEditar(false)//regresa al grid
+            setEsNuevo(false)
+          }
+        })
         
-        inicializaCampos()
-        setEsEditar(false)//regresa al grid
-        setEsNuevo(false)
-      //} catch (error) {
-      //  console.error('Error al guardar los datos.', error);
-      //}
+      } catch (error) {
+        console.error('Error al guardar los árbitros.', error);
+      }
+      
+
     };
 
 
@@ -471,6 +496,12 @@ export const CatArbitro = () => {
               onAceptar={onAceptar}
           ></AlertaEmergente>
           // : <p></p>
+        }
+        {alertaMensaje &&
+          <ElementoToastNotification
+              mensaje={alertaMensaje}
+              onAceptar={onAceptarC}
+          ></ElementoToastNotification>
         }
       </div>
     );
