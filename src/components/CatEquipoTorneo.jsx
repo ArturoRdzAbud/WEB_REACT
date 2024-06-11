@@ -470,7 +470,7 @@ const CatEquipoTorneo = () => {
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button type="button" title="Generar Calendario" className="btn btn-info" onClick={generarCalendario}><Calendario /></button>
                 <ElementoBotones cancelar={cancelar}></ElementoBotones>
-            </div>              
+              </div>              
               {!esEditarEquipos &&
                 <>
                   <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={esNuevo} />

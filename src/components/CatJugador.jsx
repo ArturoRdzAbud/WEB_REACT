@@ -50,8 +50,9 @@ const CatJugador = () => {
     const [alertaMensaje, setAlertaMensaje] = useState('');
 
     const selectedFotoHandler = e => {
-        console.log('File info working!')
-        console.log(e.target.files[0]);
+        console.log('ARCHIVO SELECCIONADO:')
+        setFoto(null)
+        setUserProfileImage('')
         setFoto(e.target.files[0])
 
     }
@@ -175,26 +176,31 @@ const CatJugador = () => {
 
     }, []);
 
+    const ConsultarJugadoresFoto = () => {
+
+         // Cambia la URL a la de tu API
+         const apiUrl = config.apiUrl + '/ConsultarJugadoresFoto';
+         //axios.get(apiUrl)
+         console.log(idLiga, idJugador)
+         if (idLiga > 0 && idJugador > 0) {
+             //axios.get('http://localhost:3000/ConsultarJugadores', { params: { pnIdLiga: ligaF } })
+             axios.get(apiUrl, { params: { pnFotosn: fotosn, pnIdLiga: idLiga, pnIdJugador: idJugador } }
+                 , {
+                     responseType: 'blob' // Indicar que esperamos una respuesta binaria
+                 })
+                 .then(response => {
+                     // Convertir la respuesta binaria a una URL de objeto
+                     //console.log(response.data[0].HexadecimalData)
+                     setUserProfileImage(response.data[0].HexadecimalData)
+ 
+                 })
+                 .catch(error => console.error('Error al obtener datos:', error))
+         }
+    };
+
 
     useEffect(() => {
-        // Cambia la URL a la de tu API
-        const apiUrl = config.apiUrl + '/ConsultarJugadoresFoto';
-        //axios.get(apiUrl)
-        console.log(idLiga, idJugador)
-        if (idLiga > 0 && idJugador > 0) {
-            //axios.get('http://localhost:3000/ConsultarJugadores', { params: { pnIdLiga: ligaF } })
-            axios.get(apiUrl, { params: { pnFotosn: fotosn, pnIdLiga: idLiga, pnIdJugador: idJugador } }
-                , {
-                    responseType: 'blob' // Indicar que esperamos una respuesta binaria
-                })
-                .then(response => {
-                    // Convertir la respuesta binaria a una URL de objeto
-                    //console.log(response.data[0].HexadecimalData)
-                    setUserProfileImage(response.data[0].HexadecimalData)
-
-                })
-                .catch(error => console.error('Error al obtener datos:', error))
-        }
+        ConsultarJugadoresFoto();
     }, [esEditar]);
 
     useEffect(() => {
@@ -307,24 +313,22 @@ const CatJugador = () => {
         else {
             try {
                 await axios.post(apiReq, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-                .then(response => {
-                    console.log('response:')
-                    console.log(response.data)
-                    
-                    if (!response.data == '') {
-                        console.log('vacio')
-                        console.log(response.data.originalError.info.message)
-                        setAlertaMensaje(response.data.originalError.info.message)
-                    } else {
-                        setEsFin(true)
-                    }
-                })
+                console.log('guardo correctamente')  
+                setEsFin(true)
                 
             } catch (error) {
-                console.error('Error al guardar fotografia', error);
+                if (!error.message == '') {
+                    console.log('REGRESA ERROR:')
+                    console.error('Error al guardar fotografia', error);
+                    setAlertaMensaje('Error al guardar fotografia: ' + error.message)
+                    
+                }
             }
         }
-    }
+
+        ConsultarJugadoresFoto();
+
+    };
 
     const guardarJugador = async (e) => {
         e.preventDefault();
@@ -362,8 +366,14 @@ const CatJugador = () => {
                 .then(response => {                   
                     if (!response.data == '') {
                         console.log('REGRESA ERROR:')
-                        console.log(response.data.originalError.info.message)
-                        setAlertaMensaje(response.data.originalError.info.message)
+                        if (response.data.originalError === undefined) {
+                            console.log('response.data: ' + response.data)
+                            setAlertaMensaje(response.data)
+                        }
+                        else {
+                            console.log('response.data.originalError.info.message: ' + response.data.originalError.info.message)
+                            setAlertaMensaje(response.data.originalError.info.message)
+                        }
                     } else {
                         console.log('guardo correctamente')  
                         inicializaCampos()

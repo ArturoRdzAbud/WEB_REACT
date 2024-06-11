@@ -42,7 +42,7 @@ const CatLiga = () => {
     const [ligaPais, setLigaPais] = useState(-1);
     const [ligaEstado, setLigaEstado] = useState(-1);
     const [ligaMunicipio, setLigaMunicipio] = useState(-1);
-    const [ligaPaisF, setLigaPaisF] = useState(-1);
+    const [ligaPaisF, setLigaPaisF] = useState(1);
     const [ligaEstadoF, setLigaEstadoF] = useState(-1);
     const [ligaMunicipioF, setLigaMunicipioF] = useState(-1);
 
@@ -133,7 +133,7 @@ const CatLiga = () => {
         setLigaTelefono('')
         setLigaCorreo('')
         
-        setLigaPais(-1)
+        setLigaPais(1)
         setLigaEstado(-1)
         setLigaMunicipio(-1)
 
@@ -301,9 +301,9 @@ const CatLiga = () => {
             , visible: true
         },
         {
-            header: 'Pais',
-            accessorKey: 'País',
-            footer: 'Pais'
+            header: 'País',
+            accessorKey: 'Pais',
+            footer: 'País'
             , visible: esVerCamposFiltro
         },
         {

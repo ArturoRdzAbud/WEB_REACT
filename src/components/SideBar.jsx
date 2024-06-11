@@ -5,31 +5,37 @@ import '../css/Sidebar.css';
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 
 //pantallas
-
-import CatEquipos from './CatEquipos';
-import CatTiposDeSancion from './CatTiposDeSancion';
-import CatArbitro from './CatArbitro';
-import CatEquipoTorneo from './CatEquipoTorneo';
-import CatEquipoJugador from './CatEquipoJugador';
-import CatJugador from './CatJugador';
-import TraEstadisticaJugador from './TraEstadisticaJugador';
 import CatLiga from './CatLiga';
-//Iconos
-import EquiposSvg from '../svg/equipos.svg?react'
-import BalonSvg from '../svg/balon.svg?react'
-import Arbitrosvg from '../svg/arbitro.svg?react'
-import Tarjetasvg from '../svg/tarjetas.svg?react'
-import Programacionsvg from '../svg/evento-de-calendario.svg?react'
-import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react'
-import EquipoJugadorSvg from '../svg/menu-equipo-jugador.svg?react'
-import EstadisticaJugadorSvg from '../svg/menu-estadistica-jugador.svg?react'
-import EstadisticaEquipoSvg from '../svg/menu-estadistica-equipo.svg?react'
-import CapturaResultadosSvg from '../svg/menu-captura-resultados.svg?react'
-import LigaSvg from '../svg/menu-liga.svg?react'
+import CatEquipos from './CatEquipos';
+import CatEquipoTorneo from './CatEquipoTorneo';
+import CatJugador from './CatJugador';
+import CatEquipoJugador from './CatEquipoJugador';
+import CatArbitro from './CatArbitro';
+import CatTiposDeSancion from './CatTiposDeSancion';
 
 import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 import TraCapturaDeResultados from './TraCapturaDeResultados';
+
 import EstEstadisticaPorEquipo from './EstEstadisticaPorEquipo';
+import TraEstadisticaJugador from './TraEstadisticaJugador';
+
+//Iconos
+import LigaSvg from '../svg/menu-liga.svg?react'
+import EquiposSvg from '../svg/equipos.svg?react'
+import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react'
+import JugadoresSvg from '../svg/jugador-de-futbol.svg?react'
+import EquipoJugadorSvg from '../svg/menu-equipo-jugador.svg?react'
+import Arbitrosvg from '../svg/arbitro.svg?react'
+import Arbitros2vg from '../svg/arbitro-final.svg?react'
+import Tarjetasvg from '../svg/tarjetas.svg?react'
+
+import Programacionsvg from '../svg/evento-de-calendario.svg?react'
+import CapturaResultadosSvg from '../svg/menu-captura-resultados.svg?react'
+
+import EstadisticaEquipoSvg from '../svg/menu-estadistica-equipo.svg?react'
+import EstadisticaJugadorSvg from '../svg/menu-estadistica-jugador.svg?react'
+import BalonSvg from '../svg/balon.svg?react'
+
 
 
 // export default props => {
@@ -96,29 +102,28 @@ export const SideBar = () => {
         Desserts
       </a> */}
 
-
             <BrowserRouter>
-
 
                 <Menu isOpen={isOpen}
                     onOpen={handleIsOpen}
                     onClose={handleIsOpen}>
                     <ul className='navbar-nav'>
                         <li className="nav-item">
+                            {/*Configuración inicial*/}
                             <NavLink onClick={closeMenu} to='/Liga' className='nav-link' > <LigaSvg />{' Ligas '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/' className='nav-link' > <BalonSvg />{' Alta de Equipo'} </NavLink>
-                            {/* <NavLink to='/Equipos' className='nav-link' > <EquiposSvg />{expanded ? ' Equipos' : ''} </NavLink> */}
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <JugadoresSvg />{' Jugadores'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores x Equipo'} </NavLink>
-                            {/* <NavLink to='/Equipos' className='nav-link' >{' Equipos'} </NavLink> */}
-                            <NavLink onClick={closeMenu} to='/Arbitros' className='nav-link' > <Arbitrosvg />{' Árbitros'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/Arbitros' className='nav-link' > <Arbitros2vg />{' Árbitros'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
+
+                            {/*Operación de las ligas y torneos*/}
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <Arbitrosvg />{' Jugadores'} </NavLink>
                             <NavLink onClick={closeMenu} to='/CapturaDeResultados' className='nav-link' > <CapturaResultadosSvg />{' Captura De Resultados '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por equipo '} </NavLink>
-                            
+
+                            {/*Consulta de estadisticas*/}
+                            <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por equipo '} </NavLink>                            
                             <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica x Jugador '} </NavLink>
                         </li>
                     </ul>
@@ -127,19 +132,22 @@ export const SideBar = () => {
 
                 <div className='container'>
                     <Routes>
-                        
+                        {/*Configuración inicial*/}
+                        <Route path='/Liga' element={<CatLiga />} />
                         <Route path='/Equipos' element={<CatEquipos />} />
                         <Route path='/EquipoTorneo' element={<CatEquipoTorneo />} />
+                        <Route path='/CatJugador' element={<CatJugador />} />
                         <Route path='/EquipoJugador' element={<CatEquipoJugador />} />
                         <Route path='/Arbitros' element={<CatArbitro />} />
                         <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
-                        <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />
-                        <Route path='/CatJugador' element={<CatJugador />} />
+
+                        {/*Operación de las ligas y torneos*/}
+                        <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />                        
                         <Route path='/CapturaDeResultados' element={<TraCapturaDeResultados />} />
-                        <Route path='/EstEstadisticaPorEquipo' element={<EstEstadisticaPorEquipo />} />
-                        
-                        <Route path='/EstadisticaJugador' element={<TraEstadisticaJugador />} />
-                        <Route path='/Liga' element={<CatLiga />} />
+
+                        {/*Consulta de estadisticas*/}
+                        <Route path='/EstEstadisticaPorEquipo' element={<EstEstadisticaPorEquipo />} />                        
+                        <Route path='/EstadisticaJugador' element={<TraEstadisticaJugador />} />                        
                     </Routes>
                 </div>
 
