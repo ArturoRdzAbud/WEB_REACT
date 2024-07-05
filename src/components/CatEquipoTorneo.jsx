@@ -263,6 +263,8 @@ const CatEquipoTorneo = () => {
     datosFiltrados = claTorneo > 0 ? datosFiltrados.filter(item => item.IdTorneo == claTorneo) : datosFiltrados;
     // console.log(datosFiltrados)
     setDatosEquipos(datosFiltrados);
+    // console.log(claLiga)
+    // console.log(claTorneo)
   };
 
   //-------------------------------------------------------------------SECCION USE EFFFECT
