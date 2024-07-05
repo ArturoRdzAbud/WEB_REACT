@@ -6,6 +6,7 @@ import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 import { ElementoToastNotification } from './ElementoToastNotification';
+import { useParams } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
@@ -44,6 +45,7 @@ const TraCapturaDeResultados = () => {
   const [idJornadaSel, setIdJornadaSel] = useState(-1);
   const [alertaMensaje, setAlertaMensaje] = useState('');
 
+  const { muestraLinkCaptura } = useParams(true);
   
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
@@ -289,6 +291,7 @@ const TraCapturaDeResultados = () => {
 
       .catch(error => console.error('Error al obtener datos:', error))
     
+      console.log(muestraLinkCaptura)
 
   }, [esEditar]); // Se EJECUTA CUANDO CAMBIA la bandera esEditar
 
@@ -341,7 +344,7 @@ const TraCapturaDeResultados = () => {
       header: 'Capturar',
       accessorKey: 'Descripcion',
       footer: 'Capturar'
-      ,visible:true
+      ,visible:muestraLinkCaptura
     },
     {
       header: 'Liga',

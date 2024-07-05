@@ -120,9 +120,10 @@ export const SideBar = () => {
 
                             {/*Operación de las ligas y torneos*/}
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/CapturaDeResultados' className='nav-link' > <CapturaResultadosSvg />{' Captura De Resultados '} </NavLink>
+                            <NavLink onClick={closeMenu} to='/CapturaDeResultados/true' className='nav-link' > <CapturaResultadosSvg />{' Captura De Resultados '} </NavLink>
 
                             {/*Consulta de estadisticas*/}
+                            <NavLink onClick={closeMenu} to='/CapturaDeResultados/false' className='nav-link' > <CapturaResultadosSvg />{' Consulta De Resultados '} </NavLink>
                             <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por equipo '} </NavLink>                            
                             <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica x Jugador '} </NavLink>
                         </li>
@@ -143,9 +144,10 @@ export const SideBar = () => {
 
                         {/*Operación de las ligas y torneos*/}
                         <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />                        
-                        <Route path='/CapturaDeResultados' element={<TraCapturaDeResultados />} />
+                        <Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<TraCapturaDeResultados />} />
 
                         {/*Consulta de estadisticas*/}
+                        <Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<TraCapturaDeResultados />} />
                         <Route path='/EstEstadisticaPorEquipo' element={<EstEstadisticaPorEquipo />} />                        
                         <Route path='/EstadisticaJugador' element={<TraEstadisticaJugador />} />                        
                     </Routes>
