@@ -12,6 +12,7 @@ import CatJugador from './CatJugador';
 import CatEquipoJugador from './CatEquipoJugador';
 import CatArbitro from './CatArbitro';
 import CatTiposDeSancion from './CatTiposDeSancion';
+import CatUsuario from './CatUsuario';
 
 import TraProgramacionDePartidos from './TraProgramacionDePartidos';
 import TraCapturaDeResultados from './TraCapturaDeResultados';
@@ -117,6 +118,7 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores x Equipo'} </NavLink>
                             <NavLink onClick={closeMenu} to='/Arbitros' className='nav-link' > <Arbitros2vg />{' Árbitros'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/CatUsuario' className='nav-link' > <JugadoresSvg />{' Usuarios'} </NavLink>
 
                             {/*Operación de las ligas y torneos*/}
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
@@ -141,6 +143,7 @@ export const SideBar = () => {
                         <Route path='/EquipoJugador' element={<CatEquipoJugador />} />
                         <Route path='/Arbitros' element={<CatArbitro />} />
                         <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
+                        <Route path='/CatUsuario' element={<CatUsuario />} />
 
                         {/*Operación de las ligas y torneos*/}
                         <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />                        
