@@ -47,6 +47,8 @@ const CatJugador = () => {
     const [fotosn, setFotosn] = useState(null);
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
+    const [esNoCoinciden, setEsNoCoinciden] = useState(false);
     const [alertaMensaje, setAlertaMensaje] = useState('');
 
     const selectedFotoHandler = e => {
@@ -178,24 +180,24 @@ const CatJugador = () => {
 
     const ConsultarJugadoresFoto = () => {
 
-         // Cambia la URL a la de tu API
-         const apiUrl = config.apiUrl + '/ConsultarJugadoresFoto';
-         //axios.get(apiUrl)
-         console.log(idLiga, idJugador)
-         if (idLiga > 0 && idJugador > 0) {
-             //axios.get('http://localhost:3000/ConsultarJugadores', { params: { pnIdLiga: ligaF } })
-             axios.get(apiUrl, { params: { pnFotosn: fotosn, pnIdLiga: idLiga, pnIdJugador: idJugador } }
-                 , {
-                     responseType: 'blob' // Indicar que esperamos una respuesta binaria
-                 })
-                 .then(response => {
-                     // Convertir la respuesta binaria a una URL de objeto
-                     //console.log(response.data[0].HexadecimalData)
-                     setUserProfileImage(response.data[0].HexadecimalData)
- 
-                 })
-                 .catch(error => console.error('Error al obtener datos:', error))
-         }
+        // Cambia la URL a la de tu API
+        const apiUrl = config.apiUrl + '/ConsultarJugadoresFoto';
+        //axios.get(apiUrl)
+        console.log(idLiga, idJugador)
+        if (idLiga > 0 && idJugador > 0) {
+            //axios.get('http://localhost:3000/ConsultarJugadores', { params: { pnIdLiga: ligaF } })
+            axios.get(apiUrl, { params: { pnFotosn: fotosn, pnIdLiga: idLiga, pnIdJugador: idJugador } }
+                , {
+                    responseType: 'blob' // Indicar que esperamos una respuesta binaria
+                })
+                .then(response => {
+                    // Convertir la respuesta binaria a una URL de objeto
+                    //console.log(response.data[0].HexadecimalData)
+                    setUserProfileImage(response.data[0].HexadecimalData)
+
+                })
+                .catch(error => console.error('Error al obtener datos:', error))
+        }
     };
 
 
@@ -228,7 +230,9 @@ const CatJugador = () => {
     useEffect(() => {
         filtraLocal()
     }, [esVerBaja, ligaF]); //Se invoca al interactuar con los filtros arriba del grid
-
+    useEffect(() => {
+        setEsNoCoinciden(password !== password2);
+    }, [password, password2]); //Se invoca al interactuar con los filtros arriba del grid
 
 
     const handleEdit = (rowData) => {
@@ -313,15 +317,15 @@ const CatJugador = () => {
         else {
             try {
                 await axios.post(apiReq, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-                console.log('guardo correctamente')  
+                console.log('guardo correctamente')
                 setEsFin(true)
-                
+
             } catch (error) {
                 if (!error.message == '') {
                     console.log('REGRESA ERROR:')
                     console.error('Error al guardar fotografia', error);
                     setAlertaMensaje('Error al guardar fotografia: ' + error.message)
-                    
+
                 }
             }
         }
@@ -361,9 +365,10 @@ const CatJugador = () => {
             if (idLiga == -1) { setEsMuestraCamposReq(true); return }
             if (nombre.trim == '') { setEsMuestraCamposReq(true); return }
             if (numero === '') { setEsMuestraCamposReq(true); return }
+            if (esNoCoinciden) { setAlertaMensaje('Contraseña no Coincide, Favor de verificar'); return }
 
             await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*', "Content-Type": "multipart/form-data" })
-                .then(response => {                   
+                .then(response => {
                     if (!response.data == '') {
                         console.log('REGRESA ERROR:')
                         if (response.data.originalError === undefined) {
@@ -375,7 +380,7 @@ const CatJugador = () => {
                             setAlertaMensaje(response.data.originalError.info.message)
                         }
                     } else {
-                        console.log('guardo correctamente')  
+                        console.log('guardo correctamente')
                         inicializaCampos()
                         setEsEditar(false)//regresa al grid
                         setEsNuevo(false)
@@ -441,7 +446,9 @@ const CatJugador = () => {
                                 <ElementoCampo type="select" lblCampo="Genero*: " claCampo="genero" nomCampo={idGenero} options={dataGenero} onInputChange={setIdGenero} />
                                 <ElementoCampo type='text' lblCampo="Usuario :" claCampo="Login" nomCampo={login} onInputChange={setLogin} tamanioString={30} />
                                 <ElementoCampo type='password' lblCampo="Contraseña :" claCampo="Password" onInputChange={setPassword} tamanioString={30} />
-
+                                <ElementoCampo type='password' lblCampo="Confirmar Contraseña :" claCampo="Password2" onInputChange={setPassword2} tamanioString={30} />
+                                {/* {password!=password2?<span>¡Contraseñas no Coinciden!</span>:<span></span>} */}
+                                {esNoCoinciden && <span>¡Contraseñas no Coinciden!</span>}
                             </span>
                         </div>
 
