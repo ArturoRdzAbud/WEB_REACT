@@ -344,7 +344,6 @@ const TraCapturaDeResultados = () => {
       header: 'Capturar',
       accessorKey: 'Descripcion',
       footer: 'Capturar'
-      // ,visible:muestraLinkCaptura
       ,visible:(muestraLinkCaptura=='true')
     },
     {
