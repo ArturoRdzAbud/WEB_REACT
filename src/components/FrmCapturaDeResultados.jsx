@@ -7,12 +7,13 @@ import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 import { ElementoToastNotification } from './ElementoToastNotification';
 import { useParams } from 'react-router-dom';
+import { ElementoBotones } from './ElementoBotones'
 
 import dayjs from 'dayjs';
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
-const TraCapturaDeResultados = () => {
+const FrmCapturaDeResultados = () => {
   const [datosResultadosBD, setDatosResultadosBD] = useState([]);
   const [datosResultados, setDatosResultados] = useState([]);
   const [datosEquipo1BD, setDatosEquipo1BD] = useState([]);
@@ -577,6 +578,7 @@ const TraCapturaDeResultados = () => {
           <div>
             <form onSubmit={guardarCapturaDeResultados}>
               <br />
+              <ElementoBotones cancelar={cancelar}></ElementoBotones>
               <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={false} />
               <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={false} />
               <ElementoCampo type="select" lblCampo="Jornada: " claCampo="campo" nomCampo={idJornada} options={datosJornada} onInputChange={setIdJornada} editable={false} />
@@ -603,9 +605,6 @@ const TraCapturaDeResultados = () => {
                 </span>
               </div>                       
               
-                            
-              <button type="submit" className="btn btn-primary" >Guardar</button>
-              <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
               
             </form>
           </div>
@@ -634,4 +633,4 @@ const TraCapturaDeResultados = () => {
   );
 };
 
-export default TraCapturaDeResultados;
+export default FrmCapturaDeResultados;

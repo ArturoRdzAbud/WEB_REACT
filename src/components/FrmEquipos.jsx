@@ -8,12 +8,12 @@ import config from '../config'; // archivo configs globales del proy
 
 
 import { ElementoBotones } from './ElementoBotones';
-import { CatEquiposRel1 } from './CatEquiposRel1';
+import { FrmEquiposRel1 } from './FrmEquiposRel1';
 import { ElementoImagen } from './ElementoImagen';
 import { useLocation } from 'react-router-dom';
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
-const CatEquipos = () => {
+const FrmEquipos = () => {
   const location = useLocation();
   // const { esNuevoP } = new URLSearchParams(location.search);
   const buttonRefNuevo = useRef(null);
@@ -256,7 +256,7 @@ const CatEquipos = () => {
           </>
           ://----------------------------MODO EDICION/NUEVO REGISTRO
           <div>
-            <CatEquiposRel1
+            <FrmEquiposRel1
               claLiga={claLiga}
               idEquipo={idEquipo}
               datosLiga={datosLiga}
@@ -271,7 +271,7 @@ const CatEquipos = () => {
               activo={activo}
               setActivo={setActivo}
               accion={accion}
-            ></CatEquiposRel1>
+            ></FrmEquiposRel1>
           </div>
         }
 
@@ -280,4 +280,4 @@ const CatEquipos = () => {
   );
 };
 
-export default CatEquipos;
+export default FrmEquipos;

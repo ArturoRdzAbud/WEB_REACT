@@ -12,7 +12,7 @@ import { ElementoToastNotification } from './ElementoToastNotification';
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
-const CatEquipoTorneo = () => {
+const FrmEquipoTorneo = () => {
   const [datosTorneosBD, setDatosTorneosBD] = useState([]);
   const [datosTorneos, setDatosTorneos] = useState([]);
   const [datosEquiposBD, setDatosEquiposBD] = useState([]);
@@ -539,4 +539,4 @@ const CatEquipoTorneo = () => {
   );
 };
 
-export default CatEquipoTorneo;
+export default FrmEquipoTorneo;

@@ -7,8 +7,9 @@ import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 import { ElementoImagen } from './ElementoImagen'
 import { ElementoToastNotification } from './ElementoToastNotification';
+import { ElementoBotones } from './ElementoBotones'
 
-export const CatArbitro = () => {
+export const FrmArbitro = () => {
     const [datosArbitro, setDatosArbitro] = useState([]);
     const [datosArbitroBd, setDatosArbitroBd] = useState([]);
     //Filtros
@@ -435,7 +436,7 @@ export const CatArbitro = () => {
           <>
             <form onSubmit={guardarArbitro}>
               <br />
-              
+              <ElementoBotones cancelar={cancelar}></ElementoBotones>
               <div>
                   {userProfileImage ? (
                       // Mostrar la imagen si los datos están disponibles
@@ -470,10 +471,7 @@ export const CatArbitro = () => {
               <ElementoCampo type="select" lblCampo="Estado*: " claCampo="campo" nomCampo={idEstado} options={datosEstado} onInputChange={setIdEstado}  />
               <ElementoCampo type="select" lblCampo="Municipio*: " claCampo="campo" nomCampo={idMunicipio} options={datosMunicipio} onInputChange={setIdMunicipio}  />
               <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
-  
-              <button type="submit" className="btn btn-primary" >Guardar</button>
-              <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
-  
+    
               {/*<p>Parrafo temporal para ver parametros del SP a Base de datos|@accion={accion}|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>*/}
             </form>
           </>
@@ -507,4 +505,4 @@ export const CatArbitro = () => {
     );
 }
 
-export default CatArbitro;
+export default FrmArbitro;

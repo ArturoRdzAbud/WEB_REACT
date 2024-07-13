@@ -5,20 +5,21 @@ import '../css/Sidebar.css';
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 
 //pantallas
-import CatLiga from './CatLiga';
-import CatEquipos from './CatEquipos';
-import CatEquipoTorneo from './CatEquipoTorneo';
-import CatJugador from './CatJugador';
-import CatEquipoJugador from './CatEquipoJugador';
-import CatArbitro from './CatArbitro';
-import CatTiposDeSancion from './CatTiposDeSancion';
-import CatUsuario from './CatUsuario';
+import FrmLiga from './FrmLiga';
+import FrmEquipos from './FrmEquipos';
+import FrmEquipoTorneo from './FrmEquipoTorneo';
+import FrmJugador from './FrmJugador';
+import FrmEquipoJugador from './FrmEquipoJugador';
+import FrmArbitro from './FrmArbitro';
+import FrmTiposDeSancion from './FrmTiposDeSancion';
+import FrmUsuario from './FrmUsuario';
+import FrmConfiguraAccesoLigas from './FrmConfiguraAccesoLigas';
 
-import TraProgramacionDePartidos from './TraProgramacionDePartidos';
-import TraCapturaDeResultados from './TraCapturaDeResultados';
+import FrmProgramacionDePartidos from './FrmProgramacionDePartidos';
+import FrmCapturaDeResultados from './FrmCapturaDeResultados';
 
-import EstEstadisticaPorEquipo from './EstEstadisticaPorEquipo';
-import TraEstadisticaJugador from './TraEstadisticaJugador';
+import FrmEstadisticaPorEquipo from './FrmEstadisticaPorEquipo';
+import FrmEstadisticaJugador from './FrmEstadisticaJugador';
 
 //Iconos
 import LigaSvg from '../svg/menu-liga.svg?react'
@@ -114,11 +115,12 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/Liga' className='nav-link' > <LigaSvg />{' Ligas '} </NavLink>
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <JugadoresSvg />{' Jugadores'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/Jugador' className='nav-link' > <JugadoresSvg />{' Jugadores'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores x Equipo'} </NavLink>
                             <NavLink onClick={closeMenu} to='/Arbitros' className='nav-link' > <Arbitros2vg />{' Árbitros'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/CatUsuario' className='nav-link' > <JugadoresSvg />{' Usuarios'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/Usuario' className='nav-link' > <JugadoresSvg />{' Usuarios'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/FrmConfiguraAccesoLigas' className='nav-link' > <JugadoresSvg />{' Configura Acceso a Ligas y Torneos'} </NavLink>
 
                             {/*Operación de las ligas y torneos*/}
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
@@ -126,7 +128,7 @@ export const SideBar = () => {
 
                             {/*Consulta de estadisticas*/}
                             <NavLink onClick={closeMenu} to='/CapturaDeResultados/false' className='nav-link' > <CapturaResultadosSvg />{' Consulta De Resultados '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por equipo '} </NavLink>                            
+                            <NavLink onClick={closeMenu} to='/EstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por equipo '} </NavLink>                            
                             <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica x Jugador '} </NavLink>
                         </li>
                     </ul>
@@ -136,23 +138,24 @@ export const SideBar = () => {
                 <div className='container'>
                     <Routes>
                         {/*Configuración inicial*/}
-                        <Route path='/Liga' element={<CatLiga />} />
-                        <Route path='/Equipos' element={<CatEquipos />} />
-                        <Route path='/EquipoTorneo' element={<CatEquipoTorneo />} />
-                        <Route path='/CatJugador' element={<CatJugador />} />
-                        <Route path='/EquipoJugador' element={<CatEquipoJugador />} />
-                        <Route path='/Arbitros' element={<CatArbitro />} />
-                        <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
-                        <Route path='/CatUsuario' element={<CatUsuario />} />
+                        <Route path='/Liga' element={<FrmLiga />} />
+                        <Route path='/Equipos' element={<FrmEquipos />} />
+                        <Route path='/EquipoTorneo' element={<FrmEquipoTorneo />} />
+                        <Route path='/Jugador' element={<FrmJugador />} />
+                        <Route path='/EquipoJugador' element={<FrmEquipoJugador />} />
+                        <Route path='/Arbitros' element={<FrmArbitro />} />
+                        <Route path='/TiposDeSancion' element={<FrmTiposDeSancion />} />
+                        <Route path='/Usuario' element={<FrmUsuario />} />
+                        <Route path='/FrmConfiguraAccesoLigas' element={<FrmConfiguraAccesoLigas />} />
 
                         {/*Operación de las ligas y torneos*/}
-                        <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />                        
-                        <Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<TraCapturaDeResultados />} />
+                        <Route path='/ProgramacionDePartidos' element={<FrmProgramacionDePartidos />} />                        
+                        <Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<FrmCapturaDeResultados />} />
 
                         {/*Consulta de estadisticas*/}
-                        <Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<TraCapturaDeResultados />} />
-                        <Route path='/EstEstadisticaPorEquipo' element={<EstEstadisticaPorEquipo />} />                        
-                        <Route path='/EstadisticaJugador' element={<TraEstadisticaJugador />} />                        
+                        <Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<FrmCapturaDeResultados />} />
+                        <Route path='/EstadisticaPorEquipo' element={<FrmEstadisticaPorEquipo />} />                        
+                        <Route path='/EstadisticaJugador' element={<FrmEstadisticaJugador />} />                        
                     </Routes>
                 </div>
 

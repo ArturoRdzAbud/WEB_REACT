@@ -3,10 +3,10 @@ import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
 import { SideBarHeader } from './SideBarHeader';
-import '../css/EstEstadisticaPorEquipo.css'; // Archivo CSS para estilos
+import '../css/FrmEstadisticaPorEquipo.css'; // Archivo CSS para estilos
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
-const EstEstadisticaPorEquipo = () => {
+const FrmEstadisticaPorEquipo = () => {
   const [datosEstadisticaEquipoBD, setdatosEstadisticaEquipoBD] = useState([]);
   const [datosEstadisticaEquipo, setdatosEstadisticaEquipo] = useState([]);
 
@@ -243,4 +243,4 @@ const EstEstadisticaPorEquipo = () => {
   );
 };
 
-export default EstEstadisticaPorEquipo;
+export default FrmEstadisticaPorEquipo;

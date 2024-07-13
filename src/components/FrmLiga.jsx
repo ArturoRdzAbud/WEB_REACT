@@ -10,7 +10,7 @@ import { ElementoToastNotification } from './ElementoToastNotification';
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
-const CatLiga = () => {
+const FrmLiga = () => {
     const [datosLigaBD, setDatosLigaBD] = useState([]);
     //Filtros
     const [esVerBaja, setEsVerBaja] = useState(false);
@@ -456,4 +456,4 @@ const CatLiga = () => {
     );
 };
 
-export default CatLiga;
+export default FrmLiga;
