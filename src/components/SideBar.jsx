@@ -25,15 +25,18 @@ import FrmEstadisticaJugador from './FrmEstadisticaJugador';
 import LigaSvg from '../svg/menu-liga.svg?react'
 import EquiposSvg from '../svg/equipos.svg?react'
 import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react'
-import JugadoresSvg from '../svg/jugador-de-futbol.svg?react'
-import EquipoJugadorSvg from '../svg/menu-equipo-jugador.svg?react'
+import JugadoresSvg from '../svg/menu-equipo-jugador.svg?react'
+import EquipoJugadorSvg from '../svg/balon.svg?react'
 import Arbitrosvg from '../svg/arbitro.svg?react'
-import Arbitros2vg from '../svg/arbitro-final.svg?react'
+import Arbitros2vg from '../svg/arbitro.svg?react'
 import Tarjetasvg from '../svg/tarjetas.svg?react'
+import UsuarioSvg from '../svg/usuario.svg?react'
+import ConfiguraAccesoSvg from '../svg/configura-acceso.svg?react'
 
-import Programacionsvg from '../svg/evento-de-calendario.svg?react'
+import Programacionsvg from '../svg/programacion-partidos.svg?react'
 import CapturaResultadosSvg from '../svg/menu-captura-resultados.svg?react'
 
+import ConsultaResultadosSvg from '../svg/consulta-resultados2.svg?react'
 import EstadisticaEquipoSvg from '../svg/menu-estadistica-equipo.svg?react'
 import EstadisticaJugadorSvg from '../svg/menu-estadistica-jugador.svg?react'
 import BalonSvg from '../svg/balon.svg?react'
@@ -116,20 +119,20 @@ export const SideBar = () => {
                             <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
                             <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
                             <NavLink onClick={closeMenu} to='/Jugador' className='nav-link' > <JugadoresSvg />{' Jugadores'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores x Equipo'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores por Equipo'} </NavLink>
                             <NavLink onClick={closeMenu} to='/Arbitros' className='nav-link' > <Arbitros2vg />{' Árbitros'} </NavLink>
                             <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/Usuario' className='nav-link' > <JugadoresSvg />{' Usuarios'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/FrmConfiguraAccesoLigas' className='nav-link' > <JugadoresSvg />{' Configura Acceso a Ligas y Torneos'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/Usuario' className='nav-link' > <UsuarioSvg />{' Usuarios'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/FrmConfiguraAccesoLigas' className='nav-link' > <ConfiguraAccesoSvg />{' Configura Acceso a Ligas y Torneos'} </NavLink>
 
                             {/*Operación de las ligas y torneos*/}
                             <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
                             <NavLink onClick={closeMenu} to='/CapturaDeResultados/true' className='nav-link' > <CapturaResultadosSvg />{' Captura De Resultados '} </NavLink>
 
                             {/*Consulta de estadisticas*/}
-                            <NavLink onClick={closeMenu} to='/CapturaDeResultados/false' className='nav-link' > <CapturaResultadosSvg />{' Consulta De Resultados '} </NavLink>
+                            <NavLink onClick={closeMenu} to='/CapturaDeResultados/false' className='nav-link' > <ConsultaResultadosSvg />{' Consulta De Resultados '} </NavLink>
                             <NavLink onClick={closeMenu} to='/EstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por equipo '} </NavLink>                            
-                            <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica x Jugador '} </NavLink>
+                            <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica por Jugador '} </NavLink>
                         </li>
                     </ul>
                 </Menu>
