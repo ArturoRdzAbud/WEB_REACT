@@ -4,7 +4,7 @@ import './App.css'
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 
 import { SideBar } from './components/SideBar';
-import CatTiposDeSancion from './components/CatTiposDeSancion';
+// import CatTiposDeSancion from './components/CatTiposDeSancion';
 
 function App() {
   return (
