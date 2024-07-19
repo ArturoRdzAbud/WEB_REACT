@@ -5,6 +5,7 @@ import { ElementoCampo } from './ElementoCampo';
 import { AlertaEmergente } from './AlertaEmergente';
 import { SideBarHeader } from './SideBarHeader';
 import { ElementoToastNotification } from './ElementoToastNotification';
+import { ElementoBotones } from './ElementoBotones'
 import config from '../config'; // archivo configs globales del proy
 import dayjs from 'dayjs';
 
@@ -13,7 +14,7 @@ import Save from '../svg/icon-save.svg?react'
 
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
-const TraProgramacionDePartidos = () => {
+const FrmProgramacionDePartidos = () => {
   const [datosProgramacionBD, setDatosProgramacionBD] = useState([]);
   const [datosProgramacion, setDatosProgramacion] = useState([]);
   //Filtros  
@@ -330,6 +331,7 @@ const TraProgramacionDePartidos = () => {
           <div>
             <form onSubmit={guardarProgramacionDePartidos}>
               <br />
+              <ElementoBotones cancelar={cancelar}></ElementoBotones>
               <ElementoCampo type="select" lblCampo="Liga: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={setClaLiga} editable={false} />
               <ElementoCampo type="select" lblCampo="Torneo: " claCampo="campo" nomCampo={claTorneo} options={datosTorneo} onInputChange={setClaTorneo} editable={false} />
               <ElementoCampo type="select" lblCampo="Jornada: " claCampo="campo" nomCampo={idJornada} options={datosJornada} onInputChange={setIdJornada} editable={false} />
@@ -348,8 +350,7 @@ const TraProgramacionDePartidos = () => {
             
               <ElementoCampo type='checkbox' lblCampo="Programado*: " claCampo="programado" nomCampo={programado} onInputChange={setProgramado} />
               <ElementoCampo type='datetime-local' lblCampo="Fecha Hora*:" claCampo="fechahora" nomCampo={fechaHora} onInputChange={setFechaHora} />
-              <button type="submit" className="btn btn-primary" >Guardar</button>
-              <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
+              
               
             </form>
           </div>
@@ -378,4 +379,4 @@ const TraProgramacionDePartidos = () => {
   );
 };
 
-export default TraProgramacionDePartidos;
+export default FrmProgramacionDePartidos;

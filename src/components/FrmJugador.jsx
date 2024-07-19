@@ -14,7 +14,7 @@ import { alignPropType } from 'react-bootstrap/esm/types';
 import { ElementoToastNotification } from './ElementoToastNotification';
 
 
-const CatJugador = () => {
+const FrmJugador = () => {
 
     const [datosJugadorBd, setDatosJugadorBd] = useState([]);
     const [datosJugador, setDatosJugador] = useState([]);
@@ -412,8 +412,7 @@ const CatJugador = () => {
                 <>
                     <form onSubmit={guardarJugador} autoComplete="off">
                         <br />
-
-
+                        <ElementoBotones cancelar={cancelar}></ElementoBotones>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ flexGrow: 1 }}>
@@ -502,8 +501,6 @@ const CatJugador = () => {
                         <br></br>
                         <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
                         <br></br>
-
-                        <ElementoBotones cancelar={cancelar}></ElementoBotones>
                     </form>
                 </>
 
@@ -540,4 +537,4 @@ const CatJugador = () => {
     )
 }
 
-export default CatJugador
+export default FrmJugador

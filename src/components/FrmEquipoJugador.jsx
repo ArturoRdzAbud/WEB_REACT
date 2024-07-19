@@ -10,13 +10,13 @@ import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 
 import { ElementoBotones } from './ElementoBotones';
-import { CatEquipoJugadorRel1 } from './CatEquipoJugadorRel1';
+import { FrmEquipoJugadorRel1 } from './FrmEquipoJugadorRel1';
 import { useLocation } from 'react-router-dom';
 
 
 
 
-const CatEquipoJugador = () => {
+const FrmEquipoJugador = () => {
     const location = useLocation();
     const buttonRefNuevo = useRef(null);
     const params = new URLSearchParams(location.search);
@@ -364,15 +364,15 @@ const CatEquipoJugador = () => {
                     onAceptar={onAceptarC}
                 ></ElementoToastNotification>
             }
-            <CatEquipoJugadorRel1 isOpen={isOpen} setIsOpen={setIsOpen}
+            <FrmEquipoJugadorRel1 isOpen={isOpen} setIsOpen={setIsOpen}
                 datosLiga={datosLiga} datosTorneoBD={datosTorneoBD}
                 setEsMuestraCamposReq={setEsMuestraCamposReq}
                 setEsFin={setEsFin}
-            ></CatEquipoJugadorRel1>
+            ></FrmEquipoJugadorRel1>
 
 
         </>
     );
 };
 
-export default CatEquipoJugador;
+export default FrmEquipoJugador;

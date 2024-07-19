@@ -9,12 +9,10 @@ import { ElementoToastNotification } from './ElementoToastNotification';
 import { SideBarHeader } from './SideBarHeader';
 import config from '../config'; // archivo configs globales del proy
 
-import { ElementoBotones } from './ElementoBotones';
-import { CatEquipoJugadorRel1 } from './CatEquipoJugadorRel1';
 import { useLocation } from 'react-router-dom';
 
 
-export const TraEstadisticaJugador = () => {
+export const FrmEstadisticaJugador = () => {
     const [datosJugBD, setDatosJugBD] = useState([]);
     const [datosJug, setDatosJug] = useState([]);
 
@@ -162,10 +160,7 @@ export const TraEstadisticaJugador = () => {
             <SideBarHeader titulo={'Estadistica x Jugador'}></SideBarHeader>
             <br /><br /><br /><br />
 
-            {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button type="button" title="Copiar Jugadores" className="btn btn-secondary" onClick={openModal}>Copiar</button>
-                <ElementoBotones guardar={guardar} esOcultaCancelar={true}></ElementoBotones>
-            </div> */}
+          
 
             {/* <ElementoCampo type='checkbox' lblCampo="Ver Inactivos :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} /> */}
             <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={claLiga} options={datosLiga} onInputChange={(value) => handleLiga(value, claLiga)} />
@@ -198,4 +193,4 @@ export const TraEstadisticaJugador = () => {
     )
 }
 
-export default TraEstadisticaJugador
+export default FrmEstadisticaJugador

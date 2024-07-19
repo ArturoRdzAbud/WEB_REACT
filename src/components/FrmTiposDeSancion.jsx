@@ -8,10 +8,11 @@ import config from '../config'; // archivo configs globales del proy
 import Close from '../svg/icon-close.svg?react'
 import Save from '../svg/icon-save.svg?react'
 import { ElementoToastNotification } from './ElementoToastNotification';
+import { ElementoBotones } from './ElementoBotones'
 
 //TIP: TENER SIEMPRE PRENDIDO EL INSPECTOR WEB (CONSOLA) EN EL NAVEGADOR PARA VER TODOS LOS ERRORES EN VIVO 
 
-const CatTiposDeSancion = () => {
+const FrmTiposDeSancion = () => {
 
   const [datosTiposBd, setDatosTiposBd] = useState([]);
   const [datosTipos, setDatosTipos] = useState([]);
@@ -233,16 +234,13 @@ const CatTiposDeSancion = () => {
         <>
           <form onSubmit={guardarTiposDeSancion}>
             <br />
-            {/* <ElementoCampo type='checkbox' lblCampo="Ver Baja :" claCampo="activo" nomCampo={esVerBaja} onInputChange={setEsVerBaja} /> */}
+            <ElementoBotones cancelar={cancelar}></ElementoBotones>
             <ElementoCampo type="select" lblCampo="Liga*: " claCampo="campo" nomCampo={idLiga} options={dataLiga} onInputChange={setIdLiga} editable={esNuevo} />
             <ElementoCampo type='text' lblCampo="Clave* :" claCampo="Clave" onInputChange={setClave} nomCampo={clave} editable={esNuevo} />
             <ElementoCampo type='text' lblCampo="Descripción* :" claCampo="Descripcion" onInputChange={setDescripcion} nomCampo={descripcion} />
             <ElementoCampo type='number' lblCampo="Juegos de Suspensión* :" claCampo="JuegosSuspension" nomCampo={juegosSuspension} onInputChange={setJuegosSuspension} />
             <ElementoCampo type='checkbox' lblCampo="Causa Baja* :" claCampo="CausaBaja" nomCampo={causaBaja} onInputChange={setCausaBaja} />
             <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
-
-            <button type="submit" className="btn btn-primary" >Guardar</button>
-            <button type="button" className="btn btn-primary" onClick={cancelar}>Cancelar</button>
 
             {/*<p>Parrafo temporal para ver parametros del SP a Base de datos|@accion={accion}|@IdTipoSancion={idTipoSancion}|@sDescripcion={descripcion}|@sActivo={activo.toString()}|</p>*/}
           </form>
@@ -267,4 +265,4 @@ const CatTiposDeSancion = () => {
   );
 };
 
-export default CatTiposDeSancion;
+export default FrmTiposDeSancion;

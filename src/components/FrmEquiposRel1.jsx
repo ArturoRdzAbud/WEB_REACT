@@ -7,7 +7,7 @@ import { AlertaEmergente } from './AlertaEmergente';
 import config from '../config'; // archivo configs globales del proy
 import { ElementoToastNotification } from './ElementoToastNotification';
 
-export const CatEquiposRel1 = ({
+export const FrmEquiposRel1 = ({
     claLiga
     ,idEquipo
     ,datosLiga
@@ -114,4 +114,4 @@ export const CatEquiposRel1 = ({
     )
 }
 
-// export default CatEquiposRel1;
+// export default FrmEquiposRel1;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ElementoCampo } from './ElementoCampo';
 
-const EquipoForm = () => {
+const FrmEquiposRel1 = () => {
   const [nombre, setNombre] = useState('');
   const [activo, setActivo] = useState(false);
   const [capitan, setCapitan] = useState('');
@@ -81,4 +81,4 @@ const EquipoForm = () => {
   );
 };
 
-export default EquipoForm;
+export default FrmEquiposRel1;

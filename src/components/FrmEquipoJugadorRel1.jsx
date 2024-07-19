@@ -6,7 +6,7 @@ import axios from 'axios';
 import config from '../config'; // archivo configs globales del proy
 import { ElementoToastNotification } from './ElementoToastNotification';
 
-export const CatEquipoJugadorRel1 = ({ isOpen, setIsOpen, datosLiga, datosTorneoBD, setEsMuestraCamposReq, setEsFin }) => {
+export const FrmEquipoJugadorRel1 = ({ isOpen, setIsOpen, datosLiga, datosTorneoBD, setEsMuestraCamposReq, setEsFin }) => {
     // const [isOpen, setIsOpen] = useState(isOpen);
 
     // const openModal = () => {

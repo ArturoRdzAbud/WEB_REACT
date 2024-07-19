@@ -14,7 +14,7 @@ import { alignPropType } from 'react-bootstrap/esm/types';
 import { ElementoToastNotification } from './ElementoToastNotification';
 
 
-const CatUsuario = () => {
+const FrmUsuario = () => {
 
     const [datosUsuarioBd, setdatosUsuarioBd] = useState([]);
     const [datosUsuario, setdatosUsuario] = useState([]);
@@ -38,22 +38,10 @@ const CatUsuario = () => {
     const [accion, setAccion] = useState(0);    
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
+    const [esNoCoinciden, setEsNoCoinciden] = useState(false);
     const [alertaMensaje, setAlertaMensaje] = useState('');
 
-
-    function formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
-
-        return [year, month, day].join('-');
-    }
 
     const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
 
@@ -106,7 +94,7 @@ const CatUsuario = () => {
             header: 'Password',
             accessorKey: 'Password',
             footer: 'Password',
-            visible: true
+            visible: false
         },
         {
             header: 'Activo',
@@ -155,18 +143,21 @@ const CatUsuario = () => {
         filtraLocal()
     }, [esVerBaja]); //Se invoca al interactuar con los filtros arriba del grid
 
+    useEffect(() => {
+        setEsNoCoinciden(password !== password2);
+    }, [password, password2]); //Se invoca al interactuar con los campos de Password
 
 
     const handleEdit = (rowData) => {
         setEsEditar(true)
-        console.log(rowData.original)
-
+        
         setIdUsuario(rowData.original.IdUsuario)
         setNombre(rowData.original.Nombre || "")
         setCorreo(rowData.original.Correo || "")
         setIdPerfil(rowData.original.IdPerfil || "")        
         setLogin(rowData.original.Login || "")
         setPassword(rowData.original.Password || "")
+        setPassword2(rowData.original.Password || "")
         if (rowData.original.ActivoChk == false) { setActivo(false) } else { setActivo(true) }
 
         setAccion(0)//0 para MODIF 1 para nuevo  
@@ -221,34 +212,41 @@ const CatUsuario = () => {
         const apiReq = config.apiUrl + '/GuardarUsuario';
 
         try {
-            console.log('Guardando Usuario', data);
-            //console.log(foto);
+            
+            if (nombre === null || nombre.trim() == '') { setEsMuestraCamposReq(true); return }
+            //if (nombre.trim == '') { setEsMuestraCamposReq(true); return }
+            if (correo === null || correo.trim() == '') { setEsMuestraCamposReq(true); return }
+            //if (correo.trim === '') { setEsMuestraCamposReq(true); return }
+            if (login === null || login.trim() == '') { setEsMuestraCamposReq(true); return }
+            //if (login.trim == '') { setEsMuestraCamposReq(true); return }
+            if (password === null || password.trim() == '') { setEsMuestraCamposReq(true); return }
+            //if (password.trim == '') { setEsMuestraCamposReq(true); return }
+            if (password2 === null || password2.trim() == '') { setEsMuestraCamposReq(true); return }
+            //if (password2.trim == '') { setEsMuestraCamposReq(true); return }
+            if (idPerfil == -1) { setEsMuestraCamposReq(true); return }
+            //if (idPerfil === '') { setEsMuestraCamposReq(true); return }
+            if (esNoCoinciden) { setAlertaMensaje('El Password no coincide, Favor de verificar'); return }
 
-            if (nombre.trim == '') { setEsMuestraCamposReq(true); return }
-            if (correo.trim == '') { setEsMuestraCamposReq(true); return }
-            if (login.trim == '') { setEsMuestraCamposReq(true); return }
-            if (password.trim == '') { setEsMuestraCamposReq(true); return }
-            if (idPerfil === '') { setEsMuestraCamposReq(true); return }
-
+                       
             await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*', "Content-Type": "multipart/form-data" })
-                .then(response => {                   
-                    if (!response.data == '') {
-                        console.log('REGRESA ERROR:')
-                        if (response.data.originalError === undefined) {
-                            console.log('response.data: ' + response.data)
-                            setAlertaMensaje(response.data)
-                        }
-                        else {
-                            console.log('response.data.originalError.info.message: ' + response.data.originalError.info.message)
-                            setAlertaMensaje(response.data.originalError.info.message)
-                        }
-                    } else {
-                        console.log('guardo correctamente')  
-                        inicializaCampos()
-                        setEsEditar(false)//regresa al grid
-                        setEsNuevo(false)
-                    }
-                })
+            .then(response => {
+                if (response.data && Object.keys(response.data).length !== 0) {
+                    console.log('REGRESA ERROR:')
+                    console.log('response.data:', response.data);
+                    // Asegúrate de que response.data sea una cadena antes de asignarla
+                    setAlertaMensaje(JSON.stringify(response.data));
+                } else {
+                    console.log('guardo correctamente');
+                    inicializaCampos();
+                    setEsEditar(false); // regresa al grid
+                    setEsNuevo(false);
+                }
+            })
+            .catch(error => {
+                console.error('Error al enviar la solicitud:', error);
+                setAlertaMensaje('Error al enviar la solicitud');
+            });
+                       
 
 
         } catch (error) {
@@ -272,7 +270,7 @@ const CatUsuario = () => {
                 <>
                     <form onSubmit={guardarUsuario} autoComplete="off">
                         <br />
-
+                        <ElementoBotones cancelar={cancelar}></ElementoBotones>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ flexGrow: 1 }}>
                                 <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="Nombre" nomCampo={nombre} onInputChange={setNombre} tamanioString={100} />
@@ -286,7 +284,10 @@ const CatUsuario = () => {
                             <span style={{ flexGrow: 1 }}>
                                
                                 <ElementoCampo type='text' lblCampo="Login* :" claCampo="Login" nomCampo={login} onInputChange={setLogin} tamanioString={30} />
-                                <ElementoCampo type='text' lblCampo="Password* :" claCampo="Password" onInputChange={setPassword} tamanioString={100} />
+                                <ElementoCampo type='password' lblCampo="Password* :" claCampo="Password" onInputChange={setPassword} tamanioString={30} />
+                                <ElementoCampo type='password' lblCampo="Confirmar Password* :" claCampo="Password2" onInputChange={setPassword2} tamanioString={30} />
+                                {/* {password!=password2?<span>¡Contraseñas no Coinciden!</span>:<span></span>} */}
+                                {esNoCoinciden && <span>¡Contraseñas no Coinciden!</span>}
                                                                 
 
                             </span>
@@ -326,7 +327,6 @@ const CatUsuario = () => {
                         <ElementoCampo type='checkbox' lblCampo="Activo :" claCampo="activo" nomCampo={activo} onInputChange={setActivo} />
                         <br></br>
 
-                        <ElementoBotones cancelar={cancelar}></ElementoBotones>
                     </form>
                 </>
 
@@ -363,4 +363,4 @@ const CatUsuario = () => {
     )
 }
 
-export default CatUsuario
+export default FrmUsuario
