@@ -240,7 +240,7 @@ const CatEquipos = () => {
 
   return (
     <>
-      <SideBarHeader titulo={esNuevo ? ('Nuevo Equipo') : esEditar ? 'Editar Equipo' : 'Equipos'}></SideBarHeader>
+      <SideBarHeader titulo={esNuevo ? ('Nuevo Equipo') : esEditar ? 'Editar Equipo' : 'Equipos '}></SideBarHeader>
       <br /><br /><br /><br />
       {/* <h1>hola</h1>
       <hr></hr> */}

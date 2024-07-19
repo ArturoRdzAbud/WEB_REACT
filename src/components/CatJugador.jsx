@@ -395,7 +395,7 @@ const CatJugador = () => {
 
     return (
         <>
-            <SideBarHeader titulo={esNuevo ? 'Nuevo Jugador' : esEditar ? 'Editar Jugador' : 'Jugadores'}></SideBarHeader>
+            <SideBarHeader titulo={esNuevo ? 'Nuevo Jugador' : esEditar ? 'Editar Jugador' : 'Jugadores '}></SideBarHeader>
             <br /><br /><br /><br />
 
             {!esEditar ?

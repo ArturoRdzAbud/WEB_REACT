@@ -9,10 +9,6 @@ import CatEquipos from './components/CatEquipos';
 import { SideBar } from './components/SideBar';
 import CatTiposDeSancion from './components/CatTiposDeSancion';
 
-
-
-
-
 function App() {
   return (
     <>

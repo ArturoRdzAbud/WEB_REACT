@@ -12,7 +12,18 @@
     /* margin-left: 100px; */
     /* transform: translateX(100px) */
   }
-  .text {
+  .textHeader {
     /* transform: translateX(-100px); Contrarresta el desplazamiento del header */
+    /* margin-left: 100px; */
+    margin-left: 65px;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header .buttons {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones, ajusta según necesites */
   }
   

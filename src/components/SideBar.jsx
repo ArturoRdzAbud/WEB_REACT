@@ -1,10 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import '../css/Sidebar.css';
 
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+
+import { PerfilContext } from './PerfilContext'; // Importa el contexto
 
 //pantallas
+import Home from './Home';
+import Login from './Login';
 import CatLiga from './CatLiga';
 import CatEquipos from './CatEquipos';
 import CatEquipoTorneo from './CatEquipoTorneo';
@@ -20,7 +26,13 @@ import TraCapturaDeResultados from './TraCapturaDeResultados';
 import EstEstadisticaPorEquipo from './EstEstadisticaPorEquipo';
 import TraEstadisticaJugador from './TraEstadisticaJugador';
 
+import ProtectedRoute from './ProtectedRoute';
+import AccessDeniedPage from './AccessDeniedPage';
+
+
+
 //Iconos
+import HomeSvg from '../svg/icon-home.svg?react'
 import LigaSvg from '../svg/menu-liga.svg?react'
 import EquiposSvg from '../svg/equipos.svg?react'
 import EquipoTorneoSvg from '../svg/menu-equipo-torneo.svg?react'
@@ -41,6 +53,7 @@ import BalonSvg from '../svg/balon.svg?react'
 
 // export default props => {
 export const SideBar = () => {
+    const { perfil, esConLicencia } = useContext(PerfilContext);
 
     // const menuRef = useRef(null); // Create a ref
 
@@ -55,6 +68,39 @@ export const SideBar = () => {
         // menuRef.current.closeMenu();
         setOpen(false)
     };
+
+
+    const [isEstadisticasOpen, setIsEstadisticasOpen] = useState(false);
+    const toggleEstadisticas = () => {
+        setIsEstadisticasOpen(!isEstadisticasOpen);
+    };
+    const [isPartidosOpen, setIsPartidosOpen] = useState(false);
+    const togglePartidos = () => {
+        setIsPartidosOpen(!isPartidosOpen);
+    };
+    const [isAdminOpen, setIsAdminOpen] = useState(false);
+    const toggleAdmin = () => {
+        setIsAdminOpen(!isAdminOpen);
+    };
+    const [isAccesosOpen, setIsAccesosOpen] = useState(false);
+    const toggleAccesos = () => {
+        setIsAccesosOpen(!isAccesosOpen);
+    };
+    const fontsize = {
+        fontSize: '14px' // Puedes ajustar este valor al tamaño que desees
+    };
+    const fontsizeH = {
+        fontSize: '18px', // Puedes ajustar este valor al tamaño que desees
+        cursor: 'pointer',
+    };
+    // Estilos para la línea separadora
+    const separatorStyles = {
+        width: '100%',
+        height: '1px',
+        backgroundColor: '#ccc', // Color de la línea
+        margin: '10px 0' // Espaciado alrededor de la línea
+    };
+
 
     return (
 
@@ -74,9 +120,6 @@ export const SideBar = () => {
         //20240408 npm install react-bootstrap bootstrap
             // para que funcionene los modales bootstrap en react
 
-
-
-
         https://app.netlify.com/
         https://www.digitalocean.com/community/tutorials/react-react-burger-menu-sidebar  
         https://www.npmjs.com/package/react-burger-menu   
@@ -89,6 +132,16 @@ export const SideBar = () => {
                 https://github.com/azouaoui-med/react-pro-sidebar/blob/master/storybook/Playground.tsx
                 https://azouaoui-med.github.io/react-pro-sidebar/iframe.html?id=playground--playground&args=&viewMode=story
                 https://www.geeksforgeeks.org/how-to-create-a-responsive-sidebar-with-dropdown-menu-in-reactjs/
+
+        SVG:
+        https://www.freeconvert.com/es/svg-converter
+
+        Iconos:
+        https://favicon.io/favicon-converter/
+
+        Login:
+        https://mdbootstrap.com/docs/standard/extended/login/
+
 
       <a className="menu-item" href="/">
         Home
@@ -111,48 +164,121 @@ export const SideBar = () => {
                     <ul className='navbar-nav'>
                         <li className="nav-item">
                             {/*Configuración inicial*/}
-                            <NavLink onClick={closeMenu} to='/Liga' className='nav-link' > <LigaSvg />{' Ligas '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Equipos'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Torneos'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <JugadoresSvg />{' Jugadores'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Jugadores x Equipo'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/Arbitros' className='nav-link' > <Arbitros2vg />{' Árbitros'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Tipos de Sanción'} </NavLink>
-                            <NavLink onClick={closeMenu} to='/CatUsuario' className='nav-link' > <JugadoresSvg />{' Usuarios'} </NavLink>
+                            <NavLink onClick={closeMenu} to='/' className='nav-link' > <HomeSvg />{''} </NavLink>
+                            {/* <NavLink onClick={closeMenu} to='/Login' className='nav-link' > <HomeSvg />{' Login '} </NavLink> */}
+                            <div style={separatorStyles}></div> {/* Línea de separación */}
 
-                            {/*Operación de las ligas y torneos*/}
-                            <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/CapturaDeResultados/true' className='nav-link' > <CapturaResultadosSvg />{' Captura De Resultados '} </NavLink>
+                            <div className="menu-section">
+                                <div className="menu-section-title" onClick={toggleAdmin} style={fontsizeH}>
+                                    {isAdminOpen ? '▾' : '▸'} Configuración
+                                </div>
+                                <div style={separatorStyles}></div> {/* Línea de separación */}
+                                {isAdminOpen && (
+                                    <div style={fontsize}>
+                                        <NavLink onClick={closeMenu} to='/Liga' className='nav-link' > <LigaSvg />{' Cátalogo de Ligas '} </NavLink>
+                                        <NavLink onClick={closeMenu} to='/Equipos' className='nav-link' > <EquiposSvg />{' Cátalogo de Equipos'} </NavLink>
+                                        <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Configuración de Torneos'} </NavLink>
+                                        <NavLink onClick={closeMenu} to='/EquipoTorneo' className='nav-link' > <EquipoTorneoSvg />{' Generar Calendario'} </NavLink>
+                                        <NavLink onClick={closeMenu} to='/CatJugador' className='nav-link' > <JugadoresSvg />{' Cátalogo de Jugadores'} </NavLink>
+                                        <NavLink onClick={closeMenu} to='/EquipoJugador' className='nav-link' > <EquipoJugadorSvg />{' Configuración de Plantilla de Equipos'} </NavLink>
+                                        <NavLink onClick={closeMenu} to='/Arbitros' className='nav-link' > <Arbitros2vg />{' Catálogo de Árbitros'} </NavLink>
+                                        <NavLink onClick={closeMenu} to='/TiposDeSancion' className='nav-link' > <Tarjetasvg />{' Catálogo de Tipos de Sanción'} </NavLink>
+                                    </div>
+                                )}
+                            </div>
 
-                            {/*Consulta de estadisticas*/}
-                            <NavLink onClick={closeMenu} to='/CapturaDeResultados/false' className='nav-link' > <CapturaResultadosSvg />{' Consulta De Resultados '} </NavLink>
-                            <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por equipo '} </NavLink>                            
-                            <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica x Jugador '} </NavLink>
+
+                            {esConLicencia == -1 &&
+                                <>
+                                    <NavLink onClick={closeMenu} to='/CatUsuario' className='nav-link' > <JugadoresSvg />{' Usuarios'} </NavLink>
+                                </>
+                            }
+
+                            {perfil >= 1 &&
+                                <>
+
+                                    <div className="menu-section">
+                                        <div className="menu-section-title" onClick={togglePartidos} style={fontsizeH}>
+                                            {isPartidosOpen ? '▾' : '▸'} Administración
+                                        </div>
+                                        <div style={separatorStyles}></div> {/* Línea de separación */}
+                                        {isPartidosOpen && (
+                                            <div style={fontsize}>
+                                                {/*Operación de las ligas y torneos*/}
+                                                <NavLink onClick={closeMenu} to='/ProgramacionDePartidos' className='nav-link' > <Programacionsvg />{' Programación de Partidos '} </NavLink>
+                                                <NavLink onClick={closeMenu} to='/CapturaDeResultados/true' className='nav-link' > <CapturaResultadosSvg />{' Captura de Resultados '} </NavLink>
+                                                {/*Consulta de estadisticas*/}
+                                            </div>
+                                        )}
+                                    </div>
+
+
+                                    <div className="menu-section">
+                                        <div className="menu-section-title" onClick={toggleEstadisticas} style={fontsizeH}>
+                                            {isEstadisticasOpen ? '▾' : '▸'} Analiticos
+                                        </div>
+                                        <div style={separatorStyles}></div> {/* Línea de separación */}
+                                        {isEstadisticasOpen && (
+                                            <div style={fontsize}>
+                                                <NavLink onClick={closeMenu} to='/CapturaDeResultados/false' className='nav-link' > <CapturaResultadosSvg />{' Consulta de Resultados '} </NavLink>
+                                                <NavLink onClick={closeMenu} to='/EstEstadisticaPorEquipo' className='nav-link' > <EstadisticaEquipoSvg />{' Estadistica por Equipo '} </NavLink>
+                                                <NavLink onClick={closeMenu} to='/EstadisticaJugador' className='nav-link' > <EstadisticaJugadorSvg />{' Estadistica por Jugador '} </NavLink>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="menu-section" >
+                                        <div className="menu-section-title" onClick={toggleAccesos} style={fontsizeH}>
+                                            {isAccesosOpen ? '▾' : '▸'} Control de Accesos
+                                        </div>
+                                        <div style={separatorStyles}></div> {/* Línea de separación */}
+                                        {isAccesosOpen && (
+                                            <div style={fontsize}>
+                                                <NavLink onClick={closeMenu} to='/CatUsuario' className='nav-link' > <JugadoresSvg />{' Registro de Usuarios'} </NavLink>
+                                                <NavLink onClick={closeMenu} to='/CatUsuario' className='nav-link' > <JugadoresSvg />{' Configuración de Accesos a Ligas y Torneos'} </NavLink>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                </>
+                            }
                         </li>
                     </ul>
                 </Menu>
 
 
                 <div className='container'>
+
                     <Routes>
                         {/*Configuración inicial*/}
-                        <Route path='/Liga' element={<CatLiga />} />
-                        <Route path='/Equipos' element={<CatEquipos />} />
-                        <Route path='/EquipoTorneo' element={<CatEquipoTorneo />} />
-                        <Route path='/CatJugador' element={<CatJugador />} />
-                        <Route path='/EquipoJugador' element={<CatEquipoJugador />} />
-                        <Route path='/Arbitros' element={<CatArbitro />} />
-                        <Route path='/TiposDeSancion' element={<CatTiposDeSancion />} />
-                        <Route path='/CatUsuario' element={<CatUsuario />} />
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/' element={<Home />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/Login' element={<Login />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path="/access-denied" element={<AccessDeniedPage />} /></Route>
+
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={2} />}><Route path='/Liga' element={<CatLiga />} /></Route>
+
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/Equipos' element={<CatEquipos />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/EquipoTorneo' element={<CatEquipoTorneo />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/CatJugador' element={<CatJugador />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/EquipoJugador' element={<CatEquipoJugador />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/Arbitros' element={<CatArbitro />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/TiposDeSancion' element={<CatTiposDeSancion />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/CatUsuario' element={<CatUsuario />} /></Route>
 
                         {/*Operación de las ligas y torneos*/}
-                        <Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} />                        
-                        <Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<TraCapturaDeResultados />} />
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/ProgramacionDePartidos' element={<TraProgramacionDePartidos />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<TraCapturaDeResultados />} /></Route>
 
                         {/*Consulta de estadisticas*/}
-                        <Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<TraCapturaDeResultados />} />
-                        <Route path='/EstEstadisticaPorEquipo' element={<EstEstadisticaPorEquipo />} />                        
-                        <Route path='/EstadisticaJugador' element={<TraEstadisticaJugador />} />                        
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/CapturaDeResultados/:muestraLinkCaptura' element={<TraCapturaDeResultados />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/EstEstadisticaPorEquipo' element={<EstEstadisticaPorEquipo />} /></Route>
+                        <Route element={<ProtectedRoute profile={perfil} requiredProfile={1} />}><Route path='/EstadisticaJugador' element={<TraEstadisticaJugador />} /></Route>
+
+                        {/* <ProtectedRoute path="/Liga" element={<CatLiga />} profile={perfil} requiredProfile={2}/> */}
+                        {/* <Route path="/Liga" element={<ProtectedRoute profile={perfil} requiredProfile={2} />}/> */}
+
+
+
                     </Routes>
                 </div>
 
