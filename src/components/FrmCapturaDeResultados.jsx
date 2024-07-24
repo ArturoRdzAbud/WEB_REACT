@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
@@ -8,7 +8,7 @@ import config from '../config'; // archivo configs globales del proy
 import { ElementoToastNotification } from './ElementoToastNotification';
 import { useParams } from 'react-router-dom';
 import { ElementoBotones } from './ElementoBotones'
-
+import { PerfilContext } from './PerfilContext'; // Importa el contexto
 import dayjs from 'dayjs';
 
 
@@ -47,7 +47,7 @@ const FrmCapturaDeResultados = () => {
   const [alertaMensaje, setAlertaMensaje] = useState('');
 
   const { muestraLinkCaptura } = useParams(true);
-  
+  const { perfil, esConLicencia } = useContext(PerfilContext);
   const onAceptar = () => {
     setEsMuestraCamposReq(false)
   };
@@ -345,7 +345,7 @@ const FrmCapturaDeResultados = () => {
       header: 'Capturar',
       accessorKey: 'Descripcion',
       footer: 'Capturar'
-      ,visible:(muestraLinkCaptura=='true')
+      ,visible:(muestraLinkCaptura=='true'&&perfil>1)
     },
     {
       header: 'Liga',

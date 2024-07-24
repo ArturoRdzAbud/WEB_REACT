@@ -1,4 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
+import config from '../config'; // archivo configs globales del proy
+
 import '../css/Login.css'; // Asegúrate de crear y ajustar este archivo CSS según sea necesario
 import { SideBarHeader } from './SideBarHeader';
 import { PerfilContext } from './PerfilContext'; // Importa el contexto
@@ -6,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { ElementoToastNotification } from './ElementoToastNotification';
 
 export const Login = () => {
-  const [esLoginValido, setEsLoginValido] = useState(false);
+  const [esLoginValido, setEsLoginValido] = useState(-1);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
@@ -14,26 +17,115 @@ export const Login = () => {
   const [alertaMensaje, setAlertaMensaje] = useState('');
 
   const navigate = useNavigate();
-  const ruta = '/CatUsuario';
+  const ruta = '/FrmUsuario';
   const rutaHome = '/';
 
+  const [esMuestraCamposReq, setEsMuestraCamposReq] = useState(false);
+  const [datosLogin, setDatosLogin] = useState([]);
+  const [datosLoginBD, setDatosLoginBD] = useState([]);
 
-  const handleSubmit = (e) => {
+  const onAceptarB = () => {
+    setEsMuestraCamposReq(false)
+    // setEsMuestraConfirmacion(false)
+    // setEsFin(false)
+  };
+
+  // useEffect(() => {
+  //   if (!datosLoginBD.length > 0){
+  //     console.log('sale')
+  //     return
+  //   }
+  //   console.log('esLoginValido:' + datosLoginBD[0].esLoginValido)
+  //   setEsLoginValido(datosLoginBD[0].esLoginValido)
+  // }, [datosLoginBD])
+
+  useEffect(() => {
+    // validaDatos()
+
+  }, [esLoginValido])
+
+  // const validaDatos = () => {
+  //   // console.log('validaDatos')
+
+
+  // }
+
+  useEffect(() => {
+    // if (datosLoginBD !== null) {
+    if (datosLoginBD.length > 0) {
+      console.log('Datos de login actualizados:', datosLoginBD);
+      if (datosLoginBD[0].esLoginValido == 1) {
+        console.log('si')
+        setPerfil(datosLoginBD[0].perfil)
+        setEsConLicencia(datosLoginBD[0].esConLicencia)
+        setNombreUsuario(datosLoginBD[0].nombreUsuario)
+        navigate(rutaHome);
+      } else {
+        console.log('no')
+        setAlertaMensaje('Usuario o contraseña incorrectos, Favor de validar')
+      }
+
+    }
+  }, [datosLoginBD]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Aquí puedes manejar el envío del formulario, por ejemplo, enviando los datos a un servidor
     console.log({ email, password, rememberMe });
+    // const data = {
+    //   pnIdUser: email,
+    //   psPass: password,
+    // };
 
-    //valida usuario traer en un data set nombre completo, perfil actual y si es loginValido, esConLicencia
-    setEsLoginValido(true)
+    if (email.trim() === '') { setEsMuestraCamposReq(true); return }
+    if (password.trim() === '') { setEsMuestraCamposReq(true); return }
 
-    if (esLoginValido) {
-      //Asigna Perfil desde BD
-      setPerfil(2)
-      setEsConLicencia(1)
-      setNombreUsuario('Rolando')
-      navigate(rutaHome);
-    } else {
-      setAlertaMensaje('Usuario o contraseña incorrectos, Favor de validar')
+    const params = {
+      psSpSel: '"ConsultarLogin"',
+      psUser: email,
+      psPass: password,
+    };
+    const headers = {
+      'Access-Control-Allow-Origin': '*'
+    };
+
+    try {
+      var apiUrl = config.apiUrl + '/ConsultarLogin';
+      // await axios.get(apiUrl, { data }, { 'Access-Control-Allow-Origin': '*' })
+      await axios.get(apiUrl, {
+        params,
+        headers
+      })
+        // .then(response => {
+        //   setDatosLigaBD(response.data);
+        // })
+        // .catch(error => console.error('Error al obtener datos:', error))
+        // .finally(() => {
+        //   inicializaCampos()
+        // });
+        .then(response => {
+          if (response.data == '') {
+            // if (response.data.originalError.info.message) {
+            // console.log('REGRESA ERROR:')
+            if (response.data.originalError === undefined) {
+              console.log('REGRESA undefined:')
+              console.log(response.data)
+              setAlertaMensaje(response.data)
+              return
+            }
+            else {
+              console.log('REGRESA originalError:')
+              console.log(response.data.originalError.info.message)
+              setAlertaMensaje(response.data.originalError.info.message)
+              return
+            }
+          } else {
+            setDatosLoginBD(response.data);
+          }
+        })
+    } catch (error) {
+      console.error('Error al consultar LOGIN', error);
+      return
     }
 
   };
@@ -81,7 +173,7 @@ export const Login = () => {
                     />
                     <label className="form-label" htmlFor="form2Example1">
                       {/* Email address */}
-                      Usuario
+                      Usuario*
                     </label>
                   </div>
 
@@ -98,7 +190,7 @@ export const Login = () => {
                     />
                     <label className="form-label" htmlFor="form2Example2">
                       {/* Password */}
-                      Contraseña
+                      Contraseña*
                     </label>
                   </div>
 
@@ -128,10 +220,11 @@ export const Login = () => {
 
                   {/* Submit button */}
                   <button
-                    type="submit"
+                    //type="submit"
                     data-mdb-button-init
                     data-mdb-ripple-init
                     className="btn btn-primary btn-block mb-4"
+                    onClick={handleSubmit}
                   >
                     Entrar
                   </button>
@@ -147,12 +240,7 @@ export const Login = () => {
                   </button>
 
 
-                  {alertaMensaje &&
-                    <ElementoToastNotification
-                      mensaje={alertaMensaje}
-                      onAceptar={onAceptarC}
-                    ></ElementoToastNotification>
-                  }
+
 
 
                 </form>
@@ -161,6 +249,21 @@ export const Login = () => {
           </div>
         </div>
       </section>
+
+      {alertaMensaje &&
+        <ElementoToastNotification
+          mensaje={alertaMensaje}
+          onAceptar={onAceptarC}
+        ></ElementoToastNotification>
+      }
+
+      {esMuestraCamposReq &&
+        <ElementoToastNotification
+          mensaje={'Los datos con * son requeridos, favor de validar.'}
+          onAceptar={onAceptarB}
+        ></ElementoToastNotification>
+        // : <p></p>
+      }
 
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import SimpleTable from './SimpleTable';
 import { ElementoCampo } from './ElementoCampo';
@@ -12,15 +12,16 @@ import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses';
 import { ElementoImagen } from './ElementoImagen'
 import { alignPropType } from 'react-bootstrap/esm/types';
 import { ElementoToastNotification } from './ElementoToastNotification';
+import { PerfilContext } from './PerfilContext'; // Importa el contexto
 
 
 const FrmUsuario = () => {
-
+    const { perfil, esConLicencia } = useContext(PerfilContext);
     const [datosUsuarioBd, setdatosUsuarioBd] = useState([]);
     const [datosUsuario, setdatosUsuario] = useState([]);
     //Filtros
     const [esVerBaja, setEsVerBaja] = useState(false);
-    
+
     //combo
     const [dataPerfil, setDatosPerfil] = useState([]);
 
@@ -34,8 +35,8 @@ const FrmUsuario = () => {
     const [activo, setActivo] = useState(false);
     const [nombre, setNombre] = useState('');
     const [correo, setCorreo] = useState('');
-    const [idPerfil, setIdPerfil] = useState(0);    
-    const [accion, setAccion] = useState(0);    
+    const [idPerfil, setIdPerfil] = useState(0);
+    const [accion, setAccion] = useState(0);
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
@@ -116,7 +117,7 @@ const FrmUsuario = () => {
 
     }, []);
 
-   
+
 
     useEffect(() => {
         // Cambia la URL a la de tu API
@@ -135,7 +136,7 @@ const FrmUsuario = () => {
         // TODO IR FILTRANDO LOCALMENTE CAMPO POR CAMPO SIN IR A BASE DE DATOS
         var datosFiltrados = datosUsuarioBd
         datosFiltrados = !esVerBaja ? datosUsuarioBd.filter(item => item.ActivoChk) : datosUsuarioBd;
-        
+
         setdatosUsuario(datosFiltrados);
     }
 
@@ -149,19 +150,24 @@ const FrmUsuario = () => {
 
 
     const handleEdit = (rowData) => {
+        if (perfil <= 1) {
+            setAlertaMensaje('No tienes acceso para utilizar esta opción')
+            return
+        }
+
         setEsEditar(true)
-        
+
         setIdUsuario(rowData.original.IdUsuario)
         setNombre(rowData.original.Nombre || "")
         setCorreo(rowData.original.Correo || "")
-        setIdPerfil(rowData.original.IdPerfil || "")        
+        setIdPerfil(rowData.original.IdPerfil || "")
         setLogin(rowData.original.Login || "")
         setPassword(rowData.original.Password || "")
         setPassword2(rowData.original.Password || "")
         if (rowData.original.ActivoChk == false) { setActivo(false) } else { setActivo(true) }
 
         setAccion(0)//0 para MODIF 1 para nuevo  
-        
+
     }
 
     const nuevo = () => {
@@ -212,7 +218,7 @@ const FrmUsuario = () => {
         const apiReq = config.apiUrl + '/GuardarUsuario';
 
         try {
-            
+
             if (nombre === null || nombre.trim() == '') { setEsMuestraCamposReq(true); return }
             //if (nombre.trim == '') { setEsMuestraCamposReq(true); return }
             if (correo === null || correo.trim() == '') { setEsMuestraCamposReq(true); return }
@@ -227,26 +233,26 @@ const FrmUsuario = () => {
             //if (idPerfil === '') { setEsMuestraCamposReq(true); return }
             if (esNoCoinciden) { setAlertaMensaje('El Password no coincide, Favor de verificar'); return }
 
-                       
+
             await axios.post(apiReq, { data }, { 'Access-Control-Allow-Origin': '*', "Content-Type": "multipart/form-data" })
-            .then(response => {
-                if (response.data && Object.keys(response.data).length !== 0) {
-                    console.log('REGRESA ERROR:')
-                    console.log('response.data:', response.data);
-                    // Asegúrate de que response.data sea una cadena antes de asignarla
-                    setAlertaMensaje(JSON.stringify(response.data));
-                } else {
-                    console.log('guardo correctamente');
-                    inicializaCampos();
-                    setEsEditar(false); // regresa al grid
-                    setEsNuevo(false);
-                }
-            })
-            .catch(error => {
-                console.error('Error al enviar la solicitud:', error);
-                setAlertaMensaje('Error al enviar la solicitud');
-            });
-                       
+                .then(response => {
+                    if (response.data && Object.keys(response.data).length !== 0) {
+                        console.log('REGRESA ERROR:')
+                        console.log('response.data:', response.data);
+                        // Asegúrate de que response.data sea una cadena antes de asignarla
+                        setAlertaMensaje(JSON.stringify(response.data));
+                    } else {
+                        console.log('guardo correctamente');
+                        inicializaCampos();
+                        setEsEditar(false); // regresa al grid
+                        setEsNuevo(false);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al enviar la solicitud:', error);
+                    setAlertaMensaje('Error al enviar la solicitud');
+                });
+
 
 
         } catch (error) {
@@ -276,19 +282,19 @@ const FrmUsuario = () => {
                                 <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="Nombre" nomCampo={nombre} onInputChange={setNombre} tamanioString={100} />
                                 <ElementoCampo type='email' lblCampo="Correo* :" claCampo="Correo" nomCampo={correo} onInputChange={setCorreo} tamanioString={50} />
                                 <ElementoCampo type="select" lblCampo="Perfil*: " claCampo="NombrePerfil" nomCampo={idPerfil} options={dataPerfil} onInputChange={setIdPerfil} />
-                                
+
                             </span>
                             <span style={{ flexGrow: 0.5 }}>
                                 <h2></h2>
                             </span>
                             <span style={{ flexGrow: 1 }}>
-                               
+
                                 <ElementoCampo type='text' lblCampo="Login* :" claCampo="Login" nomCampo={login} onInputChange={setLogin} tamanioString={30} />
                                 <ElementoCampo type='password' lblCampo="Password* :" claCampo="Password" onInputChange={setPassword} tamanioString={30} />
                                 <ElementoCampo type='password' lblCampo="Confirmar Password* :" claCampo="Password2" onInputChange={setPassword2} tamanioString={30} />
                                 {/* {password!=password2?<span>¡Contraseñas no Coinciden!</span>:<span></span>} */}
                                 {esNoCoinciden && <span>¡Contraseñas no Coinciden!</span>}
-                                                                
+
 
                             </span>
                         </div>
