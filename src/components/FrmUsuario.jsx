@@ -155,6 +155,7 @@ const FrmUsuario = () => {
             return
         }
 
+        
         setEsEditar(true)
 
         setIdUsuario(rowData.original.IdUsuario)
@@ -167,7 +168,6 @@ const FrmUsuario = () => {
         if (rowData.original.ActivoChk == false) { setActivo(false) } else { setActivo(true) }
 
         setAccion(0)//0 para MODIF 1 para nuevo  
-
     }
 
     const nuevo = () => {
@@ -193,7 +193,8 @@ const FrmUsuario = () => {
         setIdUsuario(0)
         setNombre('')
         setCorreo('')
-        setIdPerfil(-1)
+        // setIdPerfil(-1)
+        setIdPerfil(1)
         setAccion(0)
         setEsFin(false)
     }
@@ -281,7 +282,7 @@ const FrmUsuario = () => {
                             <span style={{ flexGrow: 1 }}>
                                 <ElementoCampo type='text' lblCampo="Nombre* :" claCampo="Nombre" nomCampo={nombre} onInputChange={setNombre} tamanioString={100} />
                                 <ElementoCampo type='email' lblCampo="Correo* :" claCampo="Correo" nomCampo={correo} onInputChange={setCorreo} tamanioString={50} />
-                                <ElementoCampo type="select" lblCampo="Perfil*: " claCampo="NombrePerfil" nomCampo={idPerfil} options={dataPerfil} onInputChange={setIdPerfil} />
+                                {perfil==4&&<ElementoCampo type="select" lblCampo="Perfil*: " claCampo="NombrePerfil" nomCampo={idPerfil} options={dataPerfil} onInputChange={setIdPerfil} />}
 
                             </span>
                             <span style={{ flexGrow: 0.5 }}>
